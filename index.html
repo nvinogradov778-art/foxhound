@@ -180,6 +180,92 @@
             color: #fff;
         }
 
+        .radio-station {
+            background: #111413;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        @media (min-width: 600px) {
+            .radio-station {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        .radio-display {
+            background: #0d1f11;
+            border: 1px solid #1f4021;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            color: #39ff14;
+            text-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .radio-display .freq-tag {
+            font-weight: bold;
+            font-size: 14px;
+            color: #fff;
+            border-bottom: 1px dashed #1f4021;
+            padding-bottom: 3px;
+        }
+
+        .radio-display .desc-tag {
+            color: #85ff7a;
+            font-size: 11px;
+            line-height: 1.3;
+            margin-top: 5px;
+        }
+
+        .radio-controls {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .radio-btn {
+            background: rgba(230, 126, 34, 0.1);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .radio-btn:hover {
+            background: var(--accent-color);
+            color: #fff;
+        }
+
+        .playlist-select {
+            background: #242b28;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .playlist-select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
         .log-container {
             background: #000;
             border: 1px solid var(--border-color);
@@ -297,6 +383,21 @@
         </div>
     </div>
 
+    <h2>Полевое Радио</h2>
+    <div class="radio-station">
+        <div class="radio-display">
+            <div id="radio-freq" class="freq-tag">FREQ: ---.--- MHz</div>
+            <div id="radio-purpose" style="font-weight: bold; color: var(--accent-color);">СЕТЬ ОТКЛЮЧЕНА</div>
+            <div id="track-title" style="color: #fff; margin-top: 5px;">ШУМ ЭФИРА...</div>
+            <div id="radio-desc" class="desc-tag">Для активации аудио-модуля нажмите ВКЛ РАДИО</div>
+        </div>
+        <div class="radio-controls">
+            <select id="playlist-select" class="playlist-select" onchange="changeChannel()">
+            </select>
+            <button id="play-btn" class="radio-btn" onclick="toggleRadio()">ВКЛ РАДИО</button>
+        </div>
+    </div>
+
     <h2>Наши операторы</h2>
     
     <h3>Руководитель отряда</h3>
@@ -365,8 +466,112 @@
         <li>Адекватность, честность и отсутствие овертюна — база нашей команды.</li>
     </ul>
 
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdCmb8iLGiwe5nbRQl4SpGQPjZiFfVIw1meTqHWFHm5yhAPzg/viewform?usp=publish-editor" target="_blank" class="join-btn">Подать заявку в команду</a>
+    <a href="google.com" target="_blank" class="join-btn">Подать заявку в команду</a>
 </div>
+
+<script>
+    const radioStations = [
+        {
+            id: "main_hq",
+            name: "CH 1: Главный Штаб",
+            frequency: "MAIN",
+            purpose: "«ЧЕЛОВЕК, ПРОДАВШИЙ МИР»",
+            desc: "Главная тема команды FOXHOUND.",
+            tracks: [
+                { title: "The Man Who Sold The World", src: "playlist_mgs/man_who_sold_the_world.mp3" },
+            ]
+        },
+        {
+            id: "tactical_prep",
+            name: "CH 2: Сборы и Тюнинг",
+            frequency: "145.625",
+            purpose: "ЧАСТОТА — «ПОДГОТОВКА И СБОРЫ»",
+            desc: "Классика русского рока и мрачный вайб для вдумчивой работы над снарягой и приводами.",
+            tracks: [
+                { title: "Группа Крови — Кино", src: "playlist_rock/gruppa_krovi.mp3" },
+                { title: "Мрачный Трэк — Рок", src: "playlist_rock/rock_track.mp3" }
+            ]
+        }
+    ];
+
+    let currentStationIndex = 0;
+    let currentTrackIndex = 0;
+    let isPlaying = false;
+    const audio = new Audio();
+
+    function initRadio() {
+        const select = document.getElementById("playlist-select");
+        select.innerHTML = "";
+        radioStations.forEach((station, index) => {
+            const opt = document.createElement("option");
+            opt.value = index;
+            opt.innerText = station.name;
+            select.appendChild(opt);
+        });
+        updateDisplay();
+    }
+
+    function updateDisplay() {
+        const station = radioStations[currentStationIndex];
+        const track = station.tracks[currentTrackIndex];
+        
+        if (isPlaying) {
+            document.getElementById("radio-freq").innerText = `FREQ: ${station.frequency} MHz`;
+            document.getElementById("radio-purpose").innerText = station.purpose.toUpperCase();
+            document.getElementById("track-title").innerText = `▶ ${track.title.toUpperCase()}`;
+            document.getElementById("radio-desc").innerText = station.desc;
+        } else {
+            document.getElementById("radio-freq").innerText = "FREQ: ---.--- MHz";
+            document.getElementById("radio-purpose").innerText = "СЕТЬ ОТКЛЮЧЕНА";
+            document.getElementById("track-title").innerText = "ШУМ ЭФИРА...";
+            document.getElementById("radio-desc").innerText = "Для активации аудио-модуля нажмите ВКЛ РАДИО";
+        }
+    }
+
+    function toggleRadio() {
+        const btn = document.getElementById("play-btn");
+        if (!isPlaying) {
+            isPlaying = true;
+            btn.innerText = "ВЫКЛ РАДИО";
+            playTrack();
+        } else {
+            isPlaying = false;
+            btn.innerText = "ВКЛ РАДИО";
+            audio.pause();
+            updateDisplay();
+        }
+    }
+
+    function playTrack() {
+        if (!isPlaying) return;
+        const station = radioStations[currentStationIndex];
+        const track = station.tracks[currentTrackIndex];
+        audio.src = track.src;
+        audio.play().catch(e => console.log("Каналы пусты или ошибка файла:", e));
+        updateDisplay();
+    }
+
+    function changeChannel() {
+        currentStationIndex = parseInt(document.getElementById("playlist-select").value);
+        currentTrackIndex = 0;
+        if (isPlaying) {
+            playTrack();
+        } else {
+            updateDisplay();
+        }
+    }
+
+    audio.onended = function() {
+        const station = radioStations[currentStationIndex];
+        currentTrackIndex++;
+        if (currentTrackIndex >= station.tracks.length) {
+            currentTrackIndex = 0;
+        }
+        playTrack();
+    };
+
+    window.onload = initRadio;
+</script>
 
 </body>
 </html>
