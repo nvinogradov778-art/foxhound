@@ -384,19 +384,24 @@
     </div>
 
     <h2>Полевое Радио</h2>
-    <div class="radio-station">
-        <div class="radio-display">
-            <div id="radio-freq" class="freq-tag">FREQ: ---.--- MHz</div>
-            <div id="radio-purpose" style="font-weight: bold; color: var(--accent-color);">СЕТЬ ОТКЛЮЧЕНА</div>
-            <div id="track-title" style="color: #fff; margin-top: 5px;">ШУМ ЭФИРА...</div>
-            <div id="radio-desc" class="desc-tag">Для активации аудио-модуля нажмите ВКЛ РАДИО</div>
-        </div>
-        <div class="radio-controls">
-            <select id="playlist-select" class="playlist-select" onchange="changeChannel()">
-            </select>
-            <button id="play-btn" class="radio-btn" onclick="toggleRadio()">ВКЛ РАДИО</button>
+<div class="radio-station">
+    <div class="radio-display">
+        <div id="radio-freq" class="freq-tag">FREQ: ---.--- MHz</div>
+        <div id="radio-purpose" style="font-weight: bold; color: var(--accent-color);">СЕТЬ ОТКЛЮЧЕНА</div>
+        <div id="track-title" style="color: #fff; margin-top: 5px;">ШУМ ЭФИРА...</div>
+        <div id="radio-desc" class="desc-tag">Для активации аудио-модуля нажмите ВКЛ РАДИО</div>
+    </div>
+    <div class="radio-controls">
+        <select id="playlist-select" class="playlist-select" onchange="changeChannel()">
+        </select>
+        <button id="play-btn" class="radio-btn" onclick="toggleRadio()">ВКЛ РАДИО</button>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button class="radio-btn" onclick="prevTrack()">◀ НАЗАД</button>
+            <button class="radio-btn" onclick="nextTrack()">ВПЕРЕД ▶</button>
         </div>
     </div>
+</div>
+
 
     <h2>Наши операторы</h2>
     
@@ -656,6 +661,31 @@
     };
 
     window.onload = initRadio;
+	function nextTrack() {
+    const station = radioStations[currentStationIndex];
+    currentTrackIndex++;
+    if (currentTrackIndex >= station.tracks.length) {
+        currentTrackIndex = 0;
+    }
+    if (isPlaying) {
+        playTrack();
+    } else {
+        updateDisplay();
+    }
+}
+
+function prevTrack() {
+    const station = radioStations[currentStationIndex];
+    currentTrackIndex--;
+    if (currentTrackIndex < 0) {
+        currentTrackIndex = station.tracks.length - 1;
+    }
+    if (isPlaying) {
+        playTrack();
+    } else {
+        updateDisplay();
+    }
+}
 </script>
 
 </body>
