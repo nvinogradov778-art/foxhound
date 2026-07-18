@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FOXHOUND — Калькулятор страйкбола</title>
+    <style>
+        :root {
+            --bg-color: #1a1f1d;
+            --panel-bg: #242b28;
+            --accent: #e67e22;
+            --text: #e0e0e0;
+            --muted: #a0a8a4;
+            --border: #34403a;
+            --green: #27ae60;
+            --red: #e74c3c;
+            --card-bg: rgba(0,0,0,0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            padding: 30px 15px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--panel-bg);
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 30px 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== ШАПКА (как на главной) ===== */
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 25px;
+            margin-bottom: 25px;
+        }
+
+        .logo-image {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            margin: 0 auto 20px;
+            display: block;
+            background: #000;
+            border: 2px solid var(--accent);
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: 24px;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: var(--accent);
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 2px;
+        }
+
+        .back-link-wrap {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        .back-link {
+            display: inline-block;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            border: 1px solid var(--accent);
+            padding: 5px 15px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        .back-link:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .param-group {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .slider-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .slider-row label {
+            min-width: 110px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .slider-row input[type="range"] {
+            flex: 1;
+            min-width: 150px;
+            background: #2c3e35;
+            height: 6px;
+            border-radius: 3px;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .slider-row input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: none;
+        }
+        .slider-row input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: none;
+        }
+
+        .value-display {
+            min-width: 70px;
+            text-align: right;
+            font-weight: bold;
+            color: var(--accent);
+            font-size: 18px;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        @media (max-width: 500px) {
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .result-item {
+            background: #111413;
+            padding: 12px 15px;
+            border-radius: 4px;
+            border-left: 4px solid var(--accent);
+        }
+        .result-item .label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+        .result-item .value {
+            font-size: 22px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .result-item .value.highlight {
+            color: var(--accent);
+        }
+
+        .rules-table {
+            margin-top: 15px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .rules-table th,
+        .rules-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+        }
+        .rules-table th {
+            color: var(--muted);
+            font-weight: 400;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+        .rules-table tr {
+            transition: 0.2s;
+        }
+        .rules-table tr.active {
+            background: rgba(230,126,34,0.15);
+            border-left: 4px solid var(--accent);
+        }
+        .rules-table tr.active td:first-child {
+            border-left: 4px solid var(--accent);
+        }
+        .rules-table tr.warning {
+            background: rgba(231,76,60,0.15);
+        }
+        .rules-table tr.warning td:first-child {
+            border-left: 4px solid var(--red);
+        }
+
+        .status-msg {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-align: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+        }
+        .status-msg.ok {
+            border-color: var(--green);
+            color: var(--green);
+        }
+        .status-msg.fail {
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        /* Футер удалён */
+    </style>
+</head>
+<body>
+
+<video class="video-background" autoplay muted loop playsinline>
+    <source src="background.mp4" type="video/mp4">
+</video>
+<div class="video-overlay"></div>
+
+<div class="container">
+
+    <!-- Ссылка назад -->
+    <div class="back-link-wrap">
+        <a href="index.html" class="back-link">← На главную</a>
+    </div>
+
+    <!-- ===== ШАПКА ===== -->
+    <div class="header">
+        <img src="logo-foxhound.png" alt="FOXHOUND LOGO" class="logo-image" />
+        <h1>FOXHOUND</h1>
+        <div class="subtitle">Группа высокотехнологичных операций</div>
+    </div>
+
+    <!-- Калькулятор -->
+    <div class="param-group">
+        <div class="slider-row">
+            <label for="weightSlider">Вес шара</label>
+            <input type="range" id="weightSlider" min="0.12" max="0.43" step="0.01" value="0.25" />
+            <span class="value-display" id="weightValue">0.25 г</span>
+        </div>
+        <div class="slider-row">
+            <label for="speedSlider">Скорость</label>
+            <input type="range" id="speedSlider" min="60" max="160" step="1" value="120" />
+            <span class="value-display" id="speedValue">120 м/с</span>
+        </div>
+    </div>
+
+    <!-- Результаты -->
+    <div class="result-grid">
+        <div class="result-item">
+            <div class="label">Дульная энергия</div>
+            <div class="value highlight" id="energyDisplay">1.80 Дж</div>
+        </div>
+        <div class="result-item">
+            <div class="label">Скорость на 0.20 г</div>
+            <div class="value highlight" id="speedOn20Display">134 м/с</div>
+        </div>
+    </div>
+
+    <!-- Регламент полигона (автоматическое определение категории) -->
+    <h3 style="color: var(--accent); margin-top: 25px; text-transform: uppercase; font-size: 14px;">Регламент полигона (Уральская ассоциация страйкбола)</h3>
+    <table class="rules-table" id="rulesTable">
+        <thead>
+            <tr>
+                <th>Категория</th>
+                <th>Ограничение по энергии</th>
+                <th>Дистанция</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-weapon="secondary">
+                <td>Вторичка (пистолеты, автоматы в здании)</td>
+                <td>до 1.5 Дж</td>
+                <td>0 м</td>
+                <td id="statusSecondary">✔</td>
+            </tr>
+            <tr data-weapon="primary">
+                <td>Основное (автомат на открытой местности)</td>
+                <td>до 2.4 Дж</td>
+                <td>10 м</td>
+                <td id="statusPrimary">✔</td>
+            </tr>
+            <tr data-weapon="sniper">
+                <td>Снайперка (болтовка, полуавтомат, только одиночный)</td>
+                <td>до 2.9 Дж</td>
+                <td>25 м</td>
+                <td id="statusSniper">✔</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Сообщение о допуске -->
+    <div id="statusMessage" class="status-msg ok">✅ Допуск: разрешено, дистанция 10 м</div>
+
+</div>
+
+<script>
+    (function() {
+        const weightSlider = document.getElementById('weightSlider');
+        const speedSlider = document.getElementById('speedSlider');
+        const weightValue = document.getElementById('weightValue');
+        const speedValue = document.getElementById('speedValue');
+        const energyDisplay = document.getElementById('energyDisplay');
+        const speedOn20Display = document.getElementById('speedOn20Display');
+
+        const rows = document.querySelectorAll('#rulesTable tbody tr');
+        const statusSecondary = document.getElementById('statusSecondary');
+        const statusPrimary = document.getElementById('statusPrimary');
+        const statusSniper = document.getElementById('statusSniper');
+        const statusMsg = document.getElementById('statusMessage');
+
+        // Лимиты по правилам Уральской ассоциации страйкбола
+        const LIMITS = {
+            secondary: { maxEnergy: 1.5, distance: 0, label: 'Вторичка' },
+            primary:   { maxEnergy: 2.4, distance: 10, label: 'Основное' },
+            sniper:    { maxEnergy: 2.9, distance: 25, label: 'Снайперка' }
+        };
+
+        function getCategoryByEnergy(E) {
+            if (E <= 1.5) return 'secondary';
+            if (E <= 2.4) return 'primary';
+            if (E <= 2.9) return 'sniper';
+            return 'over';
+        }
+
+        function updateAll() {
+            const m = parseFloat(weightSlider.value);
+            const v = parseFloat(speedSlider.value);
+            const E = (m * v * v) / 2000;
+            const v20 = Math.sqrt(E * 2000 / 0.20);
+
+            weightValue.textContent = m.toFixed(2) + ' г';
+            speedValue.textContent = v.toFixed(0) + ' м/с';
+            energyDisplay.textContent = E.toFixed(2) + ' Дж';
+            speedOn20Display.textContent = v20.toFixed(0) + ' м/с';
+
+            const category = getCategoryByEnergy(E);
+
+            rows.forEach(row => row.classList.remove('active', 'warning'));
+
+            let activeRow = null;
+            rows.forEach(row => {
+                if (row.dataset.weapon === category) {
+                    activeRow = row;
+                }
+            });
+
+            let isAllowed = false;
+            let limit = null;
+            if (category !== 'over') {
+                limit = LIMITS[category];
+                isAllowed = E <= limit.maxEnergy;
+            }
+
+            if (activeRow) {
+                if (isAllowed) {
+                    activeRow.classList.add('active');
+                } else {
+                    activeRow.classList.add('warning');
+                }
+            }
+
+            const statusMap = {
+                secondary: statusSecondary,
+                primary: statusPrimary,
+                sniper: statusSniper
+            };
+            for (let w in statusMap) {
+                const lim = LIMITS[w];
+                const ok = E <= lim.maxEnergy;
+                statusMap[w].textContent = ok ? '✔' : '✘';
+                statusMap[w].style.color = ok ? 'var(--green)' : 'var(--red)';
+            }
+
+            if (category === 'over') {
+                statusMsg.className = 'status-msg fail';
+                statusMsg.innerHTML = '❌ Не допуск: превышен максимальный лимит (2.9 Дж)';
+            } else if (isAllowed) {
+                statusMsg.className = 'status-msg ok';
+                statusMsg.innerHTML = `✅ Допуск: разрешено, дистанция ${limit.distance} м (категория «${limit.label}»)`;
+            } else {
+                statusMsg.className = 'status-msg fail';
+                statusMsg.innerHTML = `❌ Не допуск: превышен лимит для «${limit.label}» (макс. ${limit.maxEnergy} Дж)`;
+            }
+        }
+
+        weightSlider.addEventListener('input', updateAll);
+        speedSlider.addEventListener('input', updateAll);
+
+        updateAll();
+    })();
+</script>
+
+</body>
+</html>
