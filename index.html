@@ -499,7 +499,7 @@
         </div>
         <div class="log-row">
             <span class="log-date">[STATUS]</span>
-            <span style="color: #2ecc71;">Штаб и личный состав переведены в режим повышенной боевой готовности. Ведётся форсированное развёртывание и слаживание сил для реализации оперативно-тактического плана „Чёрный Ястреб“. Час „Х“ назначен на 19.07.2026. .</span>
+            <span style="color: #2ecc71;">Штаб и личный состав переведены в режим повышенной боевой готовности. Ведётся форсированное развёртывание и слаживание сил для реализации оперативно-тактического плана „Чёрный Ястреб“. Час „Х“ назначен на 19.07.2026.</span>
         </div>
     </div>
 
@@ -514,178 +514,90 @@
 	<a href="calculator.html" class="join-btn" style="background: #2c3e50; margin-top: 15px;">🧮 Калькулятор</a>
 </div>
 
+<!-- ===== НОВЫЙ СКРИПТ — ЗАГРУЗКА ИЗ JSON ===== -->
 <script>
-    const radioStations = [
-        {
-            id: "main_hq",
-            name: "CH 1: Главный Штаб",
-            frequency: "MAIN",
-            purpose: "ЧЕЛОВЕК, ПРОДАВШИЙ МИР",
-            desc: "Главная тема команды FOXHOUND.",
-            tracks: [
-                { title: "The Man Who Sold The World", src: "playlist_mgs/man_who_sold_the_world.mp3" },
-            ]
-        },
-        {
-            id: "tactical_prep",
-            name: "CH 2: Сборы и Тюнинг",
-            frequency: "145.15",
-            purpose: "ЧАСТОТА — ПОДГОТОВКА И СБОРЫ",
-            desc: "Классика русского рока и мрачный вайб для вдумчивой работы над снарягой и приводами.",
-            tracks: [
-                { title: "Полковнику никто не пишет — БИ - 2", src: "playlist_rock/1.mp3" },
-                { title: "Черные птицы - Наутилус Помпилиус", src: "playlist_rock/2.mp3" },
-                { title: "Черная Луна - Агата Кристи", src: "playlist_rock/3.mp3" },
-                { title: "Пластинки - Дурной Вкус", src: "playlist_rock/4.mp3" },
-                { title: "Спокойная ночь - Кино", src: "playlist_rock/5.mp3" }
-            ] 
-        },
-         {
-            id: "laboratory",
-            name: "CH 3: Лаборатория",
-            frequency: "141.52",
-            purpose: "ЧАСТОТА — ЛАБОРАТОРИЯ»",
-            desc: "Пост-панк, индастриал и электроника. Музыка для кода, пайки и 3D-печати", 
-			 tracks: [
-                { title: "Heretic — Frayle", src: "playlist_laboratory/1.mp3" },
-				{ title: "Клетка — Molchat Doma", src: "playlist_laboratory/2.mp3" },
-				{ title: "Судно (Борис Рижий) — Molchat Doma", src: "playlist_laboratory/3.mp3" },
-				{ title: "Волны — Molchat Doma", src: "playlist_laboratory/4.mp3" },
-				{ title: "Тоска — Molchat Doma", src: "playlist_laboratory/5.mp3" },
-				{ title: "Trava u Doma (Geoffrey Day Remix) — Geoffplaysguitar, Земляне, Atomic Heart", src: "playlist_laboratory/6.mp3" },
-				{ title: "Кому-то в мире весело — Где Фантом?", src: "playlist_laboratory/7.mp3" },
-				{ title: "Пикник - Из мышеловки — Пикник", src: "playlist_laboratory/8.mp3" }
-            ] 
-        },
-		{
-            id: "pole",
-            name: "CH 4: Полевой выход",
-            frequency: "140.85",
-            purpose: "ЧАСТОТА - ПОЛЕВОЙ ВЫХОД",
-            desc: "Самый мощный и драйвовый контент для дороги на полигон и боевого настроя", 
-			 tracks: [
-                { title: "Прорвёмся! Опера` (Любэ 35. Всё опять начинается. Трибьют) — RADIO TAPOK, Игорь Матвиенко", src: "playlist_pole/1.mp3" },
-                { title: "Мёртвый Город — СОЛОВЕЙ", src: "playlist_pole/2.mp3" },
-                { title: "Инструкция по Выживанию (Instructions for Survival) - Афганский Синдром (Afghan Syndrom) — Rel1sh", src: "playlist_pole/3.mp3" },
-                { title: "В диапазоне — Порнофильмы, Котляров Владимир Андреевич", src: "playlist_pole/4.mp3" },
-                { title: "Павел Пламенев и iwantsummer – Антиматерия — Plamenev", src: "playlist_pole/5.mp3" },
-                { title: "Ingermanland — Plamenev, Pavel Plamenev, Лёша Хельга, Sofiko Kardava", src: "playlist_pole/7.mp3" },
-                { title: "Он увидел солнце — Гражданская оборона, Егор Летов", src: "playlist_pole/8.mp3" },
-                { title: "Последняя битва — Norma Tale", src: "playlist_pole/9.mp3" },
-                { title: "Про дурачка — Гражданская оборона, Егор Летов", src: "playlist_pole/10.mp3" }
-            ] 
-        },
-		{
-            id: "playlist_stil",
-            name: "CH 5: Стиль",
-            frequency: "133.82",
-            purpose: "ЧАСТОТА - СТИЛЬ",
-            desc: "Сборка разных композиций для активного или монотонного времяпрепровождения под звучный и субъективно стильный саунд (Автор - Nexor)", 
-			 tracks: [
-                { title: "¡Adiós, pedrilas! — 2rbina 2rista", src: "playlist_playlist_stil/1.mp3" },
-                { title: "40 DAYS (Low Bass by Ivanich) — (41-44Hz) GREEN ORXNGE, Sagath", src: "playlist_playlist_stil/2.mp3" },
-                { title: "Resident Evil HUNK Theme Remix (RE2 x RE9) | Human Unit Never Killed — ArsChronica", src: "playlist_playlist_stil/3.mp3" },
-                { title: "The Forgotten Soldier (Metal Remix) — ArsChronica", src: "playlist_playlist_stil/4.mp3" },
-                { title: "Железные челюсти — CHAIN$AWSQUAD, SARCOFUCK", src: "playlist_playlist_stil/5.mp3" },
-                { title: "мне просто лень — CHAIN$AWSQUAD, Terror Letov, gan4o", src: "playlist_playlist_stil/6.mp3" },
-                { title: "Я люблю людей как гвоздь в горле — CHAIN$AWSQUAD, UMERTVIE", src: "playlist_playlist_stil/7.mp3" },
-                { title: "RAIDEN — DEATHCHANNEL", src: "playlist_playlist_stil/8.mp3" },
-                { title: "One Tap — DEATHCHANNEL feat. Terror Letov", src: "playlist_playlist_stil/9.mp3" },
-                { title: "KURU — DEATHCHANNEL, BLOODSET", src: "playlist_playlist_stil/10.mp3" },
-                { title: "Violence Suppressor — Irving Force", src: "playlist_playlist_stil/11.mp3" },
-                { title: "Раньше было лучше — Sagath, МОЛОДОСТЬ ВНУТРИ", src: "playlist_playlist_stil/12.mp3" },
-                { title: "Мёртвый рейв — SCREAMPUNK", src: "playlist_playlist_stil/13.mp3" },
-                { title: "АКТ 5. BIG BOY THINGS — TERROR LETOV feat. CARVACULT, FORGOTTEN GOD", src: "playlist_playlist_stil/14.mp3" },
-                { title: "АКТ 3. НОРАДРЕНАЛИН — TERROR LETOV feat. SAGATH", src: "playlist_playlist_stil/15.mp3" },
-                { title: "Метал командос — The Starkillers", src: "playlist_playlist_stil/16.mp3" },
-                { title: "Мы все уже в аду — The Starkillers", src: "playlist_playlist_stil/17.mp3" },
-                { title: "I'M DONE — whoami.wav", src: "playlist_playlist_stil/18.mp3" },
-                { title: "Встань иди — Мертвецы", src: "playlist_playlist_stil/19.mp3" },
-                { title: "Хокку — Мертвецы", src: "playlist_playlist_stil/20.mp3" },
-                { title: "HEAVYWEIGHT — НОКТУ", src: "playlist_playlist_stil/21.mp3" },
-                { title: "NUMBERS — НОКТУ, RAYBAX", src: "playlist_playlist_stil/22.mp3" }
-            ] 
-        },
-		{
-            id: "heretic",
-            name: "CH 66.6: Еретик",
-            frequency: "66.6",
-            purpose: "ЧАСТОТА - «ЕРЕСЬ»",
-            desc: "Личный канал Командира отряда. Инженерный цинизм, оккультный индастриал и ментальный кибер-синт. Музыка для тех, кто конструирует цифровую ересь на стыке тактики, технологий и абсолютного безумия.", 
-			 tracks: [
-                { title: "Chikoi the Maid - Catharsis — Chikoi the Maid", src: "playlist_heretic/1.mp3" },
-                { title: "Hacking — Synthwave Goose", src: "playlist_heretic/2.mp3" },
-                { title: "Heretic — Frayle", src: "playlist_heretic/3.mp3" },
-                { title: "Ingermanland — Plamenev, Pavel Plamenev, Лёша Хельга, Sofiko Kardava", src: "playlist_heretic/4.mp3" },
-                { title: "Kichi - Mental Obscurance — Kichi The Maid", src: "playlist_heretic/5.mp3" },
-                { title: "Princess of Vampires — Berenika, Gai Artem Vladislavovich", src: "playlist_heretic/6.mp3" },
-                { title: "Requiem — Heaven Pierce Her", src: "playlist_heretic/7.mp3" },
-                { title: "Suicide by Starlight — Kichi The Maid", src: "playlist_heretic/8.mp3" },
-                { title: "KEYGEN CHURCH - Tenebre Rosso Sangue (ULTRAKILL Soundtrack) — KEYGEN CHURCH", src: "playlist_heretic/9.mp3" },
-                { title: "The Man Who Sold the World (2010 Remaster) — Midge Ure", src: "playlist_heretic/10.mp3" }
-            ] 
-        },
-    ];
-
+    // === Глобальные переменные ===
+    let radioStations = [];          // сюда загружаем данные из JSON
     let currentStationIndex = 0;
     let currentTrackIndex = 0;
     let isPlaying = false;
     const audio = new Audio();
 
+    // === Загрузка радио-данных из внешнего JSON ===
+    async function loadRadioData() {
+        try {
+            const response = await fetch('radio_data.json');  // ← файл в корне сайта
+            if (!response.ok) throw new Error('Не удалось загрузить плейлист');
+            const data = await response.json();
+            radioStations = data.stations;   // ожидаем массив stations
+            initRadio();                     // заполняем выпадающий список и отображаем
+        } catch (error) {
+            console.error('Ошибка загрузки радио:', error);
+            // Показываем сообщение об ошибке в интерфейсе
+            document.getElementById('radio-purpose').innerText = 'ОШИБКА ЗАГРУЗКИ';
+            document.getElementById('radio-desc').innerText = 'Проверьте наличие файла radio_data.json';
+        }
+    }
+
+    // === Инициализация радио (заполнение списка станций) ===
     function initRadio() {
-        const select = document.getElementById("playlist-select");
-        select.innerHTML = "";
+        const select = document.getElementById('playlist-select');
+        select.innerHTML = '';
         radioStations.forEach((station, index) => {
-            const opt = document.createElement("option");
+            const opt = document.createElement('option');
             opt.value = index;
             opt.innerText = station.name;
             select.appendChild(opt);
         });
-        updateDisplay();
+        updateDisplay();   // отображаем первый канал
     }
 
+    // === Обновление интерфейса (дисплей радио) ===
     function updateDisplay() {
         const station = radioStations[currentStationIndex];
+        if (!station) return;   // на случай, если данных нет
         const track = station.tracks[currentTrackIndex];
-        
         if (isPlaying) {
-            document.getElementById("radio-freq").innerText = `FREQ: ${station.frequency} MHz`;
-            document.getElementById("radio-purpose").innerText = station.purpose.toUpperCase();
-            document.getElementById("track-title").innerText = `▶ ${track.title.toUpperCase()}`;
-            document.getElementById("radio-desc").innerText = station.desc;
+            document.getElementById('radio-freq').innerText = `FREQ: ${station.frequency} MHz`;
+            document.getElementById('radio-purpose').innerText = station.purpose.toUpperCase();
+            document.getElementById('track-title').innerText = `▶ ${track.title.toUpperCase()}`;
+            document.getElementById('radio-desc').innerText = station.desc;
         } else {
-            document.getElementById("radio-freq").innerText = "FREQ: ---.--- MHz";
-            document.getElementById("radio-purpose").innerText = "СЕТЬ ОТКЛЮЧЕНА";
-            document.getElementById("track-title").innerText = "ШУМ ЭФИРА...";
-            document.getElementById("radio-desc").innerText = "Для активации аудио-модуля нажмите ВКЛ РАДИО";
+            document.getElementById('radio-freq').innerText = 'FREQ: ---.--- MHz';
+            document.getElementById('radio-purpose').innerText = 'СЕТЬ ОТКЛЮЧЕНА';
+            document.getElementById('track-title').innerText = 'ШУМ ЭФИРА...';
+            document.getElementById('radio-desc').innerText = 'Для активации аудио-модуля нажмите ВКЛ РАДИО';
         }
     }
 
+    // === Включение/выключение радио ===
     function toggleRadio() {
-        const btn = document.getElementById("play-btn");
+        const btn = document.getElementById('play-btn');
         if (!isPlaying) {
             isPlaying = true;
-            btn.innerText = "ВЫКЛ РАДИО";
+            btn.innerText = 'ВЫКЛ РАДИО';
             playTrack();
         } else {
             isPlaying = false;
-            btn.innerText = "ВКЛ РАДИО";
+            btn.innerText = 'ВКЛ РАДИО';
             audio.pause();
             updateDisplay();
         }
     }
 
+    // === Воспроизведение текущего трека ===
     function playTrack() {
         if (!isPlaying) return;
         const station = radioStations[currentStationIndex];
         const track = station.tracks[currentTrackIndex];
-        audio.src = track.src;
-        audio.play().catch(e => console.log("Каналы пусты или ошибка файла:", e));
+        audio.src = track.src;   // путь уже задан в JSON
+        audio.play().catch(e => console.warn('Не удалось воспроизвести:', e));
         updateDisplay();
     }
 
+    // === Смена канала (станции) ===
     function changeChannel() {
-        currentStationIndex = parseInt(document.getElementById("playlist-select").value);
+        currentStationIndex = parseInt(document.getElementById('playlist-select').value);
         currentTrackIndex = 0;
         if (isPlaying) {
             playTrack();
@@ -694,41 +606,35 @@
         }
     }
 
+    // === Следующий трек ===
+    function nextTrack() {
+        const station = radioStations[currentStationIndex];
+        if (!station) return;
+        currentTrackIndex++;
+        if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
+        if (isPlaying) playTrack(); else updateDisplay();
+    }
+
+    // === Предыдущий трек ===
+    function prevTrack() {
+        const station = radioStations[currentStationIndex];
+        if (!station) return;
+        currentTrackIndex--;
+        if (currentTrackIndex < 0) currentTrackIndex = station.tracks.length - 1;
+        if (isPlaying) playTrack(); else updateDisplay();
+    }
+
+    // === Автоматический переход на следующий трек при окончании ===
     audio.onended = function() {
         const station = radioStations[currentStationIndex];
+        if (!station) return;
         currentTrackIndex++;
-        if (currentTrackIndex >= station.tracks.length) {
-            currentTrackIndex = 0;
-        }
+        if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
         playTrack();
     };
 
-    window.onload = initRadio;
-	function nextTrack() {
-    const station = radioStations[currentStationIndex];
-    currentTrackIndex++;
-    if (currentTrackIndex >= station.tracks.length) {
-        currentTrackIndex = 0;
-    }
-    if (isPlaying) {
-        playTrack();
-    } else {
-        updateDisplay();
-    }
-}
-
-function prevTrack() {
-    const station = radioStations[currentStationIndex];
-    currentTrackIndex--;
-    if (currentTrackIndex < 0) {
-        currentTrackIndex = station.tracks.length - 1;
-    }
-    if (isPlaying) {
-        playTrack();
-    } else {
-        updateDisplay();
-    }
-}
+    // === Запускаем загрузку при загрузке страницы ===
+    window.onload = loadRadioData;
 </script>
 
 </body>
