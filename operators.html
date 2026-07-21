@@ -13,6 +13,8 @@
             --text-muted: #a0a8a4;
             --border-color: #34403a;
             --card-bg: rgba(0,0,0,0.4);
+            --green: #2ecc71;
+            --red: #e74c3c;
         }
 
         * {
@@ -164,26 +166,26 @@
         }
 
         .header-link.photo {
-            border-color: #2ecc71;
-            color: #2ecc71;
+            border-color: var(--green);
+            color: var(--green);
             background: rgba(46, 204, 113, 0.1);
         }
         .header-link.photo:hover {
-            background: #2ecc71;
+            background: var(--green);
             color: #fff;
         }
 
         .header-link.ops {
-            border-color: #e74c3c;
-            color: #e74c3c;
+            border-color: var(--red);
+            color: var(--red);
             background: rgba(231, 76, 60, 0.1);
         }
         .header-link.ops:hover {
-            background: #e74c3c;
+            background: var(--red);
             color: #fff;
         }
         .header-link.ops.active {
-            background: #e74c3c;
+            background: var(--red);
             color: #fff;
         }
 
@@ -232,8 +234,25 @@
         }
 
         .operator-avatar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 10px;
+            width: 100%;
+            max-width: 120px;
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            background: #111413;
+            border: 2px solid var(--border-color);
+            overflow: hidden;
             font-size: 56px;
-            margin-bottom: 10px;
+        }
+
+        .operator-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .operator-name {
@@ -276,10 +295,11 @@
         }
 
         .error-msg {
+            grid-column: 1 / -1;
             padding: 20px;
             text-align: center;
-            color: var(--red, #e74c3c);
-            border: 1px solid var(--red, #e74c3c);
+            color: var(--red);
+            border: 1px solid var(--red);
             border-radius: 4px;
             background: rgba(231,76,60,0.1);
         }
@@ -335,9 +355,26 @@
                     const card = document.createElement('div');
                     card.className = 'operator-card';
 
+                    // Контейнер для аватара
                     const avatar = document.createElement('div');
                     avatar.className = 'operator-avatar';
-                    avatar.textContent = op.avatar || '👤';
+
+                    // Проверяем наличие фото
+                    if (op.photo) {
+                        const img = document.createElement('img');
+                        img.src = op.photo;
+                        img.alt = op.name || 'Оператор';
+                        // Если фото не загрузится – показываем эмодзи
+                        img.onerror = function() {
+                            this.style.display = 'none';
+                            avatar.textContent = op.avatar || '👤';
+                            avatar.style.fontSize = '56px';
+                        };
+                        avatar.appendChild(img);
+                    } else {
+                        avatar.textContent = op.avatar || '👤';
+                        avatar.style.fontSize = '56px';
+                    }
 
                     const name = document.createElement('div');
                     name.className = 'operator-name';
@@ -356,7 +393,6 @@
                     if (op.role) card.appendChild(role);
                     if (op.description) card.appendChild(desc);
 
-                    // Дополнительная информация (специализация, если есть)
                     if (op.specialization) {
                         const spec = document.createElement('div');
                         spec.className = 'operator-spec';
