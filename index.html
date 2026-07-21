@@ -13,13 +13,11 @@
             --text-muted: #a0a8a4;
             --border-color: #34403a;
         }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
-
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -29,7 +27,6 @@
             position: relative;
             overflow-x: hidden;
         }
-
         .video-background {
             position: fixed;
             top: 0;
@@ -40,7 +37,6 @@
             z-index: -2;
             pointer-events: none;
         }
-
         .video-overlay {
             position: fixed;
             top: 0;
@@ -51,7 +47,6 @@
             z-index: -1;
             pointer-events: none;
         }
-
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -61,14 +56,12 @@
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.7);
         }
-
         .header {
             text-align: center;
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 25px;
             margin-bottom: 25px;
         }
-
         .logo-image {
             width: 150px;
             height: 150px;
@@ -80,14 +73,12 @@
             border-radius: 4px;
             padding: 5px;
         }
-
         h1 {
             color: #fff;
             font-size: 24px;
             letter-spacing: 1px;
             margin-bottom: 5px;
         }
-
         .subtitle {
             color: var(--accent-color);
             font-size: 14px;
@@ -95,7 +86,58 @@
             font-weight: 600;
             letter-spacing: 2px;
         }
-
+        .header-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .header-link {
+            display: inline-block;
+            background: rgba(230, 126, 34, 0.15);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 8px 18px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+        }
+        .header-link:hover {
+            background: var(--accent-color);
+            color: #fff;
+        }
+        .header-link.calc {
+            border-color: #2c3e50;
+            color: #b0b8c0;
+            background: rgba(44, 62, 80, 0.2);
+        }
+        .header-link.calc:hover {
+            background: #2c3e50;
+            color: #fff;
+        }
+        .header-link.photo {
+            border-color: #2ecc71;
+            color: #2ecc71;
+            background: rgba(46, 204, 113, 0.1);
+        }
+        .header-link.photo:hover {
+            background: #2ecc71;
+            color: #fff;
+        }
+        .header-link.ops {
+            border-color: #e74c3c;
+            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+        }
+        .header-link.ops:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
         .quote {
             background: rgba(230, 126, 34, 0.15);
             border-left: 4px solid var(--accent-color);
@@ -104,7 +146,6 @@
             font-style: italic;
             color: #fff;
         }
-
         h2 {
             color: #fff;
             font-size: 18px;
@@ -114,7 +155,6 @@
             display: flex;
             align-items: center;
         }
-
         h2::after {
             content: '';
             flex: 1;
@@ -122,7 +162,6 @@
             height: 1px;
             background: var(--border-color);
         }
-
         h3 {
             color: var(--accent-color);
             font-size: 14px;
@@ -130,56 +169,33 @@
             margin: 15px 0 10px 0;
             letter-spacing: 1px;
         }
-
         p {
             margin-bottom: 15px;
             color: var(--text-color);
         }
-
-        .tasks-grid, .roster-grid {
+        .tasks-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 15px;
             margin-top: 15px;
         }
-
         @media (min-width: 600px) {
-            .tasks-grid, .roster-grid {
+            .tasks-grid {
                 grid-template-columns: 1fr 1fr;
             }
         }
-
-        .task-card, .operator-card {
+        .task-card {
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid var(--border-color);
             border-radius: 6px;
             padding: 15px;
         }
-
         .task-card strong {
             color: var(--accent-color);
             display: block;
             margin-bottom: 5px;
             font-size: 15px;
         }
-
-        .operator-card {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-        }
-
-        .operator-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .operator-name {
-            font-weight: bold;
-            color: #fff;
-        }
-
         .radio-station {
             background: #111413;
             border: 2px solid var(--border-color);
@@ -190,13 +206,11 @@
             grid-template-columns: 1fr;
             gap: 15px;
         }
-
         @media (min-width: 600px) {
             .radio-station {
                 grid-template-columns: 2fr 1fr;
             }
         }
-
         .radio-display {
             background: #0d1f11;
             border: 1px solid #1f4021;
@@ -210,7 +224,6 @@
             flex-direction: column;
             gap: 5px;
         }
-
         .radio-display .freq-tag {
             font-weight: bold;
             font-size: 14px;
@@ -218,21 +231,18 @@
             border-bottom: 1px dashed #1f4021;
             padding-bottom: 3px;
         }
-
         .radio-display .desc-tag {
             color: #85ff7a;
             font-size: 11px;
             line-height: 1.3;
             margin-top: 5px;
         }
-
         .radio-controls {
             display: flex;
             flex-direction: column;
             justify-content: center;
             gap: 10px;
         }
-
         .radio-btn {
             background: rgba(230, 126, 34, 0.1);
             border: 1px solid var(--accent-color);
@@ -245,12 +255,10 @@
             font-size: 12px;
             transition: all 0.2s ease;
         }
-
         .radio-btn:hover {
             background: var(--accent-color);
             color: #fff;
         }
-
         .playlist-select {
             background: #242b28;
             border: 1px solid var(--border-color);
@@ -260,12 +268,10 @@
             cursor: pointer;
             font-size: 13px;
         }
-
         .playlist-select:focus {
             outline: none;
             border-color: var(--accent-color);
         }
-
         .log-container {
             background: #000;
             border: 1px solid var(--border-color);
@@ -274,33 +280,27 @@
             font-family: 'Courier New', Courier, monospace;
             font-size: 14px;
         }
-
         .log-row {
             margin-bottom: 10px;
             border-bottom: 1px dashed #242b28;
             padding-bottom: 5px;
         }
-
         .log-row:last-child {
             margin-bottom: 0;
             border-bottom: none;
         }
-
         .log-date {
             color: var(--accent-color);
             margin-right: 10px;
         }
-
         .rules-list {
             list-style: none;
         }
-
         .rules-list li {
             position: relative;
             padding-left: 20px;
             margin-bottom: 8px;
         }
-
         .rules-list li::before {
             content: '✓';
             position: absolute;
@@ -308,7 +308,6 @@
             color: var(--accent-color);
             font-weight: bold;
         }
-
         .join-btn {
             display: block;
             width: 100%;
@@ -327,315 +326,236 @@
             margin-top: 35px;
             transition: background 0.2s ease;
         }
-
         .join-btn:hover {
             background: #d35400;
         }
-		
-		.vk-btn {
-    display: block;
-    width: 100%;
-    background: #0077ff;
-    color: #fff;
-    text-align: center;
-    padding: 15px;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    cursor: pointer;
-    text-decoration: none;
-    margin-top: 15px;
-    transition: background 0.2s ease;
-}
-.vk-btn:hover {
-    background: #005fcb;
-}
+        .vk-btn {
+            display: block;
+            width: 100%;
+            background: #0077ff;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: background 0.2s ease;
+        }
+        .vk-btn:hover {
+            background: #005fcb;
+        }
     </style>
 </head>
 <body>
+    <video class="video-background" autoplay muted loop playsinline>
+        <source src="background.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
 
-<video class="video-background" autoplay muted loop playsinline>
-    <source src="background.mp4" type="video/mp4">
-</video>
-<div class="video-overlay"></div>
-
-<div class="container">
-    <div class="header">
-        <img src="logo-foxhound.png" alt="FOXHOUND LOGO" class="logo-image">
-        <h1>FOXHOUND</h1>
-        <div class="subtitle">Группа высокотехнологичных операций</div>
-    </div>
-
-    <div class="quote">
-        «На поле боя нет места надежде. Здесь есть только расчет и воля к победе».
-    </div>
-
-    <h2>О команде</h2>
-    <p>Мы взяли название в честь легендарного отряда из мира <em>Metal Gear</em>. Там FOXHOUND был элитой, которая решала задачи не числом, а интеллектом и новейшими разработками. Мы переносим этот подход в реальный страйкбол.</p>
-    <p>Мы — инженерно-тактическая группа. Наш приоритет — техническое превосходство и дисциплина. Мы не просто играем, мы внедряем технологии в каждый выезд.</p>
-
-    <h2>Наши задачи</h2>
-    <div class="tasks-grid">
-        <div class="task-card">
-            <strong>🛠 Разработка</strong>
-            Создаем свои игровые устройства и софт. Паяльник и код — такое же оружие, как и привод.
-        </div>
-        <div class="task-card">
-            <strong>⚙️ Технический апгрейд</strong>
-            Мы сами доводим снаряжение до идеала. Глубокий тюнинг приводов, установка умной электроники и тонкая настройка систем.
-        </div>
-        <div class="task-card">
-            <strong>📡 Навигация и связь</strong>
-            Мастерское владение картами и радиоэфиром. Внедряем современные протоколы связи и знаем полигон лучше противника.
-        </div>
-        <div class="task-card">
-            <strong>⚡ Тактическая гибкость</strong>
-            Ставим на маневренность и слаженность. Отработанные действия в группе позволяют переигрывать оппонента.
-        </div>
-        <div class="task-card">
-            <strong>🤝 Атмосфера</strong>
-            FOXHOUND — это не только стрельба. Мы ценим качественный отдых, адекватное общение и выезды в кругу своих.
-        </div>
-        <div class="task-card">
-            <strong>🌲 Снаряжение</strong>
-            Наш стандарт — Woodland и Ranger Green (RG). Ориентируемся на современный MARSOC.
-        </div>
-    </div>
-
-    <h2>Полевое Радио</h2>
-<div class="radio-station">
-    <div class="radio-display">
-        <div id="radio-freq" class="freq-tag">FREQ: ---.--- MHz</div>
-        <div id="radio-purpose" style="font-weight: bold; color: var(--accent-color);">СЕТЬ ОТКЛЮЧЕНА</div>
-        <div id="track-title" style="color: #fff; margin-top: 5px;">ШУМ ЭФИРА...</div>
-        <div id="radio-desc" class="desc-tag">Для активации аудио-модуля нажмите ВКЛ РАДИО</div>
-    </div>
-    <div class="radio-controls">
-        <select id="playlist-select" class="playlist-select" onchange="changeChannel()">
-        </select>
-        <button id="play-btn" class="radio-btn" onclick="toggleRadio()">ВКЛ РАДИО</button>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <button class="radio-btn" onclick="prevTrack()">◀ НАЗАД</button>
-            <button class="radio-btn" onclick="nextTrack()">ВПЕРЕД ▶</button>
-        </div>
-    </div>
-</div>
-
-
-    <h2>Наши операторы</h2>
-    
-    <h3>Руководитель отряда</h3>
-    <div class="roster-grid" style="grid-template-columns: 1fr; margin-bottom: 20px;">
-        <div class="operator-card">
-            <div class="operator-info">
-                <span>🗿</span>
-                <span class="operator-name">ЕРЕТИК</span>
+    <div class="container">
+        <div class="header">
+            <img src="logo-foxhound.png" alt="FOXHOUND LOGO" class="logo-image">
+            <h1>FOXHOUND</h1>
+            <div class="subtitle">Группа высокотехнологичных операций</div>
+            <div class="header-links">
+                <a href="calculator.html" class="header-link calc">🧮 Калькулятор</a>
+                <a href="photo.html" class="header-link photo">📸 Фото</a>
+                <a href="operators.html" class="header-link ops">👥 Оперативники</a>
             </div>
         </div>
+
+        <div class="quote">
+            «На поле боя нет места надежде. Здесь есть только расчет и воля к победе».
+        </div>
+
+        <h2>О команде</h2>
+        <p>Мы взяли название в честь легендарного отряда из мира <em>Metal Gear</em>. Там FOXHOUND был элитой, которая решала задачи не числом, а интеллектом и новейшими разработками. Мы переносим этот подход в реальный страйкбол.</p>
+        <p>Мы — инженерно-тактическая группа. Наш приоритет — техническое превосходство и дисциплина. Мы не просто играем, мы внедряем технологии в каждый выезд.</p>
+
+        <h2>Наши задачи</h2>
+        <div class="tasks-grid">
+            <div class="task-card"><strong>🛠 Разработка</strong> Создаем свои игровые устройства и софт. Паяльник и код — такое же оружие, как и привод.</div>
+            <div class="task-card"><strong>⚙️ Технический апгрейд</strong> Мы сами доводим снаряжение до идеала. Глубокий тюнинг приводов, установка умной электроники и тонкая настройка систем.</div>
+            <div class="task-card"><strong>📡 Навигация и связь</strong> Мастерское владение картами и радиоэфиром. Внедряем современные протоколы связи и знаем полигон лучше противника.</div>
+            <div class="task-card"><strong>⚡ Тактическая гибкость</strong> Ставим на маневренность и слаженность. Отработанные действия в группе позволяют переигрывать оппонента.</div>
+            <div class="task-card"><strong>🤝 Атмосфера</strong> FOXHOUND — это не только стрельба. Мы ценим качественный отдых, адекватное общение и выезды в кругу своих.</div>
+            <div class="task-card"><strong>🌲 Снаряжение</strong> Наш стандарт — Woodland и Ranger Green (RG). Ориентируемся на современный MARSOC.</div>
+        </div>
+
+        <h2>Полевое Радио</h2>
+        <div class="radio-station">
+            <div class="radio-display">
+                <div id="radio-freq" class="freq-tag">FREQ: ---.--- MHz</div>
+                <div id="radio-purpose" style="font-weight: bold; color: var(--accent-color);">СЕТЬ ОТКЛЮЧЕНА</div>
+                <div id="track-title" style="color: #fff; margin-top: 5px;">ШУМ ЭФИРА...</div>
+                <div id="radio-desc" class="desc-tag">Для активации аудио-модуля нажмите ВКЛ РАДИО</div>
+            </div>
+            <div class="radio-controls">
+                <select id="playlist-select" class="playlist-select" onchange="changeChannel()"></select>
+                <button id="play-btn" class="radio-btn" onclick="toggleRadio()">ВКЛ РАДИО</button>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button class="radio-btn" onclick="prevTrack()">◀ НАЗАД</button>
+                    <button class="radio-btn" onclick="nextTrack()">ВПЕРЕД ▶</button>
+                </div>
+            </div>
+        </div>
+
+        <h2>Бортовой журнал</h2>
+        <div id="log-container" class="log-container">
+            <div class="log-row" style="color: var(--text-muted);">Загрузка записей...</div>
+        </div>
+
+        <h2>Порядок</h2>
+        <ul class="rules-list">
+            <li>Работаем строго по правилам Уральской Ассоциации Страйкбола (УАС).</li>
+            <li>Адекватность, честность и отсутствие овертюна — база нашей команды.</li>
+        </ul>
+
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdCmb8iLGiwe5nbRQl4SpGQPjZiFfVIw1meTqHWFHm5yhAPzg/viewform?usp=dialog" target="_blank" class="join-btn">Подать заявку в команду</a>
+        <a href="https://vk.ru/club239972469" target="_blank" class="vk-btn">Мы ВКонтакте</a>
     </div>
 
-    <h3>Члены отряда</h3>
-    <div class="roster-grid">
-        <div class="operator-card">
-            <div class="operator-info">
-                <span>🩺</span>
-                <span class="operator-name">Медик</span>
-            </div>
-        </div>
-        <div class="operator-card">
-            <div class="operator-info">
-                <span>🦅</span>
-                <span class="operator-name">Вепс</span>
-            </div>
-        </div>
-        <div class="operator-card">
-            <div class="operator-info">
-                <span>🎯</span>
-                <span class="operator-name">Соло</span>
-            </div>
-        </div>
-        <div class="operator-card">
-            <div class="operator-info">
-                <span>🎮</span>
-                <span class="operator-name">Субур</span>
-            </div>
-        </div>
-        <div class="operator-card">
-            <div class="operator-info">
-                <span>👾</span>
-                <span class="operator-name">Нексор</span>
-            </div>
-        </div>
-    </div>
+    <script>
+        // ======== РАДИО ========
+        let radioStations = [];
+        let currentStationIndex = 0;
+        let currentTrackIndex = 0;
+        let isPlaying = false;
+        const audio = new Audio();
 
-    <h2>Бортовой журнал</h2>
-    <div class="log-container">
-        <div class="log-row">
-            <span class="log-date">[11.05]</span>
-            <span>Успешно запущен тактический информационный узел команды.</span>
-        </div>
-        <div class="log-row">
-            <span class="log-date">[12.05]</span>
-            <span>Утвержден финальный состав операторов инженерного крыла.</span>
-        </div>
-        <div class="log-row">
-            <span class="log-date">[19.05]</span>
-            <span>Разработан Экспресс-курс по медицине.</span>
-        </div>
-        <div class="log-row">
-            <span class="log-date">[24.05]</span>
-            <span>Разработана Инструкция по эксплуатации Baofeng UV-5R для подразделения FOXHOUND.</span>
-        </div>
-        <div class="log-row">
-            <span class="log-date">[28.06]</span>
-            <span>Развернут сервер FTS для ATAK. Все элементы проверены в полевых условиях. Метки, линии, штриховки, чат и позиционирование на улицах города работают штатно.</span>
-        </div>
-        <div class="log-row">
-            <span class="log-date">[30.06]</span>
-            <span>Утвержден и готов к реализации новый оперативный сценарий «Падение „Чёрного ястреба“».</span>
-        </div>
-        <div class="log-row">
-            <span class="log-date">[STATUS]</span>
-            <span style="color: #2ecc71;">Штаб и личный состав переведены в режим повышенной боевой готовности. Ведётся форсированное развёртывание и слаживание сил для реализации оперативно-тактического плана „Чёрный Ястреб“. Час „Х“ назначен на 19.07.2026.</span>
-        </div>
-    </div>
-
-    <h2>Порядок</h2>
-    <ul class="rules-list">
-        <li>Работаем строго по правилам Уральской Ассоциации Страйкбола (УАС).</li>
-        <li>Адекватность, честность и отсутствие овертюна — база нашей команды.</li>
-    </ul>
-
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdCmb8iLGiwe5nbRQl4SpGQPjZiFfVIw1meTqHWFHm5yhAPzg/viewform?usp=dialog" target="_blank" class="join-btn">Подать заявку в команду</a>
-	<a href="https://vk.ru/club239972469" target="_blank" class="vk-btn">Мы ВКонтакте</a>
-	<a href="calculator.html" class="join-btn" style="background: #2c3e50; margin-top: 15px;">🧮 Калькулятор</a>
-</div>
-
-<!-- ===== НОВЫЙ СКРИПТ — ЗАГРУЗКА ИЗ JSON ===== -->
-<script>
-    // === Глобальные переменные ===
-    let radioStations = [];          // сюда загружаем данные из JSON
-    let currentStationIndex = 0;
-    let currentTrackIndex = 0;
-    let isPlaying = false;
-    const audio = new Audio();
-
-    // === Загрузка радио-данных из внешнего JSON ===
-    async function loadRadioData() {
-        try {
-            const response = await fetch('radio_data.json');  // ← файл в корне сайта
-            if (!response.ok) throw new Error('Не удалось загрузить плейлист');
-            const data = await response.json();
-            radioStations = data.stations;   // ожидаем массив stations
-            initRadio();                     // заполняем выпадающий список и отображаем
-        } catch (error) {
-            console.error('Ошибка загрузки радио:', error);
-            // Показываем сообщение об ошибке в интерфейсе
-            document.getElementById('radio-purpose').innerText = 'ОШИБКА ЗАГРУЗКИ';
-            document.getElementById('radio-desc').innerText = 'Проверьте наличие файла radio_data.json';
+        async function loadRadioData() {
+            try {
+                const response = await fetch('radio_data.json');
+                if (!response.ok) throw new Error('Не удалось загрузить плейлист');
+                const data = await response.json();
+                radioStations = data.stations;
+                initRadio();
+            } catch (error) {
+                console.error('Ошибка загрузки радио:', error);
+                document.getElementById('radio-purpose').innerText = 'ОШИБКА ЗАГРУЗКИ';
+                document.getElementById('radio-desc').innerText = 'Проверьте наличие файла radio_data.json';
+            }
         }
-    }
 
-    // === Инициализация радио (заполнение списка станций) ===
-    function initRadio() {
-        const select = document.getElementById('playlist-select');
-        select.innerHTML = '';
-        radioStations.forEach((station, index) => {
-            const opt = document.createElement('option');
-            opt.value = index;
-            opt.innerText = station.name;
-            select.appendChild(opt);
-        });
-        updateDisplay();   // отображаем первый канал
-    }
-
-    // === Обновление интерфейса (дисплей радио) ===
-    function updateDisplay() {
-        const station = radioStations[currentStationIndex];
-        if (!station) return;   // на случай, если данных нет
-        const track = station.tracks[currentTrackIndex];
-        if (isPlaying) {
-            document.getElementById('radio-freq').innerText = `FREQ: ${station.frequency} MHz`;
-            document.getElementById('radio-purpose').innerText = station.purpose.toUpperCase();
-            document.getElementById('track-title').innerText = `▶ ${track.title.toUpperCase()}`;
-            document.getElementById('radio-desc').innerText = station.desc;
-        } else {
-            document.getElementById('radio-freq').innerText = 'FREQ: ---.--- MHz';
-            document.getElementById('radio-purpose').innerText = 'СЕТЬ ОТКЛЮЧЕНА';
-            document.getElementById('track-title').innerText = 'ШУМ ЭФИРА...';
-            document.getElementById('radio-desc').innerText = 'Для активации аудио-модуля нажмите ВКЛ РАДИО';
-        }
-    }
-
-    // === Включение/выключение радио ===
-    function toggleRadio() {
-        const btn = document.getElementById('play-btn');
-        if (!isPlaying) {
-            isPlaying = true;
-            btn.innerText = 'ВЫКЛ РАДИО';
-            playTrack();
-        } else {
-            isPlaying = false;
-            btn.innerText = 'ВКЛ РАДИО';
-            audio.pause();
+        function initRadio() {
+            const select = document.getElementById('playlist-select');
+            select.innerHTML = '';
+            radioStations.forEach((station, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.innerText = station.name;
+                select.appendChild(opt);
+            });
             updateDisplay();
         }
-    }
 
-    // === Воспроизведение текущего трека ===
-    function playTrack() {
-        if (!isPlaying) return;
-        const station = radioStations[currentStationIndex];
-        const track = station.tracks[currentTrackIndex];
-        audio.src = track.src;   // путь уже задан в JSON
-        audio.play().catch(e => console.warn('Не удалось воспроизвести:', e));
-        updateDisplay();
-    }
+        function updateDisplay() {
+            const station = radioStations[currentStationIndex];
+            if (!station) return;
+            const track = station.tracks[currentTrackIndex];
+            if (isPlaying) {
+                document.getElementById('radio-freq').innerText = `FREQ: ${station.frequency} MHz`;
+                document.getElementById('radio-purpose').innerText = station.purpose.toUpperCase();
+                document.getElementById('track-title').innerText = `▶ ${track.title.toUpperCase()}`;
+                document.getElementById('radio-desc').innerText = station.desc;
+            } else {
+                document.getElementById('radio-freq').innerText = 'FREQ: ---.--- MHz';
+                document.getElementById('radio-purpose').innerText = 'СЕТЬ ОТКЛЮЧЕНА';
+                document.getElementById('track-title').innerText = 'ШУМ ЭФИРА...';
+                document.getElementById('radio-desc').innerText = 'Для активации аудио-модуля нажмите ВКЛ РАДИО';
+            }
+        }
 
-    // === Смена канала (станции) ===
-    function changeChannel() {
-        currentStationIndex = parseInt(document.getElementById('playlist-select').value);
-        currentTrackIndex = 0;
-        if (isPlaying) {
-            playTrack();
-        } else {
+        function toggleRadio() {
+            const btn = document.getElementById('play-btn');
+            if (!isPlaying) {
+                isPlaying = true;
+                btn.innerText = 'ВЫКЛ РАДИО';
+                playTrack();
+            } else {
+                isPlaying = false;
+                btn.innerText = 'ВКЛ РАДИО';
+                audio.pause();
+                updateDisplay();
+            }
+        }
+
+        function playTrack() {
+            if (!isPlaying) return;
+            const station = radioStations[currentStationIndex];
+            const track = station.tracks[currentTrackIndex];
+            audio.src = track.src;
+            audio.play().catch(e => console.warn('Не удалось воспроизвести:', e));
             updateDisplay();
         }
-    }
 
-    // === Следующий трек ===
-    function nextTrack() {
-        const station = radioStations[currentStationIndex];
-        if (!station) return;
-        currentTrackIndex++;
-        if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
-        if (isPlaying) playTrack(); else updateDisplay();
-    }
+        function changeChannel() {
+            currentStationIndex = parseInt(document.getElementById('playlist-select').value);
+            currentTrackIndex = 0;
+            if (isPlaying) playTrack(); else updateDisplay();
+        }
 
-    // === Предыдущий трек ===
-    function prevTrack() {
-        const station = radioStations[currentStationIndex];
-        if (!station) return;
-        currentTrackIndex--;
-        if (currentTrackIndex < 0) currentTrackIndex = station.tracks.length - 1;
-        if (isPlaying) playTrack(); else updateDisplay();
-    }
+        function nextTrack() {
+            const station = radioStations[currentStationIndex];
+            if (!station) return;
+            currentTrackIndex++;
+            if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
+            if (isPlaying) playTrack(); else updateDisplay();
+        }
 
-    // === Автоматический переход на следующий трек при окончании ===
-    audio.onended = function() {
-        const station = radioStations[currentStationIndex];
-        if (!station) return;
-        currentTrackIndex++;
-        if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
-        playTrack();
-    };
+        function prevTrack() {
+            const station = radioStations[currentStationIndex];
+            if (!station) return;
+            currentTrackIndex--;
+            if (currentTrackIndex < 0) currentTrackIndex = station.tracks.length - 1;
+            if (isPlaying) playTrack(); else updateDisplay();
+        }
 
-    // === Запускаем загрузку при загрузке страницы ===
-    window.onload = loadRadioData;
-</script>
+        audio.onended = function() {
+            const station = radioStations[currentStationIndex];
+            if (!station) return;
+            currentTrackIndex++;
+            if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
+            playTrack();
+        };
 
+        // ======== БОРТОВОЙ ЖУРНАЛ ========
+        async function loadLogs() {
+            try {
+                const response = await fetch('log_data.json');
+                if (!response.ok) throw new Error('Не удалось загрузить журнал');
+                const data = await response.json();
+                const container = document.getElementById('log-container');
+                container.innerHTML = '';
+                data.logs.forEach(entry => {
+                    const row = document.createElement('div');
+                    row.className = 'log-row';
+                    if (entry.style) row.style.cssText = entry.style;
+                    const dateSpan = document.createElement('span');
+                    dateSpan.className = 'log-date';
+                    dateSpan.textContent = entry.date;
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = entry.text;
+                    row.appendChild(dateSpan);
+                    row.appendChild(textSpan);
+                    container.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Ошибка загрузки журнала:', error);
+                document.getElementById('log-container').innerHTML = `<div class="log-row" style="color: var(--text-muted);">Ошибка загрузки записей. Проверьте файл log_data.json</div>`;
+            }
+        }
+
+        window.onload = function() {
+            loadRadioData();
+            loadLogs();
+        };
+    </script>
 </body>
 </html>
