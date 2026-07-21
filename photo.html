@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FOXHOUND — Оперативники</title>
+    <title>FOXHOUND — Фотогалерея</title>
     <style>
         :root {
             --bg-color: #1a1f1d;
@@ -13,6 +13,8 @@
             --text-muted: #a0a8a4;
             --border-color: #34403a;
             --card-bg: rgba(0,0,0,0.4);
+            --green: #2ecc71;
+            --red: #e74c3c;
         }
 
         * {
@@ -164,30 +166,30 @@
         }
 
         .header-link.photo {
-            border-color: #2ecc71;
-            color: #2ecc71;
+            border-color: var(--green);
+            color: var(--green);
             background: rgba(46, 204, 113, 0.1);
         }
         .header-link.photo:hover {
-            background: #2ecc71;
+            background: var(--green);
+            color: #fff;
+        }
+        .header-link.photo.active {
+            background: var(--green);
             color: #fff;
         }
 
         .header-link.ops {
-            border-color: #e74c3c;
-            color: #e74c3c;
+            border-color: var(--red);
+            color: var(--red);
             background: rgba(231, 76, 60, 0.1);
         }
         .header-link.ops:hover {
-            background: #e74c3c;
-            color: #fff;
-        }
-        .header-link.ops.active {
-            background: #e74c3c;
+            background: var(--red);
             color: #fff;
         }
 
-        /* ===== ОПЕРАТИВНИКИ ===== */
+        /* ===== ГАЛЕРЕЯ ===== */
         h2 {
             color: #fff;
             font-size: 18px;
@@ -205,69 +207,62 @@
             background: var(--border-color);
         }
 
-        .operator-grid {
+        .gallery-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
 
         @media (max-width: 700px) {
-            .operator-grid {
+            .gallery-grid {
                 grid-template-columns: 1fr;
             }
         }
 
-        .operator-card {
+        .photo-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 20px;
+            overflow: hidden;
             transition: transform 0.2s, border-color 0.2s;
-            text-align: center;
         }
 
-        .operator-card:hover {
+        .photo-card:hover {
             transform: scale(1.02);
             border-color: var(--accent-color);
         }
 
-        .operator-avatar {
-            font-size: 56px;
-            margin-bottom: 10px;
+        .photo-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            background: #000;
         }
 
-        .operator-name {
-            font-size: 20px;
+        .photo-card .card-body {
+            padding: 12px 15px 15px 15px;
+        }
+
+        .photo-card .card-title {
             font-weight: bold;
             color: #fff;
+            font-size: 16px;
+            margin-bottom: 4px;
         }
 
-        .operator-role {
-            color: var(--accent-color);
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 5px 0 10px 0;
-        }
-
-        .operator-desc {
-            color: var(--text-muted);
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .operator-spec {
-            display: inline-block;
-            background: rgba(230, 126, 34, 0.2);
-            border: 1px solid var(--accent-color);
-            border-radius: 20px;
-            padding: 2px 12px;
+        .photo-card .card-date {
             font-size: 12px;
-            color: var(--accent-color);
-            margin-top: 8px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
         }
 
-        .no-data {
+        .photo-card .card-desc {
+            font-size: 14px;
+            color: var(--text-color);
+        }
+
+        .no-photos {
             grid-column: 1 / -1;
             text-align: center;
             padding: 40px;
@@ -276,10 +271,11 @@
         }
 
         .error-msg {
+            grid-column: 1 / -1;
             padding: 20px;
             text-align: center;
-            color: var(--red, #e74c3c);
-            border: 1px solid var(--red, #e74c3c);
+            color: var(--red);
+            border: 1px solid var(--red);
             border-radius: 4px;
             background: rgba(231,76,60,0.1);
         }
@@ -303,76 +299,80 @@
         <div class="header-links">
             <a href="index.html" class="header-link main">🏠 Главная</a>
             <a href="calculator.html" class="header-link calc">🧮 Калькулятор</a>
-            <a href="photo.html" class="header-link photo">📸 Фото</a>
-            <a href="operators.html" class="header-link ops active">👥 Оперативники</a>
+            <a href="photo.html" class="header-link photo active">📸 Фото</a>
+            <a href="operators.html" class="header-link ops">👥 Оперативники</a>
         </div>
     </div>
 
-    <!-- ===== ОПЕРАТИВНИКИ ===== -->
-    <h2>Оперативный состав</h2>
-    <div id="operatorsContainer" class="operator-grid">
-        <div class="no-data">Загрузка данных...</div>
+    <!-- ===== ГАЛЕРЕЯ ===== -->
+    <h2>Фотогалерея</h2>
+    <div id="galleryContainer" class="gallery-grid">
+        <!-- Сюда будут загружены карточки -->
+        <div class="no-photos">Загрузка фотографий...</div>
     </div>
 </div>
 
 <script>
     (function() {
-        const container = document.getElementById('operatorsContainer');
+        const container = document.getElementById('galleryContainer');
 
-        async function loadOperators() {
+        async function loadPhotos() {
             try {
-                const response = await fetch('operators_data.json');
+                const response = await fetch('photo_data.json');
                 if (!response.ok) throw new Error('Не удалось загрузить данные');
                 const data = await response.json();
 
-                if (!data.operators || data.operators.length === 0) {
-                    container.innerHTML = `<div class="no-data">Оперативников пока нет</div>`;
+                if (!data.photos || data.photos.length === 0) {
+                    container.innerHTML = `<div class="no-photos">Фотографий пока нет</div>`;
                     return;
                 }
 
                 container.innerHTML = '';
-                data.operators.forEach(op => {
+                data.photos.forEach(photo => {
                     const card = document.createElement('div');
-                    card.className = 'operator-card';
+                    card.className = 'photo-card';
 
-                    const avatar = document.createElement('div');
-                    avatar.className = 'operator-avatar';
-                    avatar.textContent = op.avatar || '👤';
+                    // Изображение
+                    const img = document.createElement('img');
+                    img.src = photo.image || 'placeholder.jpg';
+                    img.alt = photo.title || 'Фото';
+                    img.loading = 'lazy';
+                    // Заглушка при ошибке загрузки
+                    img.onerror = function() {
+                        this.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'200\' viewBox=\'0 0 400 200\'%3E%3Crect fill=\'%23333\' width=\'400\' height=\'200\'/%3E%3Ctext fill=\'%23666\' x=\'50\' y=\'115\' font-family=\'sans-serif\' font-size=\'24\'%3EФото отсутствует%3C/text%3E%3C/svg%3E';
+                    };
 
-                    const name = document.createElement('div');
-                    name.className = 'operator-name';
-                    name.textContent = op.name || 'Без имени';
+                    // Тело карточки
+                    const body = document.createElement('div');
+                    body.className = 'card-body';
 
-                    const role = document.createElement('div');
-                    role.className = 'operator-role';
-                    role.textContent = op.role || '';
+                    const title = document.createElement('div');
+                    title.className = 'card-title';
+                    title.textContent = photo.title || 'Без названия';
+
+                    const date = document.createElement('div');
+                    date.className = 'card-date';
+                    date.textContent = photo.date ? `📅 ${photo.date}` : '';
 
                     const desc = document.createElement('div');
-                    desc.className = 'operator-desc';
-                    desc.textContent = op.description || '';
+                    desc.className = 'card-desc';
+                    desc.textContent = photo.description || '';
 
-                    card.appendChild(avatar);
-                    card.appendChild(name);
-                    if (op.role) card.appendChild(role);
-                    if (op.description) card.appendChild(desc);
+                    body.appendChild(title);
+                    if (photo.date) body.appendChild(date);
+                    if (photo.description) body.appendChild(desc);
 
-                    // Дополнительная информация (специализация, если есть)
-                    if (op.specialization) {
-                        const spec = document.createElement('div');
-                        spec.className = 'operator-spec';
-                        spec.textContent = op.specialization;
-                        card.appendChild(spec);
-                    }
-
+                    card.appendChild(img);
+                    card.appendChild(body);
                     container.appendChild(card);
                 });
             } catch (error) {
-                console.error('Ошибка загрузки оперативников:', error);
-                container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки данных. Проверьте файл operators_data.json</div>`;
+                console.error('Ошибка загрузки галереи:', error);
+                container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки фотографий. Проверьте файл photo_data.json</div>`;
             }
         }
 
-        loadOperators();
+        loadPhotos();
     })();
 </script>
 
