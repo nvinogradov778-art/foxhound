@@ -20,7 +20,7 @@
             --glass-bg: rgba(17, 17, 17, 0.7);
             --green: #33cc33;
             --red: #ff3333;
-            --blue: #3399ff;
+            --blue: var(--accent-color);
             --purple: #aa66ff;
             --shadow: 0 0 30px rgba(0,0,0,0.7);
         }
@@ -167,6 +167,7 @@
             opacity: 1;
         }
 
+        /* Единый стиль для активной вкладки (все разделы) */
         .header-link.active {
             color: var(--accent-color);
             background: rgba(255,102,0,0.12);
@@ -175,17 +176,6 @@
         .header-link.active::before {
             opacity: 1;
         }
-
-        .header-link.main.active { box-shadow: inset 0 -2px 0 #95a5a6; color: #95a5a6; }
-        .header-link.calc.active { box-shadow: inset 0 -2px 0 #2c3e50; color: #b0b8c0; }
-        .header-link.photo.active { box-shadow: inset 0 -2px 0 var(--green); color: var(--green); }
-        .header-link.ops.active { box-shadow: inset 0 -2px 0 var(--red); color: var(--red); }
-        .header-link.instructions.active { box-shadow: inset 0 -2px 0 var(--blue); color: var(--blue); }
-        .header-link.atak.active { box-shadow: inset 0 -2px 0 var(--purple); color: var(--purple); }
-        .header-link.maps.active { box-shadow: inset 0 -2px 0 var(--accent-color); color: var(--accent-color); }
-        .header-link.regulations.active { box-shadow: inset 0 -2px 0 var(--accent-color); color: var(--accent-color); }
-        .header-link.scenarios.active { box-shadow: inset 0 -2px 0 var(--accent-color); color: var(--accent-color); }
-        .header-link.devices.active { box-shadow: inset 0 -2px 0 var(--accent-color); color: var(--accent-color); }
 
         /* ===== СТРАНИЦЫ ===== */
         .page {
@@ -452,7 +442,7 @@
             box-shadow: 0 0 30px rgba(51,153,255,0.3);
         }
 
-        /* ===== КАЛЬКУЛЯТОР ===== (без изменений) ===== */
+        /* ===== КАЛЬКУЛЯТОР ===== */
         .param-group { background: var(--glass-bg); border: 1px solid var(--accent-color); padding: 20px; margin-bottom: 20px; }
         .slider-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
         .slider-row label { min-width: 110px; font-weight: 700; color: #fff; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 0.5px; font-size: 15px; }
@@ -534,35 +524,14 @@
         .node-leaf .node-header:hover { border-color: var(--border-color); }
         .node-leaf .node-header .arrow { display: none; }
 
-        /* ===== НОВЫЕ СТИЛИ ДЛЯ КАРТ ===== */
-        #map-container {
-            height: 500px;
-            border: 1px solid var(--accent-color);
-            margin: 10px 0;
-            background: #1a1a1a;
-        }
-        .map-layer-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 4px 0;
-        }
-        .map-layer-item input[type="checkbox"] {
-            accent-color: var(--accent-color);
-            width: 16px;
-            height: 16px;
-        }
-        .map-layer-item label {
-            color: var(--text-color);
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .leaflet-control-attribution {
-            color: #666 !important;
-            font-size: 10px !important;
-        }
+        /* ===== КАРТЫ ===== */
+        #map-container { height: 500px; border: 1px solid var(--accent-color); margin: 10px 0; background: #1a1a1a; }
+        .map-layer-item { display: flex; align-items: center; gap: 10px; padding: 4px 0; }
+        .map-layer-item input[type="checkbox"] { accent-color: var(--accent-color); width: 16px; height: 16px; }
+        .map-layer-item label { color: var(--text-color); font-size: 14px; cursor: pointer; }
+        .leaflet-control-attribution { color: #666 !important; font-size: 10px !important; }
 
-        /* ===== НОВЫЕ СТИЛИ ДЛЯ СЦЕНАРИЕВ И ДЕВАЙСОВ ===== */
+        /* ===== СЦЕНАРИИ И ДЕВАЙСЫ ===== */
         .item-card {
             background: var(--glass-bg);
             border: 1px solid var(--accent-color);
@@ -596,10 +565,10 @@
         .item-card .item-details {
             overflow: hidden;
             max-height: 0;
-            transition: max-height 0.3s ease;
+            transition: max-height 0.5s ease;
         }
         .item-card .item-details.open {
-            max-height: 2000px;
+            max-height: 9999px;
         }
         .item-card .item-details .item-description {
             margin-top: 10px;
@@ -619,7 +588,8 @@
             flex-wrap: wrap;
             margin-top: 10px;
         }
-        .item-card .item-details .item-links a {
+        .item-card .item-details .item-links a,
+        .item-card .item-details .item-files a {
             display: inline-block;
             color: var(--blue);
             text-decoration: none;
@@ -630,7 +600,8 @@
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
             letter-spacing: 1px;
         }
-        .item-card .item-details .item-links a:hover {
+        .item-card .item-details .item-links a:hover,
+        .item-card .item-details .item-files a:hover {
             background: var(--blue);
             color: #0a0a0a;
         }
@@ -661,6 +632,16 @@
         .item-card .item-details .item-schematic a:hover {
             background: var(--accent-color);
             color: #0a0a0a;
+        }
+        .item-card .item-details .item-files {
+            margin-top: 10px;
+        }
+        .item-card .item-details .item-files ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .item-card .item-details .item-files ul li {
+            margin-bottom: 6px;
         }
     </style>
 </head>
@@ -694,7 +675,7 @@
 
         <!-- ===== СТРАНИЦЫ ===== -->
 
-        <!-- ГЛАВНАЯ (без изменений) -->
+        <!-- ГЛАВНАЯ -->
         <div id="page-home" class="page active">
             <div class="quote">«На поле боя нет места надежде. Здесь есть только расчет и воля к победе».</div>
             <h2>О команде</h2>
@@ -808,8 +789,6 @@
             </div>
         </div>
 
-        <!-- ===== НОВЫЕ СТРАНИЦЫ ===== -->
-
         <!-- КАРТЫ -->
         <div id="page-maps" class="page">
             <h2>Карты полигонов</h2>
@@ -817,7 +796,7 @@
                 <label for="polygon-select" style="color: var(--text-color); font-weight: 700; margin-right: 10px;">Выберите полигон:</label>
                 <select id="polygon-select" style="background: #1a1a1a; color: #fff; border: 1px solid var(--accent-color); padding: 6px 12px; font-family: 'PT Sans', sans-serif; font-size: 15px; cursor: pointer;"></select>
             </div>
-            <div id="map-container" style="height: 500px; border: 1px solid var(--accent-color); margin: 10px 0; background: #1a1a1a;"></div>
+            <div id="map-container"></div>
             <div id="map-layers" style="margin-top: 10px;"></div>
             <div id="map-loading" class="no-data" style="display: none;">Загрузка карты...</div>
         </div>
@@ -886,7 +865,7 @@
         });
 
         // ============================================================
-        // ОСНОВНОЙ СКРИПТ
+        // ОСНОВНОЙ СКРИПТ (вкладки, радио, загрузка данных)
         // ============================================================
         (function() {
             'use strict';
@@ -909,6 +888,10 @@
             let regulationsLoaded = false;
             let scenariosLoaded = false;
             let devicesLoaded = false;
+            let mapInitialized = false;
+            let mapInstance = null;
+            let currentPolygonId = null;
+            let layerGroups = {};
 
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -927,15 +910,28 @@
                     if (pageId === 'page-operators' && !window._operatorsLoaded) loadOperators();
                     if (pageId === 'page-instructions' && !window._instructionsLoaded) loadInstructions();
                     if (pageId === 'page-atak' && !window._atakLoaded) loadAtak();
-                    if (pageId === 'page-maps' && !mapsLoaded) { loadMaps(); mapsLoaded = true; }
-                    if (pageId === 'page-regulations' && !regulationsLoaded) { loadRegulations(); regulationsLoaded = true; }
-                    if (pageId === 'page-scenarios' && !scenariosLoaded) { loadScenarios(); scenariosLoaded = true; }
-                    if (pageId === 'page-devices' && !devicesLoaded) { loadDevices(); devicesLoaded = true; }
+
+                    if (pageId === 'page-maps' && !mapsLoaded) {
+                        loadMaps();
+                        mapsLoaded = true;
+                    }
+                    if (pageId === 'page-regulations' && !regulationsLoaded) {
+                        loadRegulations();
+                        regulationsLoaded = true;
+                    }
+                    if (pageId === 'page-scenarios' && !scenariosLoaded) {
+                        loadScenarios();
+                        scenariosLoaded = true;
+                    }
+                    if (pageId === 'page-devices' && !devicesLoaded) {
+                        loadDevices();
+                        devicesLoaded = true;
+                    }
                 });
             });
 
             // ============================================================
-            // 2. РАДИО (без изменений)
+            // 2. РАДИО
             // ============================================================
             let radioStations = [];
             let currentStationIndex = 0;
@@ -1179,7 +1175,7 @@
             }
 
             // ============================================================
-            // 5. ФОТО (без изменений)
+            // 5. ФОТО
             // ============================================================
             async function loadPhotos() {
                 if (window._photoLoaded) return;
@@ -1460,18 +1456,11 @@
             }
 
             // ============================================================
-            // 9. НОВЫЕ РАЗДЕЛЫ
+            // 9. КАРТЫ (Leaflet)
             // ============================================================
-
-            // 9.1 КАРТЫ (Leaflet)
-            let currentPolygonId = null;
-            let mapInstance = null;
-            let mapInitialized = false;
-            let layerGroups = {};
-
             async function loadMaps() {
-                const select = document.getElementById('polygon-select');
                 const container = document.getElementById('map-container');
+                const select = document.getElementById('polygon-select');
                 const layersContainer = document.getElementById('map-layers');
                 const loading = document.getElementById('map-loading');
 
@@ -1485,7 +1474,6 @@
                         return;
                     }
 
-                    // Заполняем выпадающий список
                     select.innerHTML = '';
                     data.polygons.forEach(p => {
                         const opt = document.createElement('option');
@@ -1494,7 +1482,6 @@
                         select.appendChild(opt);
                     });
 
-                    // Инициализация карты (один раз)
                     if (!mapInitialized) {
                         mapInstance = L.map('map-container', {
                             center: data.polygons[0].center,
@@ -1502,25 +1489,23 @@
                             zoomControl: true,
                             attributionControl: true
                         });
-                        L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-							maxZoom: 20,
-							subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-						}).addTo(mapInstance)
+                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            attribution: '&copy; OpenStreetMap contributors',
+                            subdomains: 'abc',
+                            maxZoom: 19
+                        }).addTo(mapInstance);
                         mapInitialized = true;
                     }
 
-                    // Загружаем первый полигон
                     currentPolygonId = data.polygons[0].id;
                     switchPolygon(currentPolygonId, data);
 
-                    // Обработчик изменения селектора
                     select.addEventListener('change', function() {
                         const id = this.value;
                         currentPolygonId = id;
                         switchPolygon(id, data);
                     });
 
-                    // Ресайз карты
                     setTimeout(() => mapInstance.invalidateSize(), 500);
 
                 } catch (error) {
@@ -1535,10 +1520,8 @@
                 const polygon = data.polygons.find(p => p.id === polygonId);
                 if (!polygon) return;
 
-                // Перемещаем карту
                 mapInstance.setView(polygon.center, polygon.zoom);
 
-                // Удаляем старые слои
                 for (let key in layerGroups) {
                     if (mapInstance.hasLayer(layerGroups[key])) {
                         mapInstance.removeLayer(layerGroups[key]);
@@ -1546,7 +1529,6 @@
                 }
                 layerGroups = {};
 
-                // Создаём новые слои
                 const layersContainer = document.getElementById('map-layers');
                 layersContainer.innerHTML = '';
 
@@ -1554,7 +1536,6 @@
                     const group = L.layerGroup();
                     layerGroups[layerData.id] = group;
 
-                    // Загружаем GeoJSON
                     if (layerData.url) {
                         fetch(layerData.url)
                             .then(res => res.json())
@@ -1575,12 +1556,10 @@
                         }).addTo(group);
                     }
 
-                    // Добавляем группу на карту, если видим
                     if (layerData.visible !== false) {
                         mapInstance.addLayer(group);
                     }
 
-                    // Чекбокс
                     const cbWrapper = document.createElement('div');
                     cbWrapper.className = 'map-layer-item';
                     const cb = document.createElement('input');
@@ -1604,7 +1583,6 @@
                     layersContainer.appendChild(cbWrapper);
                 });
 
-                // Добавляем заголовок "Слои:" если есть слои
                 if (polygon.layers.length > 0) {
                     const header = document.createElement('div');
                     header.style.cssText = 'margin-top:8px; font-weight:700; color: var(--text-muted);';
@@ -1612,11 +1590,12 @@
                     layersContainer.prepend(header);
                 }
 
-                // Обновляем размер карты
                 setTimeout(() => mapInstance.invalidateSize(), 100);
             }
 
-            // 9.2 УСТАВ
+            // ============================================================
+            // 10. УСТАВ
+            // ============================================================
             async function loadRegulations() {
                 const container = document.getElementById('regulationsContainer');
                 try {
@@ -1642,7 +1621,9 @@
                 }
             }
 
-            // 9.3 СЦЕНАРИИ
+            // ============================================================
+            // 11. СЦЕНАРИИ (удалён блок radio)
+            // ============================================================
             async function loadScenarios() {
                 const container = document.getElementById('scenariosContainer');
                 try {
@@ -1670,39 +1651,100 @@
                         details.className = 'item-details';
 
                         if (scenario.description) {
-                            const desc = document.createElement('div');
-                            desc.className = 'item-description';
-                            desc.textContent = scenario.description;
-                            details.appendChild(desc);
+                            const descDiv = document.createElement('div');
+                            descDiv.style.cssText = 'margin-bottom:10px; color: var(--text-color); font-size:16px; line-height:1.5;';
+                            descDiv.textContent = scenario.description;
+                            details.appendChild(descDiv);
                         }
 
-                        if (scenario.map_image) {
-                            const mapImg = document.createElement('img');
-                            mapImg.src = scenario.map_image;
-                            mapImg.className = 'item-map';
-                            mapImg.style.height = 'auto';
-                            mapImg.style.border = '1px solid var(--border-color)';
-                            details.appendChild(mapImg);
-                        }
-
-                        const linksDiv = document.createElement('div');
-                        linksDiv.className = 'item-links';
-                        if (scenario.full_text_link) {
-                            const a = document.createElement('a');
-                            a.href = scenario.full_text_link;
-                            a.target = '_blank';
-                            a.textContent = '📄 Полный текст';
-                            linksDiv.appendChild(a);
-                        }
                         if (scenario.video_link) {
-                            const a = document.createElement('a');
-                            a.href = scenario.video_link;
-                            a.target = '_blank';
-                            a.textContent = '🎥 Видео';
-                            linksDiv.appendChild(a);
+                            const videoDiv = document.createElement('div');
+                            videoDiv.className = 'item-video';
+                            const iframe = document.createElement('iframe');
+                            iframe.width = '100%';
+                            iframe.height = '315';
+                            iframe.src = scenario.video_link;
+                            iframe.style.border = 'none';
+                            iframe.allowFullscreen = true;
+                            videoDiv.appendChild(iframe);
+                            details.appendChild(videoDiv);
                         }
-                        if (linksDiv.children.length > 0) {
-                            details.appendChild(linksDiv);
+
+                        if (scenario.phases && scenario.phases.length > 0) {
+                            const phasesDiv = document.createElement('div');
+                            phasesDiv.style.marginTop = '10px';
+                            const phasesTitle = document.createElement('div');
+                            phasesTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
+                            phasesTitle.textContent = '🔹 Фазы';
+                            phasesDiv.appendChild(phasesTitle);
+
+                            scenario.phases.forEach(phase => {
+                                const phaseBlock = document.createElement('div');
+                                phaseBlock.style.cssText = 'margin-bottom:12px; padding-left:10px; border-left:2px solid var(--accent-color);';
+                                const phaseName = document.createElement('div');
+                                phaseName.style.cssText = 'font-weight:700; color:#fff; font-size:16px;';
+                                phaseName.textContent = `${phase.name} (${phase.time})`;
+                                phaseBlock.appendChild(phaseName);
+                                if (phase.description) {
+                                    const desc = document.createElement('div');
+                                    desc.style.cssText = 'color: var(--text-color); font-size:15px; margin:4px 0;';
+                                    desc.textContent = phase.description;
+                                    phaseBlock.appendChild(desc);
+                                }
+                                if (phase.map_image) {
+                                    const img = document.createElement('img');
+                                    img.src = phase.map_image;
+                                    img.style.cssText = 'max-width:100%; height:auto; border:1px solid var(--border-color); margin-top:6px;';
+                                    img.alt = phase.name;
+                                    phaseBlock.appendChild(img);
+                                }
+                                phasesDiv.appendChild(phaseBlock);
+                            });
+                            details.appendChild(phasesDiv);
+                        }
+
+                        if (scenario.inventory && scenario.inventory.length > 0) {
+                            const invDiv = document.createElement('div');
+                            invDiv.style.marginTop = '10px';
+                            const invTitle = document.createElement('div');
+                            invTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
+                            invTitle.textContent = '📦 Инвентарь';
+                            invDiv.appendChild(invTitle);
+
+                            const list = document.createElement('ul');
+                            list.style.cssText = 'margin-left:20px; color: var(--text-color);';
+                            scenario.inventory.forEach(item => {
+                                const li = document.createElement('li');
+                                li.textContent = item;
+                                list.appendChild(li);
+                            });
+                            invDiv.appendChild(list);
+                            details.appendChild(invDiv);
+                        }
+
+                        // Блок radio полностью удалён
+
+                        if (scenario.files && scenario.files.length > 0) {
+                            const filesDiv = document.createElement('div');
+                            filesDiv.className = 'item-files';
+                            const filesTitle = document.createElement('div');
+                            filesTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
+                            filesTitle.textContent = '📁 Файлы';
+                            filesDiv.appendChild(filesTitle);
+
+                            const list = document.createElement('ul');
+                            scenario.files.forEach(file => {
+                                const li = document.createElement('li');
+                                const link = document.createElement('a');
+                                link.href = file.link;
+                                link.target = '_blank';
+                                link.textContent = file.name;
+                                link.style.cssText = 'color: var(--blue); text-decoration: none; font-weight:700; border:1px solid var(--blue); padding:4px 14px; transition:0.2s; display:inline-block;';
+                                li.appendChild(link);
+                                list.appendChild(li);
+                            });
+                            filesDiv.appendChild(list);
+                            details.appendChild(filesDiv);
                         }
 
                         card.appendChild(details);
@@ -1722,12 +1764,13 @@
                     });
                 } catch (error) {
                     console.error('Ошибка загрузки сценариев:', error);
-                    container.innerHTML =
-                        `<div class="error-msg">❌ Ошибка загрузки сценариев. Проверьте файл scenarios_data.json</div>`;
+                    container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки сценариев. Проверьте файл scenarios_data.json</div>`;
                 }
             }
 
-            // 9.4 ДЕВАЙСЫ
+            // ============================================================
+            // 12. ДЕВАЙСЫ
+            // ============================================================
             async function loadDevices() {
                 const container = document.getElementById('devicesContainer');
                 try {
@@ -1820,13 +1863,12 @@
                     });
                 } catch (error) {
                     console.error('Ошибка загрузки устройств:', error);
-                    container.innerHTML =
-                        `<div class="error-msg">❌ Ошибка загрузки устройств. Проверьте файл devices_data.json</div>`;
+                    container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки устройств. Проверьте файл devices_data.json</div>`;
                 }
             }
 
             // ============================================================
-            // 10. ЗАПУСК
+            // 13. ЗАПУСК
             // ============================================================
             window.onload = function() {
                 loadRadioData();
