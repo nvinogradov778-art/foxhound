@@ -16,6 +16,8 @@
             --card-bg: rgba(0,0,0,0.4);
             --green: #2ecc71;
             --red: #e74c3c;
+            --blue: #3498db;
+            --purple: #9b59b6;
         }
 
         * {
@@ -109,7 +111,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 12px;
+            gap: 8px;
             margin-top: 20px;
         }
 
@@ -118,9 +120,9 @@
             background: rgba(230, 126, 34, 0.15);
             border: 1px solid var(--accent-color);
             color: var(--accent-color);
-            padding: 8px 18px;
+            padding: 6px 14px;
             border-radius: 4px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             text-transform: uppercase;
             text-decoration: none;
@@ -197,6 +199,34 @@
             color: #fff;
         }
 
+        .header-link.instructions {
+            border-color: var(--blue);
+            color: var(--blue);
+            background: rgba(52, 152, 219, 0.1);
+        }
+        .header-link.instructions:hover {
+            background: var(--blue);
+            color: #fff;
+        }
+        .header-link.instructions.active {
+            background: var(--blue);
+            color: #fff;
+        }
+
+        .header-link.atak {
+            border-color: var(--purple);
+            color: var(--purple);
+            background: rgba(155, 89, 182, 0.1);
+        }
+        .header-link.atak:hover {
+            background: var(--purple);
+            color: #fff;
+        }
+        .header-link.atak.active {
+            background: var(--purple);
+            color: #fff;
+        }
+
         /* ===== СТРАНИЦЫ (ПО УМОЛЧАНИЮ СКРЫТЫ) ===== */
         .page {
             display: none;
@@ -205,7 +235,7 @@
             display: block;
         }
 
-        /* ===== ОБЩИЕ СТИЛИ ДЛЯ ВСЕХ СТРАНИЦ ===== */
+        /* ===== ОБЩИЕ СТИЛИ ===== */
         .quote {
             background: rgba(230, 126, 34, 0.15);
             border-left: 4px solid var(--accent-color);
@@ -244,7 +274,7 @@
             color: var(--text-color);
         }
 
-        /* ===== ГЛАВНАЯ ===== */
+        /* ===== ГЛАВНАЯ (без изменений, как было) ===== */
         .tasks-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -703,6 +733,130 @@
             color: var(--accent-color);
             margin-top: 8px;
         }
+
+        /* ===== ИНСТРУКЦИИ ===== */
+        .docs-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        @media (min-width: 600px) {
+            .docs-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .doc-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            transition: border-color 0.2s;
+        }
+        .doc-card:hover {
+            border-color: var(--blue);
+        }
+        .doc-card .doc-title {
+            font-weight: bold;
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        .doc-card .doc-desc {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .doc-card .doc-link {
+            display: inline-block;
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid var(--blue);
+            padding: 4px 12px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .doc-card .doc-link:hover {
+            background: var(--blue);
+            color: #fff;
+        }
+
+        /* ===== ATAK (аккордеон) ===== */
+        .atak-tree {
+            margin-top: 10px;
+        }
+        .atak-node {
+            margin-left: 0;
+        }
+        .atak-node .node-header {
+            cursor: pointer;
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.2s;
+            user-select: none;
+        }
+        .atak-node .node-header:hover {
+            background: rgba(155, 89, 182, 0.15);
+        }
+        .atak-node .node-header .arrow {
+            transition: transform 0.2s;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .atak-node .node-header .arrow.open {
+            transform: rotate(90deg);
+        }
+        .atak-node .node-children {
+            margin-left: 20px;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease;
+        }
+        .atak-node .node-children.open {
+            max-height: 2000px; /* достаточно для больших блоков */
+        }
+        .atak-node .node-content {
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin: 4px 0 8px 0;
+            color: var(--text-color);
+        }
+        .atak-node .node-content img {
+            max-width: 100%;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .atak-node .node-content ul, 
+        .atak-node .node-content ol {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        .atak-node .node-content a {
+            color: var(--blue);
+            text-decoration: none;
+        }
+        .atak-node .node-content a:hover {
+            text-decoration: underline;
+        }
+        .node-leaf .node-header {
+            cursor: default;
+            background: rgba(0,0,0,0.15);
+        }
+        .node-leaf .node-header:hover {
+            background: rgba(0,0,0,0.15);
+        }
+        .node-leaf .node-header .arrow {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -725,6 +879,8 @@
             <button class="header-link calc" data-page="page-calc">🧮 Калькулятор</button>
             <button class="header-link photo" data-page="page-photo">📸 Фото</button>
             <button class="header-link ops" data-page="page-operators">👥 Оперативники</button>
+            <button class="header-link instructions" data-page="page-instructions">📄 Инструкции</button>
+            <button class="header-link atak" data-page="page-atak">📡 ATAK</button>
         </div>
     </div>
 
@@ -854,6 +1010,22 @@
         </div>
     </div>
 
+    <!-- ИНСТРУКЦИИ -->
+    <div id="page-instructions" class="page">
+        <h2>Инструкции и руководства</h2>
+        <div id="docsContainer" class="docs-grid">
+            <div class="no-data">Загрузка документов...</div>
+        </div>
+    </div>
+
+    <!-- ATAK -->
+    <div id="page-atak" class="page">
+        <h2>Руководство по ATAK</h2>
+        <div id="atakContainer" class="atak-tree">
+            <div class="no-data">Загрузка руководства...</div>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -864,12 +1036,11 @@
         // 1. НАВИГАЦИЯ (переключение вкладок)
         // ============================================================
         const navLinks = document.querySelectorAll('.header-link');
-        const pages = {
-            home: document.getElementById('page-home'),
-            calc: document.getElementById('page-calc'),
-            photo: document.getElementById('page-photo'),
-            operators: document.getElementById('page-operators')
-        };
+        const pageIds = ['page-home', 'page-calc', 'page-photo', 'page-operators', 'page-instructions', 'page-atak'];
+        const pages = {};
+        pageIds.forEach(id => {
+            pages[id] = document.getElementById(id);
+        });
 
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
@@ -887,14 +1058,19 @@
                 const target = document.getElementById(pageId);
                 if (target) target.classList.add('active');
 
-                // Если страница фото или оперативники ещё не загружена – загружаем
+                // Ленивая загрузка данных для соответствующих страниц
                 if (pageId === 'page-photo' && !window._photoLoaded) {
                     loadPhotos();
                 }
                 if (pageId === 'page-operators' && !window._operatorsLoaded) {
                     loadOperators();
                 }
-                // Калькулятор не требует загрузки, он уже есть
+                if (pageId === 'page-instructions' && !window._instructionsLoaded) {
+                    loadInstructions();
+                }
+                if (pageId === 'page-atak' && !window._atakLoaded) {
+                    loadAtak();
+                }
             });
         });
 
@@ -1010,14 +1186,13 @@
             playTrack();
         };
 
-        // События для радио
         playBtn.addEventListener('click', toggleRadio);
         prevBtn.addEventListener('click', prevTrack);
         nextBtn.addEventListener('click', nextTrack);
         playlistSelect.addEventListener('change', changeChannel);
 
         // ============================================================
-        // 3. БОРТОВОЙ ЖУРНАЛ (загружается сразу)
+        // 3. БОРТОВОЙ ЖУРНАЛ
         // ============================================================
         async function loadLogs() {
             try {
@@ -1046,7 +1221,7 @@
         }
 
         // ============================================================
-        // 4. КАЛЬКУЛЯТОР (встроен, без JSON)
+        // 4. КАЛЬКУЛЯТОР
         // ============================================================
         function initCalculator() {
             const weightSlider = document.getElementById('weightSlider');
@@ -1272,15 +1447,164 @@
         }
 
         // ============================================================
-        // 7. ЗАПУСК
+        // 7. ИНСТРУКЦИИ (ленивая загрузка)
+        // ============================================================
+        async function loadInstructions() {
+            if (window._instructionsLoaded) return;
+            const container = document.getElementById('docsContainer');
+            try {
+                const response = await fetch('instructions_data.json');
+                if (!response.ok) throw new Error('Не удалось загрузить инструкции');
+                const data = await response.json();
+                if (!data.documents || data.documents.length === 0) {
+                    container.innerHTML = `<div class="no-data">Документов пока нет</div>`;
+                    window._instructionsLoaded = true;
+                    return;
+                }
+                container.innerHTML = '';
+                data.documents.forEach(doc => {
+                    const card = document.createElement('div');
+                    card.className = 'doc-card';
+
+                    const title = document.createElement('div');
+                    title.className = 'doc-title';
+                    title.textContent = doc.title || 'Без названия';
+
+                    const desc = document.createElement('div');
+                    desc.className = 'doc-desc';
+                    desc.textContent = doc.description || '';
+
+                    const link = document.createElement('a');
+                    link.className = 'doc-link';
+                    link.href = doc.link || '#';
+                    link.target = '_blank';
+                    link.textContent = '📄 Открыть PDF';
+                    link.rel = 'noopener noreferrer';
+
+                    card.appendChild(title);
+                    if (doc.description) card.appendChild(desc);
+                    card.appendChild(link);
+                    container.appendChild(card);
+                });
+                window._instructionsLoaded = true;
+            } catch (error) {
+                console.error('Ошибка загрузки инструкций:', error);
+                container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки инструкций. Проверьте файл instructions_data.json</div>`;
+                window._instructionsLoaded = true;
+            }
+        }
+
+        // ============================================================
+        // 8. ATAK (ленивая загрузка с аккордеоном)
+        // ============================================================
+        async function loadAtak() {
+            if (window._atakLoaded) return;
+            const container = document.getElementById('atakContainer');
+            try {
+                const response = await fetch('atak_data.json');
+                if (!response.ok) throw new Error('Не удалось загрузить руководство ATAK');
+                const data = await response.json();
+                if (!data.sections || data.sections.length === 0) {
+                    container.innerHTML = `<div class="no-data">Разделы отсутствуют</div>`;
+                    window._atakLoaded = true;
+                    return;
+                }
+                container.innerHTML = '';
+                // Создаём дерево
+                const tree = document.createElement('div');
+                tree.className = 'atak-tree';
+                data.sections.forEach(section => {
+                    const node = createAtakNode(section, 0);
+                    tree.appendChild(node);
+                });
+                container.appendChild(tree);
+                window._atakLoaded = true;
+            } catch (error) {
+                console.error('Ошибка загрузки ATAK:', error);
+                container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки руководства ATAK. Проверьте файл atak_data.json</div>`;
+                window._atakLoaded = true;
+            }
+        }
+
+        // Рекурсивное создание узлов ATAK
+        function createAtakNode(item, depth) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'atak-node';
+
+            // Заголовок
+            const header = document.createElement('div');
+            header.className = 'node-header';
+            const titleSpan = document.createElement('span');
+            titleSpan.textContent = item.title || 'Без названия';
+            header.appendChild(titleSpan);
+
+            // Стрелка, если есть дети или контент
+            const hasChildren = item.children && item.children.length > 0;
+            const hasContent = item.content && item.content.trim().length > 0;
+
+            if (hasChildren || hasContent) {
+                const arrow = document.createElement('span');
+                arrow.className = 'arrow';
+                arrow.textContent = '▶';
+                header.appendChild(arrow);
+
+                // Контейнер для дочерних элементов и контента
+                const childContainer = document.createElement('div');
+                childContainer.className = 'node-children';
+
+                // Если есть контент – добавляем его как отдельный блок
+                if (hasContent) {
+                    const contentDiv = document.createElement('div');
+                    contentDiv.className = 'node-content';
+                    contentDiv.innerHTML = item.content;
+                    childContainer.appendChild(contentDiv);
+                }
+
+                // Рекурсивно добавляем детей
+                if (hasChildren) {
+                    item.children.forEach(child => {
+                        const childNode = createAtakNode(child, depth + 1);
+                        childContainer.appendChild(childNode);
+                    });
+                }
+
+                wrapper.appendChild(header);
+                wrapper.appendChild(childContainer);
+
+                // Клик для раскрытия/скрытия
+                header.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const arrowEl = this.querySelector('.arrow');
+                    const childrenEl = this.parentElement.querySelector('.node-children');
+                    if (childrenEl) {
+                        const isOpen = childrenEl.classList.contains('open');
+                        if (isOpen) {
+                            childrenEl.classList.remove('open');
+                            if (arrowEl) arrowEl.classList.remove('open');
+                        } else {
+                            childrenEl.classList.add('open');
+                            if (arrowEl) arrowEl.classList.add('open');
+                        }
+                    }
+                });
+            } else {
+                // Лист (без детей и контента) – просто заголовок без функционала
+                wrapper.classList.add('node-leaf');
+                wrapper.appendChild(header);
+            }
+
+            return wrapper;
+        }
+
+        // ============================================================
+        // 9. ЗАПУСК
         // ============================================================
         window.onload = function() {
             loadRadioData();
             loadLogs();
             initCalculator();
-            // Фото и оперативники загружаются при первом открытии вкладки
-            // Если хотите загрузить сразу все – можно вызвать здесь loadPhotos(); loadOperators();
-            // Но для экономии трафика оставляем ленивую загрузку.
+            // Фото, оперативники, инструкции, ATAK загружаются при открытии вкладок
+            // Можно предзагрузить всё, но оставляем ленивую загрузку для экономии
         };
 
     })();

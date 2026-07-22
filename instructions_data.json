@@ -1,0 +1,19 @@
+{
+  "documents": [
+    {
+      "title": "Инструкция по эксплуатации Baofeng UV-5R для подразделения FOXHOUND",
+      "description": "Подробное руководство по программированию частот, настройке шумоподавления и работе с рацией.",
+      "link": "https://drive.google.com/file/d/11reR9K2SW65EeXa8lP22CBNeQJxr3hps/view?usp=sharing"
+    },
+    {
+      "title": "Гирбоксы AEG: Устройство, версии и совместимость",
+      "description": "Экспресс-курс по внутреннему устройству страйкбольного оружия",
+      "link": "https://drive.google.com/file/d/19qVFlgKZXllow7_KtoiItdY3C6AcirHY/view?usp=sharing"
+    },
+    {
+      "title": "Экспресс-курс по медицине",
+      "description": "Медицинское сопровождение в страйболе для подразделения FOXHOUND",
+      "link": "https://drive.google.com/file/d/1f4bv8j41H2nG_CRNiBjhqfKIQvQPTezS/view?usp=sharing"
+    }
+  ]
+}
