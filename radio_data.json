@@ -7,7 +7,7 @@
       "purpose": "ЧЕЛОВЕК, ПРОДАВШИЙ МИР",
       "desc": "Главная тема команды FOXHOUND.",
       "tracks": [
-        { "title": "The Man Who Sold The World", "src": "playlist_mgs/man_who_sold_the_world.mp3" }
+        { "title": "The Man Who Sold The World", "src": "radio/playlist_mgs/man_who_sold_the_world.mp3" }
       ]
     },
     {
@@ -17,11 +17,11 @@
       "purpose": "ЧАСТОТА — ПОДГОТОВКА И СБОРЫ",
       "desc": "Классика русского рока и мрачный вайб для вдумчивой работы над снарягой и приводами.",
       "tracks": [
-        { "title": "Полковнику никто не пишет — БИ - 2", "src": "playlist_rock/1.mp3" },
-        { "title": "Черные птицы - Наутилус Помпилиус", "src": "playlist_rock/2.mp3" },
-        { "title": "Черная Луна - Агата Кристи", "src": "playlist_rock/3.mp3" },
-        { "title": "Пластинки - Дурной Вкус", "src": "playlist_rock/4.mp3" },
-        { "title": "Спокойная ночь - Кино", "src": "playlist_rock/5.mp3" }
+        { "title": "Полковнику никто не пишет — БИ - 2", "src": "radio/playlist_rock/1.mp3" },
+        { "title": "Черные птицы - Наутилус Помпилиус", "src": "radio/playlist_rock/2.mp3" },
+        { "title": "Черная Луна - Агата Кристи", "src": "radio/playlist_rock/3.mp3" },
+        { "title": "Пластинки - Дурной Вкус", "src": "radio/playlist_rock/4.mp3" },
+        { "title": "Спокойная ночь - Кино", "src": "radio/playlist_rock/5.mp3" }
       ]
     },
     {
@@ -31,14 +31,14 @@
       "purpose": "ЧАСТОТА — ЛАБОРАТОРИЯ",
       "desc": "Пост-панк, индастриал и электроника. Музыка для кода, пайки и 3D-печати",
       "tracks": [
-        { "title": "Heretic — Frayle", "src": "playlist_laboratory/1.mp3" },
-        { "title": "Клетка — Molchat Doma", "src": "playlist_laboratory/2.mp3" },
-        { "title": "Судно (Борис Рижий) — Molchat Doma", "src": "playlist_laboratory/3.mp3" },
-        { "title": "Волны — Molchat Doma", "src": "playlist_laboratory/4.mp3" },
-        { "title": "Тоска — Molchat Doma", "src": "playlist_laboratory/5.mp3" },
-        { "title": "Trava u Doma (Geoffrey Day Remix) — Geoffplaysguitar, Земляне, Atomic Heart", "src": "playlist_laboratory/6.mp3" },
-        { "title": "Кому-то в мире весело — Где Фантом?", "src": "playlist_laboratory/7.mp3" },
-        { "title": "Пикник - Из мышеловки — Пикник", "src": "playlist_laboratory/8.mp3" }
+        { "title": "Heretic — Frayle", "src": "radio/playlist_laboratory/1.mp3" },
+        { "title": "Клетка — Molchat Doma", "src": "radio/playlist_laboratory/2.mp3" },
+        { "title": "Судно (Борис Рижий) — Molchat Doma", "src": "radio/playlist_laboratory/3.mp3" },
+        { "title": "Волны — Molchat Doma", "src": "radio/playlist_laboratory/4.mp3" },
+        { "title": "Тоска — Molchat Doma", "src": "radio/playlist_laboratory/5.mp3" },
+        { "title": "Trava u Doma (Geoffrey Day Remix) — Geoffplaysguitar, Земляне, Atomic Heart", "src": "radio/playlist_laboratory/6.mp3" },
+        { "title": "Кому-то в мире весело — Где Фантом?", "src": "radio/playlist_laboratory/7.mp3" },
+        { "title": "Пикник - Из мышеловки — Пикник", "src": "radio/playlist_laboratory/8.mp3" }
       ]
     },
     {
@@ -48,15 +48,15 @@
       "purpose": "ЧАСТОТА - ПОЛЕВОЙ ВЫХОД",
       "desc": "Самый мощный и драйвовый контент для дороги на полигон и боевого настроя",
       "tracks": [
-        { "title": "Прорвёмся! Опера` (Любэ 35. Всё опять начинается. Трибьют) — RADIO TAPOK, Игорь Матвиенко", "src": "playlist_pole/1.mp3" },
-        { "title": "Мёртвый Город — СОЛОВЕЙ", "src": "playlist_pole/2.mp3" },
-        { "title": "Инструкция по Выживанию (Instructions for Survival) - Афганский Синдром (Afghan Syndrom) — Rel1sh", "src": "playlist_pole/3.mp3" },
-        { "title": "В диапазоне — Порнофильмы, Котляров Владимир Андреевич", "src": "playlist_pole/4.mp3" },
-        { "title": "Павел Пламенев и iwantsummer – Антиматерия — Plamenev", "src": "playlist_pole/5.mp3" },
-        { "title": "Ingermanland — Plamenev, Pavel Plamenev, Лёша Хельга, Sofiko Kardava", "src": "playlist_pole/7.mp3" },
-        { "title": "Он увидел солнце — Гражданская оборона, Егор Летов", "src": "playlist_pole/8.mp3" },
-        { "title": "Последняя битва — Norma Tale", "src": "playlist_pole/9.mp3" },
-        { "title": "Про дурачка — Гражданская оборона, Егор Летов", "src": "playlist_pole/10.mp3" }
+        { "title": "Прорвёмся! Опера` (Любэ 35. Всё опять начинается. Трибьют) — RADIO TAPOK, Игорь Матвиенко", "src": "radio/playlist_pole/1.mp3" },
+        { "title": "Мёртвый Город — СОЛОВЕЙ", "src": "radio/playlist_pole/2.mp3" },
+        { "title": "Инструкция по Выживанию (Instructions for Survival) - Афганский Синдром (Afghan Syndrom) — Rel1sh", "src": "radio/playlist_pole/3.mp3" },
+        { "title": "В диапазоне — Порнофильмы, Котляров Владимир Андреевич", "src": "radio/playlist_pole/4.mp3" },
+        { "title": "Павел Пламенев и iwantsummer – Антиматерия — Plamenev", "src": "radio/playlist_pole/5.mp3" },
+        { "title": "Ingermanland — Plamenev, Pavel Plamenev, Лёша Хельга, Sofiko Kardava", "src": "radio/playlist_pole/7.mp3" },
+        { "title": "Он увидел солнце — Гражданская оборона, Егор Летов", "src": "radio/playlist_pole/8.mp3" },
+        { "title": "Последняя битва — Norma Tale", "src": "radio/playlist_pole/9.mp3" },
+        { "title": "Про дурачка — Гражданская оборона, Егор Летов", "src": "radio/playlist_pole/10.mp3" }
       ]
     },
     {
@@ -66,47 +66,28 @@
       "purpose": "ЧАСТОТА - СТИЛЬ",
       "desc": "Сборка разных композиций для активного или монотонного времяпрепровождения под звучный и субъективно стильный саунд (Автор - Nexor)",
       "tracks": [
-        { "title": "¡Adiós, pedrilas! — 2rbina 2rista", "src": "playlist_playlist_stil/1.mp3" },
-        { "title": "40 DAYS (Low Bass by Ivanich) — (41-44Hz) GREEN ORXNGE, Sagath", "src": "playlist_playlist_stil/2.mp3" },
-        { "title": "Resident Evil HUNK Theme Remix (RE2 x RE9) | Human Unit Never Killed — ArsChronica", "src": "playlist_playlist_stil/3.mp3" },
-        { "title": "The Forgotten Soldier (Metal Remix) — ArsChronica", "src": "playlist_playlist_stil/4.mp3" },
-        { "title": "Железные челюсти — CHAIN$AWSQUAD, SARCOFUCK", "src": "playlist_playlist_stil/5.mp3" },
-        { "title": "мне просто лень — CHAIN$AWSQUAD, Terror Letov, gan4o", "src": "playlist_playlist_stil/6.mp3" },
-        { "title": "Я люблю людей как гвоздь в горле — CHAIN$AWSQUAD, UMERTVIE", "src": "playlist_playlist_stil/7.mp3" },
-        { "title": "RAIDEN — DEATHCHANNEL", "src": "playlist_playlist_stil/8.mp3" },
-        { "title": "One Tap — DEATHCHANNEL feat. Terror Letov", "src": "playlist_playlist_stil/9.mp3" },
-        { "title": "KURU — DEATHCHANNEL, BLOODSET", "src": "playlist_playlist_stil/10.mp3" },
-        { "title": "Violence Suppressor — Irving Force", "src": "playlist_playlist_stil/11.mp3" },
-        { "title": "Раньше было лучше — Sagath, МОЛОДОСТЬ ВНУТРИ", "src": "playlist_playlist_stil/12.mp3" },
-        { "title": "Мёртвый рейв — SCREAMPUNK", "src": "playlist_playlist_stil/13.mp3" },
-        { "title": "АКТ 5. BIG BOY THINGS — TERROR LETOV feat. CARVACULT, FORGOTTEN GOD", "src": "playlist_playlist_stil/14.mp3" },
-        { "title": "АКТ 3. НОРАДРЕНАЛИН — TERROR LETOV feat. SAGATH", "src": "playlist_playlist_stil/15.mp3" },
-        { "title": "Метал командос — The Starkillers", "src": "playlist_playlist_stil/16.mp3" },
-        { "title": "Мы все уже в аду — The Starkillers", "src": "playlist_playlist_stil/17.mp3" },
-        { "title": "I'M DONE — whoami.wav", "src": "playlist_playlist_stil/18.mp3" },
-        { "title": "Встань иди — Мертвецы", "src": "playlist_playlist_stil/19.mp3" },
-        { "title": "Хокку — Мертвецы", "src": "playlist_playlist_stil/20.mp3" },
-        { "title": "HEAVYWEIGHT — НОКТУ", "src": "playlist_playlist_stil/21.mp3" },
-        { "title": "NUMBERS — НОКТУ, RAYBAX", "src": "playlist_playlist_stil/22.mp3" }
-      ]
-    },
-    {
-      "id": "heretic",
-      "name": "CH 66.6: Еретик",
-      "frequency": "66.6",
-      "purpose": "ЧАСТОТА - «ЕРЕСЬ»",
-      "desc": "Личный канал Командира отряда. Инженерный цинизм, оккультный индастриал и ментальный кибер-синт. Музыка для тех, кто конструирует цифровую ересь на стыке тактики, технологий и абсолютного безумия.",
-      "tracks": [
-        { "title": "Chikoi the Maid - Catharsis — Chikoi the Maid", "src": "playlist_heretic/1.mp3" },
-        { "title": "Hacking — Synthwave Goose", "src": "playlist_heretic/2.mp3" },
-        { "title": "Heretic — Frayle", "src": "playlist_heretic/3.mp3" },
-        { "title": "Ingermanland — Plamenev, Pavel Plamenev, Лёша Хельга, Sofiko Kardava", "src": "playlist_heretic/4.mp3" },
-        { "title": "Kichi - Mental Obscurance — Kichi The Maid", "src": "playlist_heretic/5.mp3" },
-        { "title": "Princess of Vampires — Berenika, Gai Artem Vladislavovich", "src": "playlist_heretic/6.mp3" },
-        { "title": "Requiem — Heaven Pierce Her", "src": "playlist_heretic/7.mp3" },
-        { "title": "Suicide by Starlight — Kichi The Maid", "src": "playlist_heretic/8.mp3" },
-        { "title": "KEYGEN CHURCH - Tenebre Rosso Sangue (ULTRAKILL Soundtrack) — KEYGEN CHURCH", "src": "playlist_heretic/9.mp3" },
-        { "title": "The Man Who Sold the World (2010 Remaster) — Midge Ure", "src": "playlist_heretic/10.mp3" }
+        { "title": "¡Adiós, pedrilas! — 2rbina 2rista", "src": "radio/playlist_playlist_stil/1.mp3" },
+        { "title": "40 DAYS (Low Bass by Ivanich) — (41-44Hz) GREEN ORXNGE, Sagath", "src": "radio/playlist_playlist_stil/2.mp3" },
+        { "title": "Resident Evil HUNK Theme Remix (RE2 x RE9) | Human Unit Never Killed — ArsChronica", "src": "radio/playlist_playlist_stil/3.mp3" },
+        { "title": "The Forgotten Soldier (Metal Remix) — ArsChronica", "src": "radio/playlist_playlist_stil/4.mp3" },
+        { "title": "Железные челюсти — CHAIN$AWSQUAD, SARCOFUCK", "src": "radio/playlist_playlist_stil/5.mp3" },
+        { "title": "мне просто лень — CHAIN$AWSQUAD, Terror Letov, gan4o", "src": "radio/playlist_playlist_stil/6.mp3" },
+        { "title": "Я люблю людей как гвоздь в горле — CHAIN$AWSQUAD, UMERTVIE", "src": "radio/playlist_playlist_stil/7.mp3" },
+        { "title": "RAIDEN — DEATHCHANNEL", "src": "radio/playlist_playlist_stil/8.mp3" },
+        { "title": "One Tap — DEATHCHANNEL feat. Terror Letov", "src": "radio/playlist_playlist_stil/9.mp3" },
+        { "title": "KURU — DEATHCHANNEL, BLOODSET", "src": "radio/playlist_playlist_stil/10.mp3" },
+        { "title": "Violence Suppressor — Irving Force", "src": "radio/playlist_playlist_stil/11.mp3" },
+        { "title": "Раньше было лучше — Sagath, МОЛОДОСТЬ ВНУТРИ", "src": "radio/playlist_playlist_stil/12.mp3" },
+        { "title": "Мёртвый рейв — SCREAMPUNK", "src": "radio/playlist_playlist_stil/13.mp3" },
+        { "title": "АКТ 5. BIG BOY THINGS — TERROR LETOV feat. CARVACULT, FORGOTTEN GOD", "src": "radio/playlist_playlist_stil/14.mp3" },
+        { "title": "АКТ 3. НОРАДРЕНАЛИН — TERROR LETOV feat. SAGATH", "src": "radio/playlist_playlist_stil/15.mp3" },
+        { "title": "Метал командос — The Starkillers", "src": "radio/playlist_playlist_stil/16.mp3" },
+        { "title": "Мы все уже в аду — The Starkillers", "src": "radio/playlist_playlist_stil/17.mp3" },
+        { "title": "I'M DONE — whoami.wav", "src": "radio/playlist_playlist_stil/18.mp3" },
+        { "title": "Встань иди — Мертвецы", "src": "radio/playlist_playlist_stil/19.mp3" },
+        { "title": "Хокку — Мертвецы", "src": "radio/playlist_playlist_stil/20.mp3" },
+        { "title": "HEAVYWEIGHT — НОКТУ", "src": "radio/playlist_playlist_stil/21.mp3" },
+        { "title": "NUMBERS — НОКТУ, RAYBAX", "src": "radio/playlist_playlist_stil/22.mp3" }
       ]
     }
   ]
