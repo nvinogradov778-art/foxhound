@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FOXHOUND — Инженерно-тактическая страйкбольная команда</title>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet" />
     <style>
-        /* ===== ОБЩИЕ ПЕРЕМЕННЫЕ ===== */
+        /* ===== ПЕРЕМЕННЫЕ ===== */
         :root {
-            --bg-color: #1a1f1d;
-            --panel-bg: #242b28;
-            --accent-color: #e67e22;
-            --text-color: #e0e0e0;
-            --text-muted: #a0a8a4;
-            --border-color: #34403a;
-            --card-bg: rgba(0,0,0,0.4);
-            --green: #2ecc71;
-            --red: #e74c3c;
-            --blue: #3498db;
-            --purple: #9b59b6;
+            --bg-color: #0a0a0a;
+            --panel-bg: #111111;
+            --accent-color: #ff6600;
+            --accent-glow: rgba(255, 102, 0, 0.2);
+            --text-color: #c0c0c0;
+            --text-muted: #666666;
+            --border-color: #2a2a2a;
+            --glass-bg: rgba(17, 17, 17, 0.7);
+            --green: #33cc33;
+            --red: #ff3333;
+            --blue: #3399ff;
+            --purple: #aa66ff;
+            --shadow: 0 0 30px rgba(0,0,0,0.7);
         }
 
         * {
@@ -29,12 +32,12 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'PT Sans', 'Arial', sans-serif;
             line-height: 1.6;
             padding: 40px 20px;
+            min-height: 100vh;
             position: relative;
             overflow-x: hidden;
-            min-height: 100vh;
         }
 
         .video-background {
@@ -48,25 +51,13 @@
             pointer-events: none;
         }
 
-        .video-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: -1;
-            pointer-events: none;
-        }
-
         .container {
             max-width: 1000px;
             margin: 0 auto;
             background: var(--panel-bg);
             border: 2px solid var(--accent-color);
-            border-radius: 8px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            box-shadow: var(--shadow), inset 0 0 20px rgba(255,102,0,0.04);
             position: relative;
             z-index: 1;
         }
@@ -77,33 +68,59 @@
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 25px;
             margin-bottom: 25px;
+            position: relative;
+        }
+        .header::after {
+            content: '/// FOXHOUND ///';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--panel-bg);
+            padding: 0 15px;
+            color: var(--accent-color);
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-family: 'PT Sans', sans-serif;
         }
 
         .logo-image {
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
             object-fit: contain;
-            margin: 0 auto 20px;
+            margin: 0 auto 16px;
             display: block;
             background: #000;
             border: 2px solid var(--accent-color);
-            border-radius: 4px;
-            padding: 5px;
+            padding: 8px;
+            box-shadow: 0 0 30px var(--accent-glow);
+            transition: all 0.3s;
+            filter: grayscale(0.2);
+        }
+        .logo-image:hover {
+            transform: scale(1.05);
+            filter: grayscale(0);
         }
 
         h1 {
             color: #fff;
-            font-size: 24px;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            font-size: 40px;
+            letter-spacing: 4px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            text-shadow: 0 0 20px var(--accent-glow);
+            text-transform: uppercase;
         }
 
         .subtitle {
             color: var(--accent-color);
-            font-size: 14px;
+            font-size: 16px;
             text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 2px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
         }
 
         /* ===== НАВИГАЦИЯ ===== */
@@ -111,146 +128,108 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 8px;
+            gap: 2px;
             margin-top: 20px;
+            padding: 4px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .header-link {
             display: inline-block;
-            background: rgba(230, 126, 34, 0.15);
-            border: 1px solid var(--accent-color);
-            color: var(--accent-color);
-            padding: 6px 14px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            font-size: 15px;
+            font-weight: 700;
             text-transform: uppercase;
-            text-decoration: none;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             transition: all 0.2s ease;
             cursor: pointer;
-            border: 1px solid transparent;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            position: relative;
+        }
+
+        .header-link::before {
+            content: '› ';
+            opacity: 0;
+            transition: opacity 0.2s;
         }
 
         .header-link:hover {
-            background: var(--accent-color);
             color: #fff;
+            background: rgba(255,102,0,0.08);
+        }
+        .header-link:hover::before {
+            opacity: 1;
         }
 
         .header-link.active {
-            background: var(--accent-color);
-            color: #fff;
-            cursor: default;
+            color: var(--accent-color);
+            background: rgba(255,102,0,0.12);
+            box-shadow: inset 0 -2px 0 var(--accent-color);
+        }
+        .header-link.active::before {
+            opacity: 1;
         }
 
-        .header-link.main {
-            border-color: #95a5a6;
-            color: #bdc3c7;
-            background: rgba(149, 165, 166, 0.1);
-        }
-        .header-link.main:hover {
-            background: #95a5a6;
-            color: #fff;
-        }
         .header-link.main.active {
-            background: #95a5a6;
-            color: #fff;
-        }
-
-        .header-link.calc {
-            border-color: #2c3e50;
-            color: #b0b8c0;
-            background: rgba(44, 62, 80, 0.2);
-        }
-        .header-link.calc:hover {
-            background: #2c3e50;
-            color: #fff;
+            box-shadow: inset 0 -2px 0 #95a5a6;
+            color: #95a5a6;
         }
         .header-link.calc.active {
-            background: #2c3e50;
-            color: #fff;
-        }
-
-        .header-link.photo {
-            border-color: var(--green);
-            color: var(--green);
-            background: rgba(46, 204, 113, 0.1);
-        }
-        .header-link.photo:hover {
-            background: var(--green);
-            color: #fff;
+            box-shadow: inset 0 -2px 0 #2c3e50;
+            color: #b0b8c0;
         }
         .header-link.photo.active {
-            background: var(--green);
-            color: #fff;
-        }
-
-        .header-link.ops {
-            border-color: var(--red);
-            color: var(--red);
-            background: rgba(231, 76, 60, 0.1);
-        }
-        .header-link.ops:hover {
-            background: var(--red);
-            color: #fff;
+            box-shadow: inset 0 -2px 0 var(--green);
+            color: var(--green);
         }
         .header-link.ops.active {
-            background: var(--red);
-            color: #fff;
-        }
-
-        .header-link.instructions {
-            border-color: var(--blue);
-            color: var(--blue);
-            background: rgba(52, 152, 219, 0.1);
-        }
-        .header-link.instructions:hover {
-            background: var(--blue);
-            color: #fff;
+            box-shadow: inset 0 -2px 0 var(--red);
+            color: var(--red);
         }
         .header-link.instructions.active {
-            background: var(--blue);
-            color: #fff;
-        }
-
-        .header-link.atak {
-            border-color: var(--purple);
-            color: var(--purple);
-            background: rgba(155, 89, 182, 0.1);
-        }
-        .header-link.atak:hover {
-            background: var(--purple);
-            color: #fff;
+            box-shadow: inset 0 -2px 0 var(--blue);
+            color: var(--blue);
         }
         .header-link.atak.active {
-            background: var(--purple);
-            color: #fff;
+            box-shadow: inset 0 -2px 0 var(--purple);
+            color: var(--purple);
         }
 
-        /* ===== СТРАНИЦЫ (ПО УМОЛЧАНИЮ СКРЫТЫ) ===== */
+        /* ===== СТРАНИЦЫ ===== */
         .page {
             display: none;
+            animation: fadeIn 0.3s ease;
         }
         .page.active {
             display: block;
         }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* ===== ОБЩИЕ СТИЛИ ===== */
         .quote {
-            background: rgba(230, 126, 34, 0.15);
-            border-left: 4px solid var(--accent-color);
-            padding: 15px;
+            background: var(--glass-bg);
+            padding: 16px 20px;
             margin: 20px 0;
             font-style: italic;
-            color: #fff;
+            color: #c9d1d9;
+            border: 1px solid var(--accent-color);
+            font-family: 'PT Sans', sans-serif;
         }
 
         h2 {
             color: #fff;
-            font-size: 18px;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            font-size: 24px;
             text-transform: uppercase;
-            margin: 40px 0 15px 0;
-            letter-spacing: 1px;
+            margin: 40px 0 16px 0;
+            letter-spacing: 2px;
             display: flex;
             align-items: center;
         }
@@ -263,23 +242,25 @@
         }
         h3 {
             color: var(--accent-color);
-            font-size: 14px;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            font-size: 18px;
             text-transform: uppercase;
-            margin: 15px 0 10px 0;
+            margin: 20px 0 10px 0;
             letter-spacing: 1px;
         }
 
         p {
             margin-bottom: 15px;
             color: var(--text-color);
+            font-size: 16px;
         }
 
-        /* ===== ГЛАВНАЯ (без изменений, как было) ===== */
+        /* ===== ГЛАВНАЯ ===== */
         .tasks-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 15px;
-            margin-top: 15px;
+            gap: 16px;
+            margin-top: 16px;
         }
         @media (min-width: 600px) {
             .tasks-grid {
@@ -287,28 +268,51 @@
             }
         }
         .task-card {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 15px;
+            background: var(--glass-bg);
+            border: 1px solid var(--accent-color);
+            padding: 18px;
+            transition: all 0.2s;
+            font-size: 15px;
+        }
+        .task-card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 20px var(--accent-glow);
+            transform: translateY(-2px);
         }
         .task-card strong {
             color: var(--accent-color);
             display: block;
-            margin-bottom: 5px;
-            font-size: 15px;
+            margin-bottom: 6px;
+            font-size: 16px;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            letter-spacing: 1px;
         }
 
         /* ===== РАДИО ===== */
         .radio-station {
-            background: #111413;
-            border: 2px solid var(--border-color);
-            border-radius: 6px;
+            background: #0a0a0a;
+            border: 2px solid var(--accent-color);
             padding: 20px;
-            margin-top: 15px;
+            margin-top: 16px;
             display: grid;
             grid-template-columns: 1fr;
-            gap: 15px;
+            gap: 16px;
+            box-shadow: inset 0 0 30px rgba(0,20,0,0.4);
+            position: relative;
+        }
+        .radio-station::before {
+            content: 'TAC-COM';
+            position: absolute;
+            top: -11px;
+            right: 20px;
+            background: #0a0a0a;
+            padding: 0 12px;
+            color: var(--green);
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            border: 1px solid var(--green);
         }
         @media (min-width: 600px) {
             .radio-station {
@@ -316,30 +320,31 @@
             }
         }
         .radio-display {
-            background: #0d1f11;
-            border: 1px solid #1f4021;
-            border-radius: 4px;
-            padding: 15px;
-            font-family: 'Courier New', Courier, monospace;
-            color: #39ff14;
-            text-shadow: 0 0 5px rgba(57, 255, 20, 0.5);
-            font-size: 13px;
+            background: #0a180a;
+            border: 1px solid var(--green);
+            padding: 16px;
+            font-family: 'PT Sans', sans-serif;
+            color: #33ff33;
+            text-shadow: 0 0 8px rgba(51, 255, 51, 0.25);
+            font-size: 15px;
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 4px;
         }
         .radio-display .freq-tag {
-            font-weight: bold;
-            font-size: 14px;
+            font-weight: 700;
+            font-size: 17px;
             color: #fff;
-            border-bottom: 1px dashed #1f4021;
-            padding-bottom: 3px;
+            border-bottom: 1px dashed #1a3a1a;
+            padding-bottom: 4px;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            letter-spacing: 1px;
         }
         .radio-display .desc-tag {
             color: #85ff7a;
-            font-size: 11px;
+            font-size: 13px;
             line-height: 1.3;
-            margin-top: 5px;
+            margin-top: 4px;
         }
         .radio-controls {
             display: flex;
@@ -348,29 +353,30 @@
             gap: 10px;
         }
         .radio-btn {
-            background: rgba(230, 126, 34, 0.1);
+            background: rgba(255,102,0,0.08);
             border: 1px solid var(--accent-color);
             color: var(--accent-color);
             padding: 10px;
-            border-radius: 4px;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
             text-transform: uppercase;
-            font-size: 12px;
+            font-size: 15px;
             transition: all 0.2s ease;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            letter-spacing: 1px;
         }
         .radio-btn:hover {
             background: var(--accent-color);
-            color: #fff;
+            color: #0a0a0a;
         }
         .playlist-select {
-            background: #242b28;
+            background: #111;
             border: 1px solid var(--border-color);
             color: #fff;
             padding: 10px;
-            border-radius: 4px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 15px;
+            font-family: 'PT Sans', sans-serif;
         }
         .playlist-select:focus {
             outline: none;
@@ -379,25 +385,25 @@
 
         /* ===== БОРТОВОЙ ЖУРНАЛ ===== */
         .log-container {
-            background: #000;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 15px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 14px;
+            background: #0d0d0d;
+            border: 1px solid var(--accent-color);
+            padding: 16px;
+            font-family: 'PT Sans', sans-serif;
+            font-size: 15px;
         }
         .log-row {
             margin-bottom: 10px;
-            border-bottom: 1px dashed #242b28;
-            padding-bottom: 5px;
+            border-bottom: 1px dashed #1a1a1a;
+            padding-bottom: 6px;
         }
         .log-row:last-child {
-            margin-bottom: 0;
             border-bottom: none;
+            margin-bottom: 0;
         }
         .log-date {
             color: var(--accent-color);
             margin-right: 10px;
+            font-weight: 700;
         }
 
         /* ===== ПРАВИЛА ===== */
@@ -406,67 +412,62 @@
         }
         .rules-list li {
             position: relative;
-            padding-left: 20px;
+            padding-left: 24px;
             margin-bottom: 8px;
+            font-size: 15px;
         }
         .rules-list li::before {
-            content: '✓';
+            content: '[+]';
             position: absolute;
             left: 0;
             color: var(--accent-color);
-            font-weight: bold;
+            font-weight: 700;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
         }
 
         /* ===== КНОПКИ ===== */
-        .join-btn {
-            display: block;
-            width: 100%;
-            background: var(--accent-color);
-            color: #fff;
-            text-align: center;
-            padding: 15px;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            text-decoration: none;
-            margin-top: 35px;
-            transition: background 0.2s ease;
-        }
-        .join-btn:hover {
-            background: #d35400;
-        }
-
+        .join-btn,
         .vk-btn {
             display: block;
             width: 100%;
-            background: #0077ff;
-            color: #fff;
             text-align: center;
-            padding: 15px;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: bold;
+            padding: 16px;
+            border: 2px solid;
+            font-size: 17px;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             cursor: pointer;
             text-decoration: none;
-            margin-top: 15px;
-            transition: background 0.2s ease;
+            transition: all 0.3s ease;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            background: transparent;
+            margin-top: 16px;
+        }
+        .join-btn {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+            margin-top: 35px;
+        }
+        .join-btn:hover {
+            background: var(--accent-color);
+            color: #0a0a0a;
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+        .vk-btn {
+            color: #3399ff;
+            border-color: #3399ff;
         }
         .vk-btn:hover {
-            background: #005fcb;
+            background: #3399ff;
+            color: #0a0a0a;
+            box-shadow: 0 0 30px rgba(51,153,255,0.3);
         }
 
         /* ===== КАЛЬКУЛЯТОР ===== */
         .param-group {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            background: var(--glass-bg);
+            border: 1px solid var(--accent-color);
             padding: 20px;
             margin-bottom: 20px;
         }
@@ -479,32 +480,33 @@
         }
         .slider-row label {
             min-width: 110px;
-            font-weight: 600;
+            font-weight: 700;
             color: #fff;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            letter-spacing: 0.5px;
+            font-size: 15px;
         }
         .slider-row input[type="range"] {
             flex: 1;
             min-width: 150px;
-            background: #2c3e35;
-            height: 6px;
-            border-radius: 3px;
+            background: #2a2a2a;
+            height: 4px;
             -webkit-appearance: none;
             appearance: none;
         }
         .slider-row input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
+            width: 16px;
+            height: 16px;
             background: var(--accent-color);
             cursor: pointer;
             border: none;
+            box-shadow: 0 0 10px var(--accent-glow);
         }
         .slider-row input[type="range"]::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
+            width: 16px;
+            height: 16px;
             background: var(--accent-color);
             cursor: pointer;
             border: none;
@@ -512,9 +514,10 @@
         .value-display {
             min-width: 70px;
             text-align: right;
-            font-weight: bold;
+            font-weight: 700;
             color: var(--accent-color);
-            font-size: 18px;
+            font-size: 19px;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
         }
 
         .result-grid {
@@ -529,20 +532,23 @@
             }
         }
         .result-item {
-            background: #111413;
+            background: #0d0d0d;
             padding: 12px 15px;
-            border-radius: 4px;
-            border-left: 4px solid var(--accent-color);
+            border: 1px solid var(--accent-color);
         }
         .result-item .label {
-            font-size: 12px;
+            font-size: 13px;
             text-transform: uppercase;
             color: var(--text-muted);
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
         .result-item .value {
-            font-size: 22px;
-            font-weight: bold;
+            font-size: 24px;
+            font-weight: 700;
             color: #fff;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
         }
         .result-item .value.highlight {
             color: var(--accent-color);
@@ -552,6 +558,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 5px;
+            font-size: 15px;
         }
         .rules-table th,
         .rules-table td {
@@ -561,34 +568,29 @@
         }
         .rules-table th {
             color: var(--text-muted);
-            font-weight: 400;
-            font-size: 13px;
+            font-weight: 700;
+            font-size: 14px;
             text-transform: uppercase;
-        }
-        .rules-table tr {
-            transition: 0.2s;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            letter-spacing: 1px;
         }
         .rules-table tr.active {
-            background: rgba(230,126,34,0.15);
-            border-left: 4px solid var(--accent-color);
-        }
-        .rules-table tr.active td:first-child {
-            border-left: 4px solid var(--accent-color);
+            background: rgba(255,102,0,0.08);
+            border: 1px solid var(--accent-color);
         }
         .rules-table tr.warning {
-            background: rgba(231,76,60,0.15);
+            background: rgba(255,51,51,0.08);
+            border: 1px solid var(--red);
         }
-        .rules-table tr.warning td:first-child {
-            border-left: 4px solid var(--red);
-        }
+
         .status-msg {
             margin-top: 15px;
             padding: 15px;
-            border-radius: 4px;
-            font-weight: bold;
+            font-weight: 700;
             text-align: center;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
+            background: var(--glass-bg);
+            border: 1px solid var(--accent-color);
+            font-size: 16px;
         }
         .status-msg.ok {
             border-color: var(--green);
@@ -611,15 +613,16 @@
             }
         }
         .photo-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            background: var(--glass-bg);
+            border: 1px solid var(--accent-color);
             overflow: hidden;
-            transition: transform 0.2s, border-color 0.2s;
+            transition: all 0.2s;
+            cursor: pointer;
         }
         .photo-card:hover {
             transform: scale(1.02);
             border-color: var(--accent-color);
+            box-shadow: 0 0 20px var(--accent-glow);
         }
         .photo-card img {
             width: 100%;
@@ -629,23 +632,26 @@
             background: #000;
         }
         .photo-card .card-body {
-            padding: 12px 15px 15px 15px;
+            padding: 12px 15px 15px;
         }
         .photo-card .card-title {
-            font-weight: bold;
+            font-weight: 700;
             color: #fff;
-            font-size: 16px;
+            font-size: 17px;
             margin-bottom: 4px;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            letter-spacing: 1px;
         }
         .photo-card .card-date {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--text-muted);
             margin-bottom: 6px;
         }
         .photo-card .card-desc {
-            font-size: 14px;
+            font-size: 15px;
             color: var(--text-color);
         }
+
         .no-data {
             grid-column: 1 / -1;
             text-align: center;
@@ -659,8 +665,44 @@
             text-align: center;
             color: var(--red);
             border: 1px solid var(--red);
-            border-radius: 4px;
-            background: rgba(231,76,60,0.1);
+            background: rgba(255,51,51,0.05);
+        }
+
+        /* ===== LIGHTBOX (модалка для фото) ===== */
+        #lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        #lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 50px rgba(255,102,0,0.3);
+        }
+        #lightbox .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: #fff;
+            cursor: pointer;
+            font-family: 'PT Sans', sans-serif;
+            font-weight: 700;
+            transition: 0.2s;
+        }
+        #lightbox .close-btn:hover {
+            color: var(--accent-color);
+            transform: scale(1.2);
         }
 
         /* ===== ОПЕРАТИВНИКИ ===== */
@@ -675,16 +717,16 @@
             }
         }
         .operator-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+            background: var(--glass-bg);
+            border: 1px solid var(--accent-color);
             padding: 20px;
-            transition: transform 0.2s, border-color 0.2s;
+            transition: all 0.2s;
             text-align: center;
         }
         .operator-card:hover {
             transform: scale(1.02);
             border-color: var(--accent-color);
+            box-shadow: 0 0 20px var(--accent-glow);
         }
         .operator-avatar {
             display: flex;
@@ -694,8 +736,7 @@
             width: 100%;
             max-width: 120px;
             aspect-ratio: 1/1;
-            border-radius: 50%;
-            background: #111413;
+            background: #0d0d0d;
             border: 2px solid var(--border-color);
             overflow: hidden;
             font-size: 56px;
@@ -708,38 +749,43 @@
         }
         .operator-name {
             font-size: 20px;
-            font-weight: bold;
+            font-weight: 700;
             color: #fff;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            letter-spacing: 1px;
         }
         .operator-role {
             color: var(--accent-color);
-            font-size: 14px;
+            font-size: 15px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin: 5px 0 10px 0;
+            margin: 5px 0 10px;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            font-weight: 700;
         }
         .operator-desc {
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 15px;
             line-height: 1.5;
         }
         .operator-spec {
             display: inline-block;
-            background: rgba(230, 126, 34, 0.2);
+            background: rgba(255,102,0,0.12);
             border: 1px solid var(--accent-color);
-            border-radius: 20px;
             padding: 2px 12px;
-            font-size: 12px;
+            font-size: 13px;
             color: var(--accent-color);
             margin-top: 8px;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            font-weight: 700;
         }
 
         /* ===== ИНСТРУКЦИИ ===== */
         .docs-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 15px;
-            margin-top: 15px;
+            gap: 16px;
+            margin-top: 16px;
         }
         @media (min-width: 600px) {
             .docs-grid {
@@ -747,42 +793,45 @@
             }
         }
         .doc-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 15px;
-            transition: border-color 0.2s;
+            background: var(--glass-bg);
+            border: 1px solid var(--accent-color);
+            padding: 18px;
+            transition: all 0.2s;
         }
         .doc-card:hover {
-            border-color: var(--blue);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 20px var(--accent-glow);
         }
         .doc-card .doc-title {
-            font-weight: bold;
+            font-weight: 700;
             color: #fff;
-            font-size: 16px;
+            font-size: 17px;
             margin-bottom: 5px;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            letter-spacing: 0.5px;
         }
         .doc-card .doc-desc {
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 15px;
             margin-bottom: 10px;
         }
         .doc-card .doc-link {
             display: inline-block;
             color: var(--blue);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
             border: 1px solid var(--blue);
-            padding: 4px 12px;
-            border-radius: 4px;
+            padding: 4px 14px;
             transition: all 0.2s;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            letter-spacing: 1px;
         }
         .doc-card .doc-link:hover {
             background: var(--blue);
-            color: #fff;
+            color: #0a0a0a;
         }
 
-        /* ===== ATAK (аккордеон) ===== */
+        /* ===== ATAK ===== */
         .atak-tree {
             margin-top: 10px;
         }
@@ -792,22 +841,24 @@
         .atak-node .node-header {
             cursor: pointer;
             padding: 10px 15px;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
+            background: var(--glass-bg);
+            border: 1px solid var(--accent-color);
             margin-bottom: 4px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            transition: background 0.2s;
+            transition: all 0.2s;
             user-select: none;
+            font-family: 'PT Sans', sans-serif;
+            font-size: 16px;
         }
         .atak-node .node-header:hover {
-            background: rgba(155, 89, 182, 0.15);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 20px var(--accent-glow);
         }
         .atak-node .node-header .arrow {
             transition: transform 0.2s;
-            font-size: 12px;
+            font-size: 14px;
             color: var(--text-muted);
         }
         .atak-node .node-header .arrow.open {
@@ -820,22 +871,22 @@
             transition: max-height 0.3s ease;
         }
         .atak-node .node-children.open {
-            max-height: 2000px; /* достаточно для больших блоков */
+            max-height: 2000px;
         }
         .atak-node .node-content {
             padding: 10px 15px;
-            background: rgba(0,0,0,0.2);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            margin: 4px 0 8px 0;
+            background: var(--glass-bg);
+            border: 1px solid var(--accent-color);
+            margin: 4px 0 8px;
             color: var(--text-color);
+            font-family: 'PT Sans', sans-serif;
+            font-size: 15px;
         }
         .atak-node .node-content img {
             max-width: 100%;
-            border-radius: 4px;
             margin: 10px 0;
         }
-        .atak-node .node-content ul, 
+        .atak-node .node-content ul,
         .atak-node .node-content ol {
             margin-left: 20px;
             margin-bottom: 10px;
@@ -852,7 +903,7 @@
             background: rgba(0,0,0,0.15);
         }
         .node-leaf .node-header:hover {
-            background: rgba(0,0,0,0.15);
+            border-color: var(--border-color);
         }
         .node-leaf .node-header .arrow {
             display: none;
@@ -861,754 +912,774 @@
 </head>
 <body>
 
-<video class="video-background" autoplay muted loop playsinline>
-    <source src="background.mp4" type="video/mp4">
-</video>
-<div class="video-overlay"></div>
+    <video class="video-background" autoplay muted loop playsinline>
+        <source src="background.mp4" type="video/mp4" />
+    </video>
 
-<div class="container">
+    <div class="container">
 
-    <!-- ===== ШАПКА ===== -->
-    <div class="header">
-        <img src="logo-foxhound.png" alt="FOXHOUND LOGO" class="logo-image">
-        <h1>FOXHOUND</h1>
-        <div class="subtitle">Группа высокотехнологичных операций</div>
+        <!-- ===== ШАПКА ===== -->
+        <div class="header">
+            <img src="logo-foxhound.png" alt="FOXHOUND LOGO" class="logo-image" />
+            <h1>FOXHOUND</h1>
+            <div class="subtitle">Группа высокотехнологичных операций</div>
 
-        <div class="header-links">
-            <button class="header-link main active" data-page="page-home">🏠 Главная</button>
-            <button class="header-link calc" data-page="page-calc">🧮 Калькулятор</button>
-            <button class="header-link photo" data-page="page-photo">📸 Фото</button>
-            <button class="header-link ops" data-page="page-operators">👥 Оперативники</button>
-            <button class="header-link instructions" data-page="page-instructions">📄 Инструкции</button>
-            <button class="header-link atak" data-page="page-atak">📡 ATAK</button>
-        </div>
-    </div>
-
-    <!-- ===== СТРАНИЦЫ ===== -->
-
-    <!-- ГЛАВНАЯ -->
-    <div id="page-home" class="page active">
-        <div class="quote">
-            «На поле боя нет места надежде. Здесь есть только расчет и воля к победе».
-        </div>
-
-        <h2>О команде</h2>
-        <p>Мы взяли название в честь легендарного отряда из мира <em>Metal Gear</em>. Там FOXHOUND был элитой, которая решала задачи не числом, а интеллектом и новейшими разработками. Мы переносим этот подход в реальный страйкбол.</p>
-        <p>Мы — инженерно-тактическая группа. Наш приоритет — техническое превосходство и дисциплина. Мы не просто играем, мы внедряем технологии в каждый выезд.</p>
-
-        <h2>Наши задачи</h2>
-        <div class="tasks-grid">
-            <div class="task-card"><strong>🛠 Разработка</strong> Создаем свои игровые устройства и софт. Паяльник и код — такое же оружие, как и привод.</div>
-            <div class="task-card"><strong>⚙️ Технический апгрейд</strong> Мы сами доводим снаряжение до идеала. Глубокий тюнинг приводов, установка умной электроники и тонкая настройка систем.</div>
-            <div class="task-card"><strong>📡 Навигация и связь</strong> Мастерское владение картами и радиоэфиром. Внедряем современные протоколы связи и знаем полигон лучше противника.</div>
-            <div class="task-card"><strong>⚡ Тактическая гибкость</strong> Ставим на маневренность и слаженность. Отработанные действия в группе позволяют переигрывать оппонента.</div>
-            <div class="task-card"><strong>🤝 Атмосфера</strong> FOXHOUND — это не только стрельба. Мы ценим качественный отдых, адекватное общение и выезды в кругу своих.</div>
-            <div class="task-card"><strong>🌲 Снаряжение</strong> Наш стандарт — Woodland и Ranger Green (RG). Ориентируемся на современный MARSOC.</div>
-        </div>
-
-        <h2>Полевое Радио</h2>
-        <div class="radio-station">
-            <div class="radio-display">
-                <div id="radio-freq" class="freq-tag">FREQ: ---.--- MHz</div>
-                <div id="radio-purpose" style="font-weight: bold; color: var(--accent-color);">СЕТЬ ОТКЛЮЧЕНА</div>
-                <div id="track-title" style="color: #fff; margin-top: 5px;">ШУМ ЭФИРА...</div>
-                <div id="radio-desc" class="desc-tag">Для активации аудио-модуля нажмите ВКЛ РАДИО</div>
+            <div class="header-links">
+                <button class="header-link main active" data-page="page-home">🏠 Главная</button>
+                <button class="header-link calc" data-page="page-calc">🧮 Калькулятор</button>
+                <button class="header-link photo" data-page="page-photo">📸 Фото</button>
+                <button class="header-link ops" data-page="page-operators">👥 Оперативники</button>
+                <button class="header-link instructions" data-page="page-instructions">📄 Инструкции</button>
+                <button class="header-link atak" data-page="page-atak">📡 ATAK</button>
             </div>
-            <div class="radio-controls">
-                <select id="playlist-select" class="playlist-select"></select>
-                <button id="play-btn" class="radio-btn">ВКЛ РАДИО</button>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <button id="prev-btn" class="radio-btn">◀ НАЗАД</button>
-                    <button id="next-btn" class="radio-btn">ВПЕРЕД ▶</button>
+        </div>
+
+        <!-- ===== СТРАНИЦЫ ===== -->
+
+        <!-- ГЛАВНАЯ -->
+        <div id="page-home" class="page active">
+            <div class="quote">
+                «На поле боя нет места надежде. Здесь есть только расчет и воля к победе».
+            </div>
+
+            <h2>О команде</h2>
+            <p>Мы взяли название в честь легендарного отряда из мира <em>Metal Gear</em>. Там FOXHOUND был элитой, которая решала задачи не числом, а интеллектом и новейшими разработками. Мы переносим этот подход в реальный страйкбол.</p>
+            <p>Мы — инженерно-тактическая группа. Наш приоритет — техническое превосходство и дисциплина. Мы не просто играем, мы внедряем технологии в каждый выезд.</p>
+
+            <h2>Наши задачи</h2>
+            <div class="tasks-grid">
+                <div class="task-card"><strong>🛠 Разработка</strong> Создаем свои игровые устройства и софт. Паяльник и код — такое же оружие, как и привод.</div>
+                <div class="task-card"><strong>⚙️ Технический апгрейд</strong> Мы сами доводим снаряжение до идеала. Глубокий тюнинг приводов, установка умной электроники и тонкая настройка систем.</div>
+                <div class="task-card"><strong>📡 Навигация и связь</strong> Мастерское владение картами и радиоэфиром. Внедряем современные протоколы связи и знаем полигон лучше противника.</div>
+                <div class="task-card"><strong>⚡ Тактическая гибкость</strong> Ставим на маневренность и слаженность. Отработанные действия в группе позволяют переигрывать оппонента.</div>
+                <div class="task-card"><strong>🤝 Атмосфера</strong> FOXHOUND — это не только стрельба. Мы ценим качественный отдых, адекватное общение и выезды в кругу своих.</div>
+                <div class="task-card"><strong>🌲 Снаряжение</strong> Наш стандарт — Woodland и Ranger Green (RG). Ориентируемся на современный MARSOC.</div>
+            </div>
+
+            <h2>Полевое Радио</h2>
+            <div class="radio-station">
+                <div class="radio-display">
+                    <div id="radio-freq" class="freq-tag">FREQ: ---.--- MHz</div>
+                    <div id="radio-purpose" style="font-weight: bold; color: var(--accent-color);">СЕТЬ ОТКЛЮЧЕНА</div>
+                    <div id="track-title" style="color: #fff; margin-top: 5px;">ШУМ ЭФИРА...</div>
+                    <div id="radio-desc" class="desc-tag">Для активации аудио-модуля нажмите ВКЛ РАДИО</div>
+                </div>
+                <div class="radio-controls">
+                    <select id="playlist-select" class="playlist-select"></select>
+                    <button id="play-btn" class="radio-btn">ВКЛ РАДИО</button>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <button id="prev-btn" class="radio-btn">◀ НАЗАД</button>
+                        <button id="next-btn" class="radio-btn">ВПЕРЕД ▶</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <h2>Бортовой журнал</h2>
-        <div id="log-container" class="log-container">
-            <div class="log-row" style="color: var(--text-muted);">Загрузка записей...</div>
-        </div>
-
-        <h2>Порядок</h2>
-        <ul class="rules-list">
-            <li>Работаем строго по правилам Уральской Ассоциации Страйкбола (УАС).</li>
-            <li>Адекватность, честность и отсутствие овертюна — база нашей команды.</li>
-        </ul>
-
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdCmb8iLGiwe5nbRQl4SpGQPjZiFfVIw1meTqHWFHm5yhAPzg/viewform?usp=dialog" target="_blank" class="join-btn">Подать заявку в команду</a>
-        <a href="https://vk.ru/club239972469" target="_blank" class="vk-btn">Мы ВКонтакте</a>
-    </div>
-
-    <!-- КАЛЬКУЛЯТОР -->
-    <div id="page-calc" class="page">
-        <h2>Калькулятор страйкбола</h2>
-        <div class="param-group">
-            <div class="slider-row">
-                <label for="weightSlider">Вес шара</label>
-                <input type="range" id="weightSlider" min="0.12" max="0.43" step="0.01" value="0.25" />
-                <span class="value-display" id="weightValue">0.25 г</span>
+            <h2>Бортовой журнал</h2>
+            <div id="log-container" class="log-container">
+                <div class="log-row" style="color: var(--text-muted);">Загрузка записей...</div>
             </div>
-            <div class="slider-row">
-                <label for="speedSlider">Скорость</label>
-                <input type="range" id="speedSlider" min="60" max="160" step="1" value="120" />
-                <span class="value-display" id="speedValue">120 м/с</span>
+
+            <h2>Порядок</h2>
+            <ul class="rules-list">
+                <li>Работаем строго по правилам Уральской Ассоциации Страйкбола (УАС).</li>
+                <li>Адекватность, честность и отсутствие овертюна — база нашей команды.</li>
+            </ul>
+
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdCmb8iLGiwe5nbRQl4SpGQPjZiFfVIw1meTqHWFHm5yhAPzg/viewform?usp=dialog" target="_blank" class="join-btn">Подать заявку в команду</a>
+            <a href="https://vk.ru/club239972469" target="_blank" class="vk-btn">Мы ВКонтакте</a>
+        </div>
+
+        <!-- КАЛЬКУЛЯТОР -->
+        <div id="page-calc" class="page">
+            <h2>Калькулятор страйкбола</h2>
+            <div class="param-group">
+                <div class="slider-row">
+                    <label for="weightSlider">Вес шара</label>
+                    <input type="range" id="weightSlider" min="0.12" max="0.43" step="0.01" value="0.25" />
+                    <span class="value-display" id="weightValue">0.25 г</span>
+                </div>
+                <div class="slider-row">
+                    <label for="speedSlider">Скорость</label>
+                    <input type="range" id="speedSlider" min="60" max="160" step="1" value="120" />
+                    <span class="value-display" id="speedValue">120 м/с</span>
+                </div>
+            </div>
+            <div class="result-grid">
+                <div class="result-item">
+                    <div class="label">Дульная энергия</div>
+                    <div class="value highlight" id="energyDisplay">1.80 Дж</div>
+                </div>
+                <div class="result-item">
+                    <div class="label">Скорость на 0.20 г</div>
+                    <div class="value highlight" id="speedOn20Display">134 м/с</div>
+                </div>
+            </div>
+
+            <h3>Регламент полигона (Уральская ассоциация страйкбола)</h3>
+            <table class="rules-table" id="rulesTable">
+                <thead>
+                    <tr><th>Категория</th><th>Ограничение по энергии</th><th>Дистанция</th><th>Статус</th></tr>
+                </thead>
+                <tbody>
+                    <tr data-weapon="secondary">
+                        <td>Вторичка (пистолеты, автоматы в здании)</td>
+                        <td>до 1.5 Дж</td>
+                        <td>0 м</td>
+                        <td id="statusSecondary">✔</td>
+                    </tr>
+                    <tr data-weapon="primary">
+                        <td>Основное (автомат на открытой местности)</td>
+                        <td>до 2.4 Дж</td>
+                        <td>10 м</td>
+                        <td id="statusPrimary">✔</td>
+                    </tr>
+                    <tr data-weapon="sniper">
+                        <td>Снайперка (болтовка, полуавтомат, только одиночный)</td>
+                        <td>до 2.9 Дж</td>
+                        <td>25 м</td>
+                        <td id="statusSniper">✔</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="statusMessage" class="status-msg ok">✅ Допуск: разрешено, дистанция 10 м</div>
+        </div>
+
+        <!-- ФОТО -->
+        <div id="page-photo" class="page">
+            <h2>Фотогалерея</h2>
+            <div id="galleryContainer" class="gallery-grid">
+                <div class="no-data">Загрузка фотографий...</div>
             </div>
         </div>
-        <div class="result-grid">
-            <div class="result-item">
-                <div class="label">Дульная энергия</div>
-                <div class="value highlight" id="energyDisplay">1.80 Дж</div>
-            </div>
-            <div class="result-item">
-                <div class="label">Скорость на 0.20 г</div>
-                <div class="value highlight" id="speedOn20Display">134 м/с</div>
+
+        <!-- ОПЕРАТИВНИКИ -->
+        <div id="page-operators" class="page">
+            <h2>Оперативный состав</h2>
+            <div id="operatorsContainer" class="operator-grid">
+                <div class="no-data">Загрузка данных...</div>
             </div>
         </div>
 
-        <h3>Регламент полигона (Уральская ассоциация страйкбола)</h3>
-        <table class="rules-table" id="rulesTable">
-            <thead>
-                <tr><th>Категория</th><th>Ограничение по энергии</th><th>Дистанция</th><th>Статус</th></tr>
-            </thead>
-            <tbody>
-                <tr data-weapon="secondary">
-                    <td>Вторичка (пистолеты, автоматы в здании)</td>
-                    <td>до 1.5 Дж</td>
-                    <td>0 м</td>
-                    <td id="statusSecondary">✔</td>
-                </tr>
-                <tr data-weapon="primary">
-                    <td>Основное (автомат на открытой местности)</td>
-                    <td>до 2.4 Дж</td>
-                    <td>10 м</td>
-                    <td id="statusPrimary">✔</td>
-                </tr>
-                <tr data-weapon="sniper">
-                    <td>Снайперка (болтовка, полуавтомат, только одиночный)</td>
-                    <td>до 2.9 Дж</td>
-                    <td>25 м</td>
-                    <td id="statusSniper">✔</td>
-                </tr>
-            </tbody>
-        </table>
-        <div id="statusMessage" class="status-msg ok">✅ Допуск: разрешено, дистанция 10 м</div>
-    </div>
-
-    <!-- ФОТО -->
-    <div id="page-photo" class="page">
-        <h2>Фотогалерея</h2>
-        <div id="galleryContainer" class="gallery-grid">
-            <div class="no-data">Загрузка фотографий...</div>
+        <!-- ИНСТРУКЦИИ -->
+        <div id="page-instructions" class="page">
+            <h2>Инструкции и руководства</h2>
+            <div id="docsContainer" class="docs-grid">
+                <div class="no-data">Загрузка документов...</div>
+            </div>
         </div>
-    </div>
 
-    <!-- ОПЕРАТИВНИКИ -->
-    <div id="page-operators" class="page">
-        <h2>Оперативный состав</h2>
-        <div id="operatorsContainer" class="operator-grid">
-            <div class="no-data">Загрузка данных...</div>
+        <!-- ATAK -->
+        <div id="page-atak" class="page">
+            <h2>Руководство по ATAK</h2>
+            <div id="atakContainer" class="atak-tree">
+                <div class="no-data">Загрузка руководства...</div>
+            </div>
         </div>
+
     </div>
 
-    <!-- ИНСТРУКЦИИ -->
-    <div id="page-instructions" class="page">
-        <h2>Инструкции и руководства</h2>
-        <div id="docsContainer" class="docs-grid">
-            <div class="no-data">Загрузка документов...</div>
-        </div>
+    <!-- ===== LIGHTBOX (для увеличения фото) ===== -->
+    <div id="lightbox" onclick="closeLightbox(event)">
+        <span class="close-btn" onclick="closeLightbox(event)">&times;</span>
+        <img id="lightbox-img" src="" alt="Увеличенное фото" />
     </div>
 
-    <!-- ATAK -->
-    <div id="page-atak" class="page">
-        <h2>Руководство по ATAK</h2>
-        <div id="atakContainer" class="atak-tree">
-            <div class="no-data">Загрузка руководства...</div>
-        </div>
-    </div>
+    <script>
+        // ===== LIGHTBOX =====
+        function openLightbox(imgSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            img.src = imgSrc;
+            lightbox.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
 
-</div>
-
-<script>
-    (function() {
-        'use strict';
-
-        // ============================================================
-        // 1. НАВИГАЦИЯ (переключение вкладок)
-        // ============================================================
-        const navLinks = document.querySelectorAll('.header-link');
-        const pageIds = ['page-home', 'page-calc', 'page-photo', 'page-operators', 'page-instructions', 'page-atak'];
-        const pages = {};
-        pageIds.forEach(id => {
-            pages[id] = document.getElementById(id);
-        });
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                const pageId = this.dataset.page;
-                if (!pageId) return;
-
-                // Убираем активный класс у всех ссылок
-                navLinks.forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-
-                // Скрываем все страницы
-                Object.values(pages).forEach(p => p.classList.remove('active'));
-
-                // Показываем нужную
-                const target = document.getElementById(pageId);
-                if (target) target.classList.add('active');
-
-                // Ленивая загрузка данных для соответствующих страниц
-                if (pageId === 'page-photo' && !window._photoLoaded) {
-                    loadPhotos();
-                }
-                if (pageId === 'page-operators' && !window._operatorsLoaded) {
-                    loadOperators();
-                }
-                if (pageId === 'page-instructions' && !window._instructionsLoaded) {
-                    loadInstructions();
-                }
-                if (pageId === 'page-atak' && !window._atakLoaded) {
-                    loadAtak();
-                }
-            });
-        });
-
-        // ============================================================
-        // 2. РАДИО (глобальное, не сбрасывается)
-        // ============================================================
-        let radioStations = [];
-        let currentStationIndex = 0;
-        let currentTrackIndex = 0;
-        let isPlaying = false;
-        const audio = new Audio();
-
-        const radioFreq = document.getElementById('radio-freq');
-        const radioPurpose = document.getElementById('radio-purpose');
-        const trackTitle = document.getElementById('track-title');
-        const radioDesc = document.getElementById('radio-desc');
-        const playlistSelect = document.getElementById('playlist-select');
-        const playBtn = document.getElementById('play-btn');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-
-        async function loadRadioData() {
-            try {
-                const response = await fetch('radio_data.json');
-                if (!response.ok) throw new Error('Не удалось загрузить плейлист');
-                const data = await response.json();
-                radioStations = data.stations;
-                initRadio();
-            } catch (error) {
-                console.error('Ошибка загрузки радио:', error);
-                radioPurpose.innerText = 'ОШИБКА ЗАГРУЗКИ';
-                radioDesc.innerText = 'Проверьте наличие файла radio_data.json';
+        function closeLightbox(e) {
+            if (e.target === document.getElementById('lightbox') || e.target.classList.contains('close-btn')) {
+                const lightbox = document.getElementById('lightbox');
+                lightbox.style.display = 'none';
+                document.body.style.overflow = '';
             }
         }
 
-        function initRadio() {
-            playlistSelect.innerHTML = '';
-            radioStations.forEach((station, index) => {
-                const opt = document.createElement('option');
-                opt.value = index;
-                opt.innerText = station.name;
-                playlistSelect.appendChild(opt);
-            });
-            updateDisplay();
-        }
-
-        function updateDisplay() {
-            const station = radioStations[currentStationIndex];
-            if (!station) return;
-            const track = station.tracks[currentTrackIndex];
-            if (isPlaying) {
-                radioFreq.innerText = `FREQ: ${station.frequency} MHz`;
-                radioPurpose.innerText = station.purpose.toUpperCase();
-                trackTitle.innerText = `▶ ${track.title.toUpperCase()}`;
-                radioDesc.innerText = station.desc;
-            } else {
-                radioFreq.innerText = 'FREQ: ---.--- MHz';
-                radioPurpose.innerText = 'СЕТЬ ОТКЛЮЧЕНА';
-                trackTitle.innerText = 'ШУМ ЭФИРА...';
-                radioDesc.innerText = 'Для активации аудио-модуля нажмите ВКЛ РАДИО';
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const lightbox = document.getElementById('lightbox');
+                if (lightbox.style.display === 'flex') {
+                    lightbox.style.display = 'none';
+                    document.body.style.overflow = '';
+                }
             }
-        }
+        });
 
-        function toggleRadio() {
-            if (!isPlaying) {
-                isPlaying = true;
-                playBtn.innerText = 'ВЫКЛ РАДИО';
-                playTrack();
-            } else {
-                isPlaying = false;
-                playBtn.innerText = 'ВКЛ РАДИО';
-                audio.pause();
+        // ===== ОСТАЛЬНОЙ СКРИПТ (вкладки, радио, калькулятор, загрузка данных) =====
+        (function() {
+            'use strict';
+
+            // ============================================================
+            // 1. НАВИГАЦИЯ
+            // ============================================================
+            const navLinks = document.querySelectorAll('.header-link');
+            const pageIds = ['page-home', 'page-calc', 'page-photo', 'page-operators', 'page-instructions', 'page-atak'];
+            const pages = {};
+            pageIds.forEach(id => {
+                pages[id] = document.getElementById(id);
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const pageId = this.dataset.page;
+                    if (!pageId) return;
+
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+
+                    Object.values(pages).forEach(p => p.classList.remove('active'));
+
+                    const target = document.getElementById(pageId);
+                    if (target) target.classList.add('active');
+
+                    if (pageId === 'page-photo' && !window._photoLoaded) loadPhotos();
+                    if (pageId === 'page-operators' && !window._operatorsLoaded) loadOperators();
+                    if (pageId === 'page-instructions' && !window._instructionsLoaded) loadInstructions();
+                    if (pageId === 'page-atak' && !window._atakLoaded) loadAtak();
+                });
+            });
+
+            // ============================================================
+            // 2. РАДИО
+            // ============================================================
+            let radioStations = [];
+            let currentStationIndex = 0;
+            let currentTrackIndex = 0;
+            let isPlaying = false;
+            const audio = new Audio();
+
+            const radioFreq = document.getElementById('radio-freq');
+            const radioPurpose = document.getElementById('radio-purpose');
+            const trackTitle = document.getElementById('track-title');
+            const radioDesc = document.getElementById('radio-desc');
+            const playlistSelect = document.getElementById('playlist-select');
+            const playBtn = document.getElementById('play-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+
+            async function loadRadioData() {
+                try {
+                    const response = await fetch('radio_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить плейлист');
+                    const data = await response.json();
+                    radioStations = data.stations;
+                    initRadio();
+                } catch (error) {
+                    console.error('Ошибка загрузки радио:', error);
+                    radioPurpose.innerText = 'ОШИБКА ЗАГРУЗКИ';
+                    radioDesc.innerText = 'Проверьте наличие файла radio_data.json';
+                }
+            }
+
+            function initRadio() {
+                playlistSelect.innerHTML = '';
+                radioStations.forEach((station, index) => {
+                    const opt = document.createElement('option');
+                    opt.value = index;
+                    opt.innerText = station.name;
+                    playlistSelect.appendChild(opt);
+                });
                 updateDisplay();
             }
-        }
 
-        function playTrack() {
-            if (!isPlaying) return;
-            const station = radioStations[currentStationIndex];
-            const track = station.tracks[currentTrackIndex];
-            audio.src = track.src;
-            audio.play().catch(e => console.warn('Не удалось воспроизвести:', e));
-            updateDisplay();
-        }
-
-        function changeChannel() {
-            currentStationIndex = parseInt(playlistSelect.value);
-            currentTrackIndex = 0;
-            if (isPlaying) playTrack(); else updateDisplay();
-        }
-
-        function nextTrack() {
-            const station = radioStations[currentStationIndex];
-            if (!station) return;
-            currentTrackIndex++;
-            if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
-            if (isPlaying) playTrack(); else updateDisplay();
-        }
-
-        function prevTrack() {
-            const station = radioStations[currentStationIndex];
-            if (!station) return;
-            currentTrackIndex--;
-            if (currentTrackIndex < 0) currentTrackIndex = station.tracks.length - 1;
-            if (isPlaying) playTrack(); else updateDisplay();
-        }
-
-        audio.onended = function() {
-            const station = radioStations[currentStationIndex];
-            if (!station) return;
-            currentTrackIndex++;
-            if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
-            playTrack();
-        };
-
-        playBtn.addEventListener('click', toggleRadio);
-        prevBtn.addEventListener('click', prevTrack);
-        nextBtn.addEventListener('click', nextTrack);
-        playlistSelect.addEventListener('change', changeChannel);
-
-        // ============================================================
-        // 3. БОРТОВОЙ ЖУРНАЛ
-        // ============================================================
-        async function loadLogs() {
-            try {
-                const response = await fetch('log_data.json');
-                if (!response.ok) throw new Error('Не удалось загрузить журнал');
-                const data = await response.json();
-                const container = document.getElementById('log-container');
-                container.innerHTML = '';
-                data.logs.forEach(entry => {
-                    const row = document.createElement('div');
-                    row.className = 'log-row';
-                    if (entry.style) row.style.cssText = entry.style;
-                    const dateSpan = document.createElement('span');
-                    dateSpan.className = 'log-date';
-                    dateSpan.textContent = entry.date;
-                    const textSpan = document.createElement('span');
-                    textSpan.textContent = entry.text;
-                    row.appendChild(dateSpan);
-                    row.appendChild(textSpan);
-                    container.appendChild(row);
-                });
-            } catch (error) {
-                console.error('Ошибка загрузки журнала:', error);
-                document.getElementById('log-container').innerHTML = `<div class="log-row" style="color: var(--text-muted);">Ошибка загрузки записей. Проверьте файл log_data.json</div>`;
+            function updateDisplay() {
+                const station = radioStations[currentStationIndex];
+                if (!station) return;
+                const track = station.tracks[currentTrackIndex];
+                if (isPlaying) {
+                    radioFreq.innerText = `FREQ: ${station.frequency} MHz`;
+                    radioPurpose.innerText = station.purpose.toUpperCase();
+                    trackTitle.innerText = `▶ ${track.title.toUpperCase()}`;
+                    radioDesc.innerText = station.desc;
+                } else {
+                    radioFreq.innerText = 'FREQ: ---.--- MHz';
+                    radioPurpose.innerText = 'СЕТЬ ОТКЛЮЧЕНА';
+                    trackTitle.innerText = 'ШУМ ЭФИРА...';
+                    radioDesc.innerText = 'Для активации аудио-модуля нажмите ВКЛ РАДИО';
+                }
             }
-        }
 
-        // ============================================================
-        // 4. КАЛЬКУЛЯТОР
-        // ============================================================
-        function initCalculator() {
-            const weightSlider = document.getElementById('weightSlider');
-            const speedSlider = document.getElementById('speedSlider');
-            const weightValue = document.getElementById('weightValue');
-            const speedValue = document.getElementById('speedValue');
-            const energyDisplay = document.getElementById('energyDisplay');
-            const speedOn20Display = document.getElementById('speedOn20Display');
-            const rows = document.querySelectorAll('#rulesTable tbody tr');
-            const statusSecondary = document.getElementById('statusSecondary');
-            const statusPrimary = document.getElementById('statusPrimary');
-            const statusSniper = document.getElementById('statusSniper');
-            const statusMsg = document.getElementById('statusMessage');
+            function toggleRadio() {
+                if (!isPlaying) {
+                    isPlaying = true;
+                    playBtn.innerText = 'ВЫКЛ РАДИО';
+                    playTrack();
+                } else {
+                    isPlaying = false;
+                    playBtn.innerText = 'ВКЛ РАДИО';
+                    audio.pause();
+                    updateDisplay();
+                }
+            }
 
-            const LIMITS = {
-                secondary: { maxEnergy: 1.5, distance: 0, label: 'Вторичка' },
-                primary:   { maxEnergy: 2.4, distance: 10, label: 'Основное' },
-                sniper:    { maxEnergy: 2.9, distance: 25, label: 'Снайперка' }
+            function playTrack() {
+                if (!isPlaying) return;
+                const station = radioStations[currentStationIndex];
+                const track = station.tracks[currentTrackIndex];
+                audio.src = track.src;
+                audio.play().catch(e => console.warn('Не удалось воспроизвести:', e));
+                updateDisplay();
+            }
+
+            function changeChannel() {
+                currentStationIndex = parseInt(playlistSelect.value);
+                currentTrackIndex = 0;
+                if (isPlaying) playTrack(); else updateDisplay();
+            }
+
+            function nextTrack() {
+                const station = radioStations[currentStationIndex];
+                if (!station) return;
+                currentTrackIndex++;
+                if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
+                if (isPlaying) playTrack(); else updateDisplay();
+            }
+
+            function prevTrack() {
+                const station = radioStations[currentStationIndex];
+                if (!station) return;
+                currentTrackIndex--;
+                if (currentTrackIndex < 0) currentTrackIndex = station.tracks.length - 1;
+                if (isPlaying) playTrack(); else updateDisplay();
+            }
+
+            audio.onended = function() {
+                const station = radioStations[currentStationIndex];
+                if (!station) return;
+                currentTrackIndex++;
+                if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
+                playTrack();
             };
 
-            function getCategoryByEnergy(E) {
-                if (E <= 1.5) return 'secondary';
-                if (E <= 2.4) return 'primary';
-                if (E <= 2.9) return 'sniper';
-                return 'over';
-            }
+            playBtn.addEventListener('click', toggleRadio);
+            prevBtn.addEventListener('click', prevTrack);
+            nextBtn.addEventListener('click', nextTrack);
+            playlistSelect.addEventListener('change', changeChannel);
 
-            function updateAll() {
-                const m = parseFloat(weightSlider.value);
-                const v = parseFloat(speedSlider.value);
-                const E = (m * v * v) / 2000;
-                const v20 = Math.sqrt(E * 2000 / 0.20);
-
-                weightValue.textContent = m.toFixed(2) + ' г';
-                speedValue.textContent = v.toFixed(0) + ' м/с';
-                energyDisplay.textContent = E.toFixed(2) + ' Дж';
-                speedOn20Display.textContent = v20.toFixed(0) + ' м/с';
-
-                const category = getCategoryByEnergy(E);
-
-                rows.forEach(row => row.classList.remove('active', 'warning'));
-
-                let activeRow = null;
-                rows.forEach(row => {
-                    if (row.dataset.weapon === category) {
-                        activeRow = row;
-                    }
-                });
-
-                let isAllowed = false;
-                let limit = null;
-                if (category !== 'over') {
-                    limit = LIMITS[category];
-                    isAllowed = E <= limit.maxEnergy;
-                }
-
-                if (activeRow) {
-                    if (isAllowed) {
-                        activeRow.classList.add('active');
-                    } else {
-                        activeRow.classList.add('warning');
-                    }
-                }
-
-                const statusMap = {
-                    secondary: statusSecondary,
-                    primary: statusPrimary,
-                    sniper: statusSniper
-                };
-                for (let w in statusMap) {
-                    const lim = LIMITS[w];
-                    const ok = E <= lim.maxEnergy;
-                    statusMap[w].textContent = ok ? '✔' : '✘';
-                    statusMap[w].style.color = ok ? 'var(--green)' : 'var(--red)';
-                }
-
-                if (category === 'over') {
-                    statusMsg.className = 'status-msg fail';
-                    statusMsg.innerHTML = '❌ Не допуск: превышен максимальный лимит (2.9 Дж)';
-                } else if (isAllowed) {
-                    statusMsg.className = 'status-msg ok';
-                    statusMsg.innerHTML = `✅ Допуск: разрешено, дистанция ${limit.distance} м (категория «${limit.label}»)`;
-                } else {
-                    statusMsg.className = 'status-msg fail';
-                    statusMsg.innerHTML = `❌ Не допуск: превышен лимит для «${limit.label}» (макс. ${limit.maxEnergy} Дж)`;
-                }
-            }
-
-            weightSlider.addEventListener('input', updateAll);
-            speedSlider.addEventListener('input', updateAll);
-            updateAll();
-        }
-
-        // ============================================================
-        // 5. ФОТО (ленивая загрузка)
-        // ============================================================
-        async function loadPhotos() {
-            if (window._photoLoaded) return;
-            const container = document.getElementById('galleryContainer');
-            try {
-                const response = await fetch('photo_data.json');
-                if (!response.ok) throw new Error('Не удалось загрузить данные');
-                const data = await response.json();
-                if (!data.photos || data.photos.length === 0) {
-                    container.innerHTML = `<div class="no-data">Фотографий пока нет</div>`;
-                    window._photoLoaded = true;
-                    return;
-                }
-                container.innerHTML = '';
-                data.photos.forEach(photo => {
-                    const card = document.createElement('div');
-                    card.className = 'photo-card';
-
-                    const img = document.createElement('img');
-                    img.src = photo.image || 'placeholder.jpg';
-                    img.alt = photo.title || 'Фото';
-                    img.loading = 'lazy';
-                    img.onerror = function() {
-                        this.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'200\' viewBox=\'0 0 400 200\'%3E%3Crect fill=\'%23333\' width=\'400\' height=\'200\'/%3E%3Ctext fill=\'%23666\' x=\'50\' y=\'115\' font-family=\'sans-serif\' font-size=\'24\'%3EФото отсутствует%3C/text%3E%3C/svg%3E';
-                    };
-
-                    const body = document.createElement('div');
-                    body.className = 'card-body';
-
-                    const title = document.createElement('div');
-                    title.className = 'card-title';
-                    title.textContent = photo.title || 'Без названия';
-
-                    const date = document.createElement('div');
-                    date.className = 'card-date';
-                    date.textContent = photo.date ? `📅 ${photo.date}` : '';
-
-                    const desc = document.createElement('div');
-                    desc.className = 'card-desc';
-                    desc.textContent = photo.description || '';
-
-                    body.appendChild(title);
-                    if (photo.date) body.appendChild(date);
-                    if (photo.description) body.appendChild(desc);
-
-                    card.appendChild(img);
-                    card.appendChild(body);
-                    container.appendChild(card);
-                });
-                window._photoLoaded = true;
-            } catch (error) {
-                console.error('Ошибка загрузки галереи:', error);
-                container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки фотографий. Проверьте файл photo_data.json</div>`;
-                window._photoLoaded = true;
-            }
-        }
-
-        // ============================================================
-        // 6. ОПЕРАТИВНИКИ (ленивая загрузка)
-        // ============================================================
-        async function loadOperators() {
-            if (window._operatorsLoaded) return;
-            const container = document.getElementById('operatorsContainer');
-            try {
-                const response = await fetch('operators_data.json');
-                if (!response.ok) throw new Error('Не удалось загрузить данные');
-                const data = await response.json();
-                if (!data.operators || data.operators.length === 0) {
-                    container.innerHTML = `<div class="no-data">Оперативников пока нет</div>`;
-                    window._operatorsLoaded = true;
-                    return;
-                }
-                container.innerHTML = '';
-                data.operators.forEach(op => {
-                    const card = document.createElement('div');
-                    card.className = 'operator-card';
-
-                    const avatar = document.createElement('div');
-                    avatar.className = 'operator-avatar';
-
-                    if (op.photo) {
-                        const img = document.createElement('img');
-                        img.src = op.photo;
-                        img.alt = op.name || 'Оператор';
-                        img.onerror = function() {
-                            this.style.display = 'none';
-                            avatar.textContent = op.avatar || '👤';
-                            avatar.style.fontSize = '56px';
-                        };
-                        avatar.appendChild(img);
-                    } else {
-                        avatar.textContent = op.avatar || '👤';
-                        avatar.style.fontSize = '56px';
-                    }
-
-                    const name = document.createElement('div');
-                    name.className = 'operator-name';
-                    name.textContent = op.name || 'Без имени';
-
-                    const role = document.createElement('div');
-                    role.className = 'operator-role';
-                    role.textContent = op.role || '';
-
-                    const desc = document.createElement('div');
-                    desc.className = 'operator-desc';
-                    desc.textContent = op.description || '';
-
-                    card.appendChild(avatar);
-                    card.appendChild(name);
-                    if (op.role) card.appendChild(role);
-                    if (op.description) card.appendChild(desc);
-
-                    if (op.specialization) {
-                        const spec = document.createElement('div');
-                        spec.className = 'operator-spec';
-                        spec.textContent = op.specialization;
-                        card.appendChild(spec);
-                    }
-
-                    container.appendChild(card);
-                });
-                window._operatorsLoaded = true;
-            } catch (error) {
-                console.error('Ошибка загрузки оперативников:', error);
-                container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки данных. Проверьте файл operators_data.json</div>`;
-                window._operatorsLoaded = true;
-            }
-        }
-
-        // ============================================================
-        // 7. ИНСТРУКЦИИ (ленивая загрузка)
-        // ============================================================
-        async function loadInstructions() {
-            if (window._instructionsLoaded) return;
-            const container = document.getElementById('docsContainer');
-            try {
-                const response = await fetch('instructions_data.json');
-                if (!response.ok) throw new Error('Не удалось загрузить инструкции');
-                const data = await response.json();
-                if (!data.documents || data.documents.length === 0) {
-                    container.innerHTML = `<div class="no-data">Документов пока нет</div>`;
-                    window._instructionsLoaded = true;
-                    return;
-                }
-                container.innerHTML = '';
-                data.documents.forEach(doc => {
-                    const card = document.createElement('div');
-                    card.className = 'doc-card';
-
-                    const title = document.createElement('div');
-                    title.className = 'doc-title';
-                    title.textContent = doc.title || 'Без названия';
-
-                    const desc = document.createElement('div');
-                    desc.className = 'doc-desc';
-                    desc.textContent = doc.description || '';
-
-                    const link = document.createElement('a');
-                    link.className = 'doc-link';
-                    link.href = doc.link || '#';
-                    link.target = '_blank';
-                    link.textContent = '📄 Открыть PDF';
-                    link.rel = 'noopener noreferrer';
-
-                    card.appendChild(title);
-                    if (doc.description) card.appendChild(desc);
-                    card.appendChild(link);
-                    container.appendChild(card);
-                });
-                window._instructionsLoaded = true;
-            } catch (error) {
-                console.error('Ошибка загрузки инструкций:', error);
-                container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки инструкций. Проверьте файл instructions_data.json</div>`;
-                window._instructionsLoaded = true;
-            }
-        }
-
-        // ============================================================
-        // 8. ATAK (ленивая загрузка с аккордеоном)
-        // ============================================================
-        async function loadAtak() {
-            if (window._atakLoaded) return;
-            const container = document.getElementById('atakContainer');
-            try {
-                const response = await fetch('atak_data.json');
-                if (!response.ok) throw new Error('Не удалось загрузить руководство ATAK');
-                const data = await response.json();
-                if (!data.sections || data.sections.length === 0) {
-                    container.innerHTML = `<div class="no-data">Разделы отсутствуют</div>`;
-                    window._atakLoaded = true;
-                    return;
-                }
-                container.innerHTML = '';
-                // Создаём дерево
-                const tree = document.createElement('div');
-                tree.className = 'atak-tree';
-                data.sections.forEach(section => {
-                    const node = createAtakNode(section, 0);
-                    tree.appendChild(node);
-                });
-                container.appendChild(tree);
-                window._atakLoaded = true;
-            } catch (error) {
-                console.error('Ошибка загрузки ATAK:', error);
-                container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки руководства ATAK. Проверьте файл atak_data.json</div>`;
-                window._atakLoaded = true;
-            }
-        }
-
-        // Рекурсивное создание узлов ATAK
-        function createAtakNode(item, depth) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'atak-node';
-
-            // Заголовок
-            const header = document.createElement('div');
-            header.className = 'node-header';
-            const titleSpan = document.createElement('span');
-            titleSpan.textContent = item.title || 'Без названия';
-            header.appendChild(titleSpan);
-
-            // Стрелка, если есть дети или контент
-            const hasChildren = item.children && item.children.length > 0;
-            const hasContent = item.content && item.content.trim().length > 0;
-
-            if (hasChildren || hasContent) {
-                const arrow = document.createElement('span');
-                arrow.className = 'arrow';
-                arrow.textContent = '▶';
-                header.appendChild(arrow);
-
-                // Контейнер для дочерних элементов и контента
-                const childContainer = document.createElement('div');
-                childContainer.className = 'node-children';
-
-                // Если есть контент – добавляем его как отдельный блок
-                if (hasContent) {
-                    const contentDiv = document.createElement('div');
-                    contentDiv.className = 'node-content';
-                    contentDiv.innerHTML = item.content;
-                    childContainer.appendChild(contentDiv);
-                }
-
-                // Рекурсивно добавляем детей
-                if (hasChildren) {
-                    item.children.forEach(child => {
-                        const childNode = createAtakNode(child, depth + 1);
-                        childContainer.appendChild(childNode);
+            // ============================================================
+            // 3. БОРТОВОЙ ЖУРНАЛ
+            // ============================================================
+            async function loadLogs() {
+                try {
+                    const response = await fetch('log_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить журнал');
+                    const data = await response.json();
+                    const container = document.getElementById('log-container');
+                    container.innerHTML = '';
+                    data.logs.forEach(entry => {
+                        const row = document.createElement('div');
+                        row.className = 'log-row';
+                        if (entry.style) row.style.cssText = entry.style;
+                        const dateSpan = document.createElement('span');
+                        dateSpan.className = 'log-date';
+                        dateSpan.textContent = entry.date;
+                        const textSpan = document.createElement('span');
+                        textSpan.textContent = entry.text;
+                        row.appendChild(dateSpan);
+                        row.appendChild(textSpan);
+                        container.appendChild(row);
                     });
+                } catch (error) {
+                    console.error('Ошибка загрузки журнала:', error);
+                    document.getElementById('log-container').innerHTML =
+                        `<div class="log-row" style="color: var(--text-muted);">Ошибка загрузки записей. Проверьте файл log_data.json</div>`;
+                }
+            }
+
+            // ============================================================
+            // 4. КАЛЬКУЛЯТОР
+            // ============================================================
+            function initCalculator() {
+                const weightSlider = document.getElementById('weightSlider');
+                const speedSlider = document.getElementById('speedSlider');
+                const weightValue = document.getElementById('weightValue');
+                const speedValue = document.getElementById('speedValue');
+                const energyDisplay = document.getElementById('energyDisplay');
+                const speedOn20Display = document.getElementById('speedOn20Display');
+                const rows = document.querySelectorAll('#rulesTable tbody tr');
+                const statusSecondary = document.getElementById('statusSecondary');
+                const statusPrimary = document.getElementById('statusPrimary');
+                const statusSniper = document.getElementById('statusSniper');
+                const statusMsg = document.getElementById('statusMessage');
+
+                const LIMITS = {
+                    secondary: { maxEnergy: 1.5, distance: 0, label: 'Вторичка' },
+                    primary: { maxEnergy: 2.4, distance: 10, label: 'Основное' },
+                    sniper: { maxEnergy: 2.9, distance: 25, label: 'Снайперка' }
+                };
+
+                function getCategoryByEnergy(E) {
+                    if (E <= 1.5) return 'secondary';
+                    if (E <= 2.4) return 'primary';
+                    if (E <= 2.9) return 'sniper';
+                    return 'over';
                 }
 
-                wrapper.appendChild(header);
-                wrapper.appendChild(childContainer);
+                function updateAll() {
+                    const m = parseFloat(weightSlider.value);
+                    const v = parseFloat(speedSlider.value);
+                    const E = (m * v * v) / 2000;
+                    const v20 = Math.sqrt(E * 2000 / 0.20);
 
-                // Клик для раскрытия/скрытия
-                header.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const arrowEl = this.querySelector('.arrow');
-                    const childrenEl = this.parentElement.querySelector('.node-children');
-                    if (childrenEl) {
-                        const isOpen = childrenEl.classList.contains('open');
-                        if (isOpen) {
-                            childrenEl.classList.remove('open');
-                            if (arrowEl) arrowEl.classList.remove('open');
+                    weightValue.textContent = m.toFixed(2) + ' г';
+                    speedValue.textContent = v.toFixed(0) + ' м/с';
+                    energyDisplay.textContent = E.toFixed(2) + ' Дж';
+                    speedOn20Display.textContent = v20.toFixed(0) + ' м/с';
+
+                    const category = getCategoryByEnergy(E);
+
+                    rows.forEach(row => row.classList.remove('active', 'warning'));
+
+                    let activeRow = null;
+                    rows.forEach(row => {
+                        if (row.dataset.weapon === category) {
+                            activeRow = row;
+                        }
+                    });
+
+                    let isAllowed = false;
+                    let limit = null;
+                    if (category !== 'over') {
+                        limit = LIMITS[category];
+                        isAllowed = E <= limit.maxEnergy;
+                    }
+
+                    if (activeRow) {
+                        if (isAllowed) {
+                            activeRow.classList.add('active');
                         } else {
-                            childrenEl.classList.add('open');
-                            if (arrowEl) arrowEl.classList.add('open');
+                            activeRow.classList.add('warning');
                         }
                     }
-                });
-            } else {
-                // Лист (без детей и контента) – просто заголовок без функционала
-                wrapper.classList.add('node-leaf');
-                wrapper.appendChild(header);
+
+                    const statusMap = {
+                        secondary: statusSecondary,
+                        primary: statusPrimary,
+                        sniper: statusSniper
+                    };
+                    for (let w in statusMap) {
+                        const lim = LIMITS[w];
+                        const ok = E <= lim.maxEnergy;
+                        statusMap[w].textContent = ok ? '✔' : '✘';
+                        statusMap[w].style.color = ok ? 'var(--green)' : 'var(--red)';
+                    }
+
+                    if (category === 'over') {
+                        statusMsg.className = 'status-msg fail';
+                        statusMsg.innerHTML = '❌ Не допуск: превышен максимальный лимит (2.9 Дж)';
+                    } else if (isAllowed) {
+                        statusMsg.className = 'status-msg ok';
+                        statusMsg.innerHTML =
+                            `✅ Допуск: разрешено, дистанция ${limit.distance} м (категория «${limit.label}»)`;
+                    } else {
+                        statusMsg.className = 'status-msg fail';
+                        statusMsg.innerHTML =
+                            `❌ Не допуск: превышен лимит для «${limit.label}» (макс. ${limit.maxEnergy} Дж)`;
+                    }
+                }
+
+                weightSlider.addEventListener('input', updateAll);
+                speedSlider.addEventListener('input', updateAll);
+                updateAll();
             }
 
-            return wrapper;
-        }
+            // ============================================================
+            // 5. ФОТО (с увеличением)
+            // ============================================================
+            async function loadPhotos() {
+                if (window._photoLoaded) return;
+                const container = document.getElementById('galleryContainer');
+                try {
+                    const response = await fetch('photo_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить данные');
+                    const data = await response.json();
+                    if (!data.photos || data.photos.length === 0) {
+                        container.innerHTML = `<div class="no-data">Фотографий пока нет</div>`;
+                        window._photoLoaded = true;
+                        return;
+                    }
+                    container.innerHTML = '';
+                    data.photos.forEach(photo => {
+                        const card = document.createElement('div');
+                        card.className = 'photo-card';
 
-        // ============================================================
-        // 9. ЗАПУСК
-        // ============================================================
-        window.onload = function() {
-            loadRadioData();
-            loadLogs();
-            initCalculator();
-            // Фото, оперативники, инструкции, ATAK загружаются при открытии вкладок
-            // Можно предзагрузить всё, но оставляем ленивую загрузку для экономии
-        };
+                        const img = document.createElement('img');
+                        img.src = photo.image || 'placeholder.jpg';
+                        img.alt = photo.title || 'Фото';
+                        img.loading = 'lazy';
+                        img.onerror = function() {
+                            this.src =
+                                'data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'200\' viewBox=\'0 0 400 200\'%3E%3Crect fill=\'%23333\' width=\'400\' height=\'200\'/%3E%3Ctext fill=\'%23666\' x=\'50\' y=\'115\' font-family=\'sans-serif\' font-size=\'24\'%3EФото отсутствует%3C/text%3E%3C/svg%3E';
+                        };
+                        img.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            openLightbox(this.src);
+                        });
 
-    })();
-</script>
+                        const body = document.createElement('div');
+                        body.className = 'card-body';
 
+                        const title = document.createElement('div');
+                        title.className = 'card-title';
+                        title.textContent = photo.title || 'Без названия';
+
+                        const date = document.createElement('div');
+                        date.className = 'card-date';
+                        date.textContent = photo.date ? `📅 ${photo.date}` : '';
+
+                        const desc = document.createElement('div');
+                        desc.className = 'card-desc';
+                        desc.textContent = photo.description || '';
+
+                        body.appendChild(title);
+                        if (photo.date) body.appendChild(date);
+                        if (photo.description) body.appendChild(desc);
+
+                        card.appendChild(img);
+                        card.appendChild(body);
+                        container.appendChild(card);
+                    });
+                    window._photoLoaded = true;
+                } catch (error) {
+                    console.error('Ошибка загрузки галереи:', error);
+                    container.innerHTML =
+                        `<div class="error-msg">❌ Ошибка загрузки фотографий. Проверьте файл photo_data.json</div>`;
+                    window._photoLoaded = true;
+                }
+            }
+
+            // ============================================================
+            // 6. ОПЕРАТИВНИКИ
+            // ============================================================
+            async function loadOperators() {
+                if (window._operatorsLoaded) return;
+                const container = document.getElementById('operatorsContainer');
+                try {
+                    const response = await fetch('operators_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить данные');
+                    const data = await response.json();
+                    if (!data.operators || data.operators.length === 0) {
+                        container.innerHTML = `<div class="no-data">Оперативников пока нет</div>`;
+                        window._operatorsLoaded = true;
+                        return;
+                    }
+                    container.innerHTML = '';
+                    data.operators.forEach(op => {
+                        const card = document.createElement('div');
+                        card.className = 'operator-card';
+
+                        const avatar = document.createElement('div');
+                        avatar.className = 'operator-avatar';
+
+                        if (op.photo) {
+                            const img = document.createElement('img');
+                            img.src = op.photo;
+                            img.alt = op.name || 'Оператор';
+                            img.onerror = function() {
+                                this.style.display = 'none';
+                                avatar.textContent = op.avatar || '👤';
+                                avatar.style.fontSize = '56px';
+                            };
+                            avatar.appendChild(img);
+                        } else {
+                            avatar.textContent = op.avatar || '👤';
+                            avatar.style.fontSize = '56px';
+                        }
+
+                        const name = document.createElement('div');
+                        name.className = 'operator-name';
+                        name.textContent = op.name || 'Без имени';
+
+                        const role = document.createElement('div');
+                        role.className = 'operator-role';
+                        role.textContent = op.role || '';
+
+                        const desc = document.createElement('div');
+                        desc.className = 'operator-desc';
+                        desc.textContent = op.description || '';
+
+                        card.appendChild(avatar);
+                        card.appendChild(name);
+                        if (op.role) card.appendChild(role);
+                        if (op.description) card.appendChild(desc);
+
+                        if (op.specialization) {
+                            const spec = document.createElement('div');
+                            spec.className = 'operator-spec';
+                            spec.textContent = op.specialization;
+                            card.appendChild(spec);
+                        }
+
+                        container.appendChild(card);
+                    });
+                    window._operatorsLoaded = true;
+                } catch (error) {
+                    console.error('Ошибка загрузки оперативников:', error);
+                    container.innerHTML =
+                        `<div class="error-msg">❌ Ошибка загрузки данных. Проверьте файл operators_data.json</div>`;
+                    window._operatorsLoaded = true;
+                }
+            }
+
+            // ============================================================
+            // 7. ИНСТРУКЦИИ
+            // ============================================================
+            async function loadInstructions() {
+                if (window._instructionsLoaded) return;
+                const container = document.getElementById('docsContainer');
+                try {
+                    const response = await fetch('instructions_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить инструкции');
+                    const data = await response.json();
+                    if (!data.documents || data.documents.length === 0) {
+                        container.innerHTML = `<div class="no-data">Документов пока нет</div>`;
+                        window._instructionsLoaded = true;
+                        return;
+                    }
+                    container.innerHTML = '';
+                    data.documents.forEach(doc => {
+                        const card = document.createElement('div');
+                        card.className = 'doc-card';
+
+                        const title = document.createElement('div');
+                        title.className = 'doc-title';
+                        title.textContent = doc.title || 'Без названия';
+
+                        const desc = document.createElement('div');
+                        desc.className = 'doc-desc';
+                        desc.textContent = doc.description || '';
+
+                        const link = document.createElement('a');
+                        link.className = 'doc-link';
+                        link.href = doc.link || '#';
+                        link.target = '_blank';
+                        link.textContent = '📄 Открыть PDF';
+                        link.rel = 'noopener noreferrer';
+
+                        card.appendChild(title);
+                        if (doc.description) card.appendChild(desc);
+                        card.appendChild(link);
+                        container.appendChild(card);
+                    });
+                    window._instructionsLoaded = true;
+                } catch (error) {
+                    console.error('Ошибка загрузки инструкций:', error);
+                    container.innerHTML =
+                        `<div class="error-msg">❌ Ошибка загрузки инструкций. Проверьте файл instructions_data.json</div>`;
+                    window._instructionsLoaded = true;
+                }
+            }
+
+            // ============================================================
+            // 8. ATAK
+            // ============================================================
+            async function loadAtak() {
+                if (window._atakLoaded) return;
+                const container = document.getElementById('atakContainer');
+                try {
+                    const response = await fetch('atak_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить руководство ATAK');
+                    const data = await response.json();
+                    if (!data.sections || data.sections.length === 0) {
+                        container.innerHTML = `<div class="no-data">Разделы отсутствуют</div>`;
+                        window._atakLoaded = true;
+                        return;
+                    }
+                    container.innerHTML = '';
+                    const tree = document.createElement('div');
+                    tree.className = 'atak-tree';
+                    data.sections.forEach(section => {
+                        const node = createAtakNode(section, 0);
+                        tree.appendChild(node);
+                    });
+                    container.appendChild(tree);
+                    window._atakLoaded = true;
+                } catch (error) {
+                    console.error('Ошибка загрузки ATAK:', error);
+                    container.innerHTML =
+                        `<div class="error-msg">❌ Ошибка загрузки руководства ATAK. Проверьте файл atak_data.json</div>`;
+                    window._atakLoaded = true;
+                }
+            }
+
+            function createAtakNode(item, depth) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'atak-node';
+
+                const header = document.createElement('div');
+                header.className = 'node-header';
+                const titleSpan = document.createElement('span');
+                titleSpan.textContent = item.title || 'Без названия';
+                header.appendChild(titleSpan);
+
+                const hasChildren = item.children && item.children.length > 0;
+                const hasContent = item.content && item.content.trim().length > 0;
+
+                if (hasChildren || hasContent) {
+                    const arrow = document.createElement('span');
+                    arrow.className = 'arrow';
+                    arrow.textContent = '▶';
+                    header.appendChild(arrow);
+
+                    const childContainer = document.createElement('div');
+                    childContainer.className = 'node-children';
+
+                    if (hasContent) {
+                        const contentDiv = document.createElement('div');
+                        contentDiv.className = 'node-content';
+                        contentDiv.innerHTML = item.content;
+                        childContainer.appendChild(contentDiv);
+                    }
+
+                    if (hasChildren) {
+                        item.children.forEach(child => {
+                            const childNode = createAtakNode(child, depth + 1);
+                            childContainer.appendChild(childNode);
+                        });
+                    }
+
+                    wrapper.appendChild(header);
+                    wrapper.appendChild(childContainer);
+
+                    header.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const arrowEl = this.querySelector('.arrow');
+                        const childrenEl = this.parentElement.querySelector('.node-children');
+                        if (childrenEl) {
+                            const isOpen = childrenEl.classList.contains('open');
+                            if (isOpen) {
+                                childrenEl.classList.remove('open');
+                                if (arrowEl) arrowEl.classList.remove('open');
+                            } else {
+                                childrenEl.classList.add('open');
+                                if (arrowEl) arrowEl.classList.add('open');
+                            }
+                        }
+                    });
+                } else {
+                    wrapper.classList.add('node-leaf');
+                    wrapper.appendChild(header);
+                }
+
+                return wrapper;
+            }
+
+            // ============================================================
+            // 9. ЗАПУСК
+            // ============================================================
+            window.onload = function() {
+                loadRadioData();
+                loadLogs();
+                initCalculator();
+            };
+        })();
+    </script>
 </body>
 </html>
