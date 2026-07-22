@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FOXHOUND — Инженерно-тактическая страйкбольная команда</title>
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet" />
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         /* ===== ПЕРЕМЕННЫЕ ===== */
         :root {
@@ -174,30 +176,16 @@
             opacity: 1;
         }
 
-        .header-link.main.active {
-            box-shadow: inset 0 -2px 0 #95a5a6;
-            color: #95a5a6;
-        }
-        .header-link.calc.active {
-            box-shadow: inset 0 -2px 0 #2c3e50;
-            color: #b0b8c0;
-        }
-        .header-link.photo.active {
-            box-shadow: inset 0 -2px 0 var(--green);
-            color: var(--green);
-        }
-        .header-link.ops.active {
-            box-shadow: inset 0 -2px 0 var(--red);
-            color: var(--red);
-        }
-        .header-link.instructions.active {
-            box-shadow: inset 0 -2px 0 var(--blue);
-            color: var(--blue);
-        }
-        .header-link.atak.active {
-            box-shadow: inset 0 -2px 0 var(--purple);
-            color: var(--purple);
-        }
+        .header-link.main.active { box-shadow: inset 0 -2px 0 #95a5a6; color: #95a5a6; }
+        .header-link.calc.active { box-shadow: inset 0 -2px 0 #2c3e50; color: #b0b8c0; }
+        .header-link.photo.active { box-shadow: inset 0 -2px 0 var(--green); color: var(--green); }
+        .header-link.ops.active { box-shadow: inset 0 -2px 0 var(--red); color: var(--red); }
+        .header-link.instructions.active { box-shadow: inset 0 -2px 0 var(--blue); color: var(--blue); }
+        .header-link.atak.active { box-shadow: inset 0 -2px 0 var(--purple); color: var(--purple); }
+        .header-link.maps.active { box-shadow: inset 0 -2px 0 var(--accent-color); color: var(--accent-color); }
+        .header-link.regulations.active { box-shadow: inset 0 -2px 0 var(--accent-color); color: var(--accent-color); }
+        .header-link.scenarios.active { box-shadow: inset 0 -2px 0 var(--accent-color); color: var(--accent-color); }
+        .header-link.devices.active { box-shadow: inset 0 -2px 0 var(--accent-color); color: var(--accent-color); }
 
         /* ===== СТРАНИЦЫ ===== */
         .page {
@@ -464,358 +452,174 @@
             box-shadow: 0 0 30px rgba(51,153,255,0.3);
         }
 
-        /* ===== КАЛЬКУЛЯТОР ===== */
-        .param-group {
-            background: var(--glass-bg);
-            border: 1px solid var(--accent-color);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .slider-row {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        .slider-row label {
-            min-width: 110px;
-            font-weight: 700;
-            color: #fff;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            letter-spacing: 0.5px;
-            font-size: 15px;
-        }
-        .slider-row input[type="range"] {
-            flex: 1;
-            min-width: 150px;
-            background: #2a2a2a;
-            height: 4px;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-        .slider-row input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            background: var(--accent-color);
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 0 10px var(--accent-glow);
-        }
-        .slider-row input[type="range"]::-moz-range-thumb {
-            width: 16px;
-            height: 16px;
-            background: var(--accent-color);
-            cursor: pointer;
-            border: none;
-        }
-        .value-display {
-            min-width: 70px;
-            text-align: right;
-            font-weight: 700;
-            color: var(--accent-color);
-            font-size: 19px;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-        }
-
-        .result-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 10px;
-        }
-        @media (max-width: 500px) {
-            .result-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        .result-item {
-            background: #0d0d0d;
-            padding: 12px 15px;
-            border: 1px solid var(--accent-color);
-        }
-        .result-item .label {
-            font-size: 13px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-        .result-item .value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #fff;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-        }
-        .result-item .value.highlight {
-            color: var(--accent-color);
-        }
-
-        .rules-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 5px;
-            font-size: 15px;
-        }
-        .rules-table th,
-        .rules-table td {
-            padding: 12px 10px;
-            border-bottom: 1px solid var(--border-color);
-            text-align: left;
-        }
-        .rules-table th {
-            color: var(--text-muted);
-            font-weight: 700;
-            font-size: 14px;
-            text-transform: uppercase;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            letter-spacing: 1px;
-        }
-        .rules-table tr.active {
-            background: rgba(255,102,0,0.08);
-            border: 1px solid var(--accent-color);
-        }
-        .rules-table tr.warning {
-            background: rgba(255,51,51,0.08);
-            border: 1px solid var(--red);
-        }
-
-        .status-msg {
-            margin-top: 15px;
-            padding: 15px;
-            font-weight: 700;
-            text-align: center;
-            background: var(--glass-bg);
-            border: 1px solid var(--accent-color);
-            font-size: 16px;
-        }
-        .status-msg.ok {
-            border-color: var(--green);
-            color: var(--green);
-        }
-        .status-msg.fail {
-            border-color: var(--red);
-            color: var(--red);
-        }
+        /* ===== КАЛЬКУЛЯТОР ===== (без изменений) ===== */
+        .param-group { background: var(--glass-bg); border: 1px solid var(--accent-color); padding: 20px; margin-bottom: 20px; }
+        .slider-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
+        .slider-row label { min-width: 110px; font-weight: 700; color: #fff; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 0.5px; font-size: 15px; }
+        .slider-row input[type="range"] { flex: 1; min-width: 150px; background: #2a2a2a; height: 4px; -webkit-appearance: none; appearance: none; }
+        .slider-row input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: var(--accent-color); cursor: pointer; border: none; box-shadow: 0 0 10px var(--accent-glow); }
+        .slider-row input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; background: var(--accent-color); cursor: pointer; border: none; }
+        .value-display { min-width: 70px; text-align: right; font-weight: 700; color: var(--accent-color); font-size: 19px; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; }
+        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+        @media (max-width: 500px) { .result-grid { grid-template-columns: 1fr; } }
+        .result-item { background: #0d0d0d; padding: 12px 15px; border: 1px solid var(--accent-color); }
+        .result-item .label { font-size: 13px; text-transform: uppercase; color: var(--text-muted); font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; font-weight: 700; letter-spacing: 1px; }
+        .result-item .value { font-size: 24px; font-weight: 700; color: #fff; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; }
+        .result-item .value.highlight { color: var(--accent-color); }
+        .rules-table { width: 100%; border-collapse: collapse; margin-top: 5px; font-size: 15px; }
+        .rules-table th, .rules-table td { padding: 12px 10px; border-bottom: 1px solid var(--border-color); text-align: left; }
+        .rules-table th { color: var(--text-muted); font-weight: 700; font-size: 14px; text-transform: uppercase; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 1px; }
+        .rules-table tr.active { background: rgba(255,102,0,0.08); border: 1px solid var(--accent-color); }
+        .rules-table tr.warning { background: rgba(255,51,51,0.08); border: 1px solid var(--red); }
+        .status-msg { margin-top: 15px; padding: 15px; font-weight: 700; text-align: center; background: var(--glass-bg); border: 1px solid var(--accent-color); font-size: 16px; }
+        .status-msg.ok { border-color: var(--green); color: var(--green); }
+        .status-msg.fail { border-color: var(--red); color: var(--red); }
 
         /* ===== ФОТО ===== */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        @media (max-width: 700px) {
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        .photo-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--accent-color);
-            overflow: hidden;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-        .photo-card:hover {
-            transform: scale(1.02);
-            border-color: var(--accent-color);
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-        .photo-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            display: block;
-            background: #000;
-        }
-        .photo-card .card-body {
-            padding: 12px 15px 15px;
-        }
-        .photo-card .card-title {
-            font-weight: 700;
-            color: #fff;
-            font-size: 17px;
-            margin-bottom: 4px;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            letter-spacing: 1px;
-        }
-        .photo-card .card-date {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-        .photo-card .card-desc {
-            font-size: 15px;
-            color: var(--text-color);
-        }
+        .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 700px) { .gallery-grid { grid-template-columns: 1fr; } }
+        .photo-card { background: var(--glass-bg); border: 1px solid var(--accent-color); overflow: hidden; transition: all 0.2s; cursor: pointer; }
+        .photo-card:hover { transform: scale(1.02); border-color: var(--accent-color); box-shadow: 0 0 20px var(--accent-glow); }
+        .photo-card img { width: 100%; height: 200px; object-fit: cover; display: block; background: #000; }
+        .photo-card .card-body { padding: 12px 15px 15px; }
+        .photo-card .card-title { font-weight: 700; color: #fff; font-size: 17px; margin-bottom: 4px; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 1px; }
+        .photo-card .card-date { font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
+        .photo-card .card-desc { font-size: 15px; color: var(--text-color); }
+        .no-data { grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted); font-style: italic; }
+        .error-msg { grid-column: 1 / -1; padding: 20px; text-align: center; color: var(--red); border: 1px solid var(--red); background: rgba(255,51,51,0.05); }
 
-        .no-data {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 40px;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-        .error-msg {
-            grid-column: 1 / -1;
-            padding: 20px;
-            text-align: center;
-            color: var(--red);
-            border: 1px solid var(--red);
-            background: rgba(255,51,51,0.05);
-        }
-
-        /* ===== LIGHTBOX (модалка для фото) ===== */
-        #lightbox {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-        #lightbox img {
-            max-width: 90%;
-            max-height: 90%;
-            object-fit: contain;
-            border: 2px solid var(--accent-color);
-            box-shadow: 0 0 50px rgba(255,102,0,0.3);
-        }
-        #lightbox .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            font-size: 40px;
-            color: #fff;
-            cursor: pointer;
-            font-family: 'PT Sans', sans-serif;
-            font-weight: 700;
-            transition: 0.2s;
-        }
-        #lightbox .close-btn:hover {
-            color: var(--accent-color);
-            transform: scale(1.2);
-        }
+        /* ===== LIGHTBOX ===== */
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; cursor: pointer; }
+        #lightbox img { max-width: 90%; max-height: 90%; object-fit: contain; border: 2px solid var(--accent-color); box-shadow: 0 0 50px rgba(255,102,0,0.3); }
+        #lightbox .close-btn { position: absolute; top: 20px; right: 30px; font-size: 40px; color: #fff; cursor: pointer; font-family: 'PT Sans', sans-serif; font-weight: 700; transition: 0.2s; }
+        #lightbox .close-btn:hover { color: var(--accent-color); transform: scale(1.2); }
 
         /* ===== ОПЕРАТИВНИКИ ===== */
-        .operator-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        @media (max-width: 700px) {
-            .operator-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        .operator-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--accent-color);
-            padding: 20px;
-            transition: all 0.2s;
-            text-align: center;
-        }
-        .operator-card:hover {
-            transform: scale(1.02);
-            border-color: var(--accent-color);
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-        .operator-avatar {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 auto 10px;
-            width: 100%;
-            max-width: 120px;
-            aspect-ratio: 1/1;
-            background: #0d0d0d;
-            border: 2px solid var(--border-color);
-            overflow: hidden;
-            font-size: 56px;
-        }
-        .operator-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .operator-name {
-            font-size: 20px;
-            font-weight: 700;
-            color: #fff;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            letter-spacing: 1px;
-        }
-        .operator-role {
-            color: var(--accent-color);
-            font-size: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 5px 0 10px;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            font-weight: 700;
-        }
-        .operator-desc {
-            color: var(--text-muted);
-            font-size: 15px;
-            line-height: 1.5;
-        }
-        .operator-spec {
-            display: inline-block;
-            background: rgba(255,102,0,0.12);
-            border: 1px solid var(--accent-color);
-            padding: 2px 12px;
-            font-size: 13px;
-            color: var(--accent-color);
-            margin-top: 8px;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            font-weight: 700;
-        }
+        .operator-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 700px) { .operator-grid { grid-template-columns: 1fr; } }
+        .operator-card { background: var(--glass-bg); border: 1px solid var(--accent-color); padding: 20px; transition: all 0.2s; text-align: center; }
+        .operator-card:hover { transform: scale(1.02); border-color: var(--accent-color); box-shadow: 0 0 20px var(--accent-glow); }
+        .operator-avatar { display: flex; justify-content: center; align-items: center; margin: 0 auto 10px; width: 100%; max-width: 120px; aspect-ratio: 1/1; background: #0d0d0d; border: 2px solid var(--border-color); overflow: hidden; font-size: 56px; }
+        .operator-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .operator-name { font-size: 20px; font-weight: 700; color: #fff; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 1px; }
+        .operator-role { color: var(--accent-color); font-size: 15px; text-transform: uppercase; letter-spacing: 1px; margin: 5px 0 10px; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; font-weight: 700; }
+        .operator-desc { color: var(--text-muted); font-size: 15px; line-height: 1.5; }
+        .operator-spec { display: inline-block; background: rgba(255,102,0,0.12); border: 1px solid var(--accent-color); padding: 2px 12px; font-size: 13px; color: var(--accent-color); margin-top: 8px; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; font-weight: 700; }
 
         /* ===== ИНСТРУКЦИИ ===== */
-        .docs-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-            margin-top: 16px;
+        .docs-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
+        @media (min-width: 600px) { .docs-grid { grid-template-columns: 1fr 1fr; } }
+        .doc-card { background: var(--glass-bg); border: 1px solid var(--accent-color); padding: 18px; transition: all 0.2s; }
+        .doc-card:hover { border-color: var(--accent-color); box-shadow: 0 0 20px var(--accent-glow); }
+        .doc-card .doc-title { font-weight: 700; color: #fff; font-size: 17px; margin-bottom: 5px; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 0.5px; }
+        .doc-card .doc-desc { color: var(--text-muted); font-size: 15px; margin-bottom: 10px; }
+        .doc-card .doc-link { display: inline-block; color: var(--blue); text-decoration: none; font-weight: 700; border: 1px solid var(--blue); padding: 4px 14px; transition: all 0.2s; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 1px; }
+        .doc-card .doc-link:hover { background: var(--blue); color: #0a0a0a; }
+
+        /* ===== ATAK ===== */
+        .atak-tree { margin-top: 10px; }
+        .atak-node { margin-left: 0; }
+        .atak-node .node-header { cursor: pointer; padding: 10px 15px; background: var(--glass-bg); border: 1px solid var(--accent-color); margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s; user-select: none; font-family: 'PT Sans', sans-serif; font-size: 16px; }
+        .atak-node .node-header:hover { border-color: var(--accent-color); box-shadow: 0 0 20px var(--accent-glow); }
+        .atak-node .node-header .arrow { transition: transform 0.2s; font-size: 14px; color: var(--text-muted); }
+        .atak-node .node-header .arrow.open { transform: rotate(90deg); }
+        .atak-node .node-children { margin-left: 20px; overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+        .atak-node .node-children.open { max-height: 2000px; }
+        .atak-node .node-content { padding: 10px 15px; background: var(--glass-bg); border: 1px solid var(--accent-color); margin: 4px 0 8px; color: var(--text-color); font-family: 'PT Sans', sans-serif; font-size: 15px; }
+        .atak-node .node-content img { max-width: 100%; margin: 10px 0; }
+        .atak-node .node-content ul, .atak-node .node-content ol { margin-left: 20px; margin-bottom: 10px; }
+        .atak-node .node-content a { color: var(--blue); text-decoration: none; }
+        .atak-node .node-content a:hover { text-decoration: underline; }
+        .node-leaf .node-header { cursor: default; background: rgba(0,0,0,0.15); }
+        .node-leaf .node-header:hover { border-color: var(--border-color); }
+        .node-leaf .node-header .arrow { display: none; }
+
+        /* ===== НОВЫЕ СТИЛИ ДЛЯ КАРТ ===== */
+        #map-container {
+            height: 500px;
+            border: 1px solid var(--accent-color);
+            margin: 10px 0;
+            background: #1a1a1a;
         }
-        @media (min-width: 600px) {
-            .docs-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+        .map-layer-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 0;
         }
-        .doc-card {
+        .map-layer-item input[type="checkbox"] {
+            accent-color: var(--accent-color);
+            width: 16px;
+            height: 16px;
+        }
+        .map-layer-item label {
+            color: var(--text-color);
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .leaflet-control-attribution {
+            color: #666 !important;
+            font-size: 10px !important;
+        }
+
+        /* ===== НОВЫЕ СТИЛИ ДЛЯ СЦЕНАРИЕВ И ДЕВАЙСОВ ===== */
+        .item-card {
             background: var(--glass-bg);
             border: 1px solid var(--accent-color);
-            padding: 18px;
+            padding: 15px;
+            margin-bottom: 12px;
             transition: all 0.2s;
         }
-        .doc-card:hover {
+        .item-card:hover {
             border-color: var(--accent-color);
             box-shadow: 0 0 20px var(--accent-glow);
         }
-        .doc-card .doc-title {
+        .item-card .item-title {
             font-weight: 700;
             color: #fff;
-            font-size: 17px;
-            margin-bottom: 5px;
+            font-size: 18px;
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
             letter-spacing: 0.5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .doc-card .doc-desc {
+        .item-card .item-title .arrow {
+            transition: transform 0.2s;
+            font-size: 14px;
             color: var(--text-muted);
-            font-size: 15px;
-            margin-bottom: 10px;
         }
-        .doc-card .doc-link {
+        .item-card .item-title .arrow.open {
+            transform: rotate(90deg);
+        }
+        .item-card .item-details {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease;
+        }
+        .item-card .item-details.open {
+            max-height: 2000px;
+        }
+        .item-card .item-details .item-description {
+            margin-top: 10px;
+            color: var(--text-color);
+            font-size: 15px;
+        }
+        .item-card .item-details .item-map {
+            width: 100%;
+            height: 300px;
+            border: 1px solid var(--border-color);
+            margin: 10px 0;
+            background: #1a1a1a;
+        }
+        .item-card .item-details .item-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .item-card .item-details .item-links a {
             display: inline-block;
             color: var(--blue);
             text-decoration: none;
@@ -826,87 +630,37 @@
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
             letter-spacing: 1px;
         }
-        .doc-card .doc-link:hover {
+        .item-card .item-details .item-links a:hover {
             background: var(--blue);
             color: #0a0a0a;
         }
-
-        /* ===== ATAK ===== */
-        .atak-tree {
-            margin-top: 10px;
-        }
-        .atak-node {
-            margin-left: 0;
-        }
-        .atak-node .node-header {
-            cursor: pointer;
-            padding: 10px 15px;
-            background: var(--glass-bg);
-            border: 1px solid var(--accent-color);
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.2s;
-            user-select: none;
-            font-family: 'PT Sans', sans-serif;
-            font-size: 16px;
-        }
-        .atak-node .node-header:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-        .atak-node .node-header .arrow {
-            transition: transform 0.2s;
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-        .atak-node .node-header .arrow.open {
-            transform: rotate(90deg);
-        }
-        .atak-node .node-children {
-            margin-left: 20px;
-            overflow: hidden;
-            max-height: 0;
-            transition: max-height 0.3s ease;
-        }
-        .atak-node .node-children.open {
-            max-height: 2000px;
-        }
-        .atak-node .node-content {
-            padding: 10px 15px;
-            background: var(--glass-bg);
-            border: 1px solid var(--accent-color);
-            margin: 4px 0 8px;
-            color: var(--text-color);
-            font-family: 'PT Sans', sans-serif;
-            font-size: 15px;
-        }
-        .atak-node .node-content img {
+        .item-card .item-details .item-photo {
             max-width: 100%;
+            height: auto;
+            margin: 10px 0;
+            border: 1px solid var(--border-color);
+        }
+        .item-card .item-details .item-video {
+            width: 100%;
+            max-width: 560px;
             margin: 10px 0;
         }
-        .atak-node .node-content ul,
-        .atak-node .node-content ol {
-            margin-left: 20px;
-            margin-bottom: 10px;
+        .item-card .item-details .item-schematic {
+            margin-top: 10px;
         }
-        .atak-node .node-content a {
-            color: var(--blue);
+        .item-card .item-details .item-schematic a {
+            color: var(--accent-color);
             text-decoration: none;
+            border: 1px solid var(--accent-color);
+            padding: 4px 14px;
+            font-weight: 700;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            letter-spacing: 1px;
+            transition: all 0.2s;
         }
-        .atak-node .node-content a:hover {
-            text-decoration: underline;
-        }
-        .node-leaf .node-header {
-            cursor: default;
-            background: rgba(0,0,0,0.15);
-        }
-        .node-leaf .node-header:hover {
-            border-color: var(--border-color);
-        }
-        .node-leaf .node-header .arrow {
-            display: none;
+        .item-card .item-details .item-schematic a:hover {
+            background: var(--accent-color);
+            color: #0a0a0a;
         }
     </style>
 </head>
@@ -931,21 +685,21 @@
                 <button class="header-link ops" data-page="page-operators">👥 Оперативники</button>
                 <button class="header-link instructions" data-page="page-instructions">📄 Инструкции</button>
                 <button class="header-link atak" data-page="page-atak">📡 ATAK</button>
+                <button class="header-link maps" data-page="page-maps">🗺️ Карты</button>
+                <button class="header-link regulations" data-page="page-regulations">📜 Устав</button>
+                <button class="header-link scenarios" data-page="page-scenarios">🎯 Сценарии</button>
+                <button class="header-link devices" data-page="page-devices">🛠️ Девайсы</button>
             </div>
         </div>
 
         <!-- ===== СТРАНИЦЫ ===== -->
 
-        <!-- ГЛАВНАЯ -->
+        <!-- ГЛАВНАЯ (без изменений) -->
         <div id="page-home" class="page active">
-            <div class="quote">
-                «На поле боя нет места надежде. Здесь есть только расчет и воля к победе».
-            </div>
-
+            <div class="quote">«На поле боя нет места надежде. Здесь есть только расчет и воля к победе».</div>
             <h2>О команде</h2>
             <p>Мы взяли название в честь легендарного отряда из мира <em>Metal Gear</em>. Там FOXHOUND был элитой, которая решала задачи не числом, а интеллектом и новейшими разработками. Мы переносим этот подход в реальный страйкбол.</p>
             <p>Мы — инженерно-тактическая группа. Наш приоритет — техническое превосходство и дисциплина. Мы не просто играем, мы внедряем технологии в каждый выезд.</p>
-
             <h2>Наши задачи</h2>
             <div class="tasks-grid">
                 <div class="task-card"><strong>🛠 Разработка</strong> Создаем свои игровые устройства и софт. Паяльник и код — такое же оружие, как и привод.</div>
@@ -955,7 +709,6 @@
                 <div class="task-card"><strong>🤝 Атмосфера</strong> FOXHOUND — это не только стрельба. Мы ценим качественный отдых, адекватное общение и выезды в кругу своих.</div>
                 <div class="task-card"><strong>🌲 Снаряжение</strong> Наш стандарт — Woodland и Ranger Green (RG). Ориентируемся на современный MARSOC.</div>
             </div>
-
             <h2>Полевое Радио</h2>
             <div class="radio-station">
                 <div class="radio-display">
@@ -973,18 +726,15 @@
                     </div>
                 </div>
             </div>
-
             <h2>Бортовой журнал</h2>
             <div id="log-container" class="log-container">
                 <div class="log-row" style="color: var(--text-muted);">Загрузка записей...</div>
             </div>
-
             <h2>Порядок</h2>
             <ul class="rules-list">
                 <li>Работаем строго по правилам Уральской Ассоциации Страйкбола (УАС).</li>
                 <li>Адекватность, честность и отсутствие овертюна — база нашей команды.</li>
             </ul>
-
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSdCmb8iLGiwe5nbRQl4SpGQPjZiFfVIw1meTqHWFHm5yhAPzg/viewform?usp=dialog" target="_blank" class="join-btn">Подать заявку в команду</a>
             <a href="https://vk.ru/club239972469" target="_blank" class="vk-btn">Мы ВКонтакте</a>
         </div>
@@ -1014,31 +764,13 @@
                     <div class="value highlight" id="speedOn20Display">134 м/с</div>
                 </div>
             </div>
-
             <h3>Регламент полигона (Уральская ассоциация страйкбола)</h3>
             <table class="rules-table" id="rulesTable">
-                <thead>
-                    <tr><th>Категория</th><th>Ограничение по энергии</th><th>Дистанция</th><th>Статус</th></tr>
-                </thead>
+                <thead><tr><th>Категория</th><th>Ограничение по энергии</th><th>Дистанция</th><th>Статус</th></tr></thead>
                 <tbody>
-                    <tr data-weapon="secondary">
-                        <td>Вторичка (пистолеты, автоматы в здании)</td>
-                        <td>до 1.5 Дж</td>
-                        <td>0 м</td>
-                        <td id="statusSecondary">✔</td>
-                    </tr>
-                    <tr data-weapon="primary">
-                        <td>Основное (автомат на открытой местности)</td>
-                        <td>до 2.4 Дж</td>
-                        <td>10 м</td>
-                        <td id="statusPrimary">✔</td>
-                    </tr>
-                    <tr data-weapon="sniper">
-                        <td>Снайперка (болтовка, полуавтомат, только одиночный)</td>
-                        <td>до 2.9 Дж</td>
-                        <td>25 м</td>
-                        <td id="statusSniper">✔</td>
-                    </tr>
+                    <tr data-weapon="secondary"><td>Вторичка (пистолеты, автоматы в здании)</td><td>до 1.5 Дж</td><td>0 м</td><td id="statusSecondary">✔</td></tr>
+                    <tr data-weapon="primary"><td>Основное (автомат на открытой местности)</td><td>до 2.4 Дж</td><td>10 м</td><td id="statusPrimary">✔</td></tr>
+                    <tr data-weapon="sniper"><td>Снайперка (болтовка, полуавтомат, только одиночный)</td><td>до 2.9 Дж</td><td>25 м</td><td id="statusSniper">✔</td></tr>
                 </tbody>
             </table>
             <div id="statusMessage" class="status-msg ok">✅ Допуск: разрешено, дистанция 10 м</div>
@@ -1076,13 +808,54 @@
             </div>
         </div>
 
+        <!-- ===== НОВЫЕ СТРАНИЦЫ ===== -->
+
+        <!-- КАРТЫ -->
+        <div id="page-maps" class="page">
+            <h2>Карты полигонов</h2>
+            <div style="margin-bottom: 10px;">
+                <label for="polygon-select" style="color: var(--text-color); font-weight: 700; margin-right: 10px;">Выберите полигон:</label>
+                <select id="polygon-select" style="background: #1a1a1a; color: #fff; border: 1px solid var(--accent-color); padding: 6px 12px; font-family: 'PT Sans', sans-serif; font-size: 15px; cursor: pointer;"></select>
+            </div>
+            <div id="map-container" style="height: 500px; border: 1px solid var(--accent-color); margin: 10px 0; background: #1a1a1a;"></div>
+            <div id="map-layers" style="margin-top: 10px;"></div>
+            <div id="map-loading" class="no-data" style="display: none;">Загрузка карты...</div>
+        </div>
+
+        <!-- УСТАВ -->
+        <div id="page-regulations" class="page">
+            <h2>Устав подразделения</h2>
+            <div id="regulationsContainer" class="atak-tree">
+                <div class="no-data">Загрузка устава...</div>
+            </div>
+        </div>
+
+        <!-- СЦЕНАРИИ -->
+        <div id="page-scenarios" class="page">
+            <h2>Сценарии для игр</h2>
+            <div id="scenariosContainer">
+                <div class="no-data">Загрузка сценариев...</div>
+            </div>
+        </div>
+
+        <!-- ДЕВАЙСЫ -->
+        <div id="page-devices" class="page">
+            <h2>Девайсы собственного производства</h2>
+            <div id="devicesContainer">
+                <div class="no-data">Загрузка устройств...</div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- ===== LIGHTBOX (для увеличения фото) ===== -->
+    <!-- ===== LIGHTBOX ===== -->
     <div id="lightbox" onclick="closeLightbox(event)">
         <span class="close-btn" onclick="closeLightbox(event)">&times;</span>
         <img id="lightbox-img" src="" alt="Увеличенное фото" />
     </div>
+
+    <!-- ===== ПОДКЛЮЧАЕМ LEAFLET ===== -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
         // ===== LIGHTBOX =====
@@ -1112,7 +885,9 @@
             }
         });
 
-        // ===== ОСТАЛЬНОЙ СКРИПТ (вкладки, радио, калькулятор, загрузка данных) =====
+        // ============================================================
+        // ОСНОВНОЙ СКРИПТ
+        // ============================================================
         (function() {
             'use strict';
 
@@ -1120,11 +895,20 @@
             // 1. НАВИГАЦИЯ
             // ============================================================
             const navLinks = document.querySelectorAll('.header-link');
-            const pageIds = ['page-home', 'page-calc', 'page-photo', 'page-operators', 'page-instructions', 'page-atak'];
+            const pageIds = [
+                'page-home', 'page-calc', 'page-photo', 'page-operators',
+                'page-instructions', 'page-atak', 'page-maps',
+                'page-regulations', 'page-scenarios', 'page-devices'
+            ];
             const pages = {};
             pageIds.forEach(id => {
                 pages[id] = document.getElementById(id);
             });
+
+            let mapsLoaded = false;
+            let regulationsLoaded = false;
+            let scenariosLoaded = false;
+            let devicesLoaded = false;
 
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -1143,11 +927,15 @@
                     if (pageId === 'page-operators' && !window._operatorsLoaded) loadOperators();
                     if (pageId === 'page-instructions' && !window._instructionsLoaded) loadInstructions();
                     if (pageId === 'page-atak' && !window._atakLoaded) loadAtak();
+                    if (pageId === 'page-maps' && !mapsLoaded) { loadMaps(); mapsLoaded = true; }
+                    if (pageId === 'page-regulations' && !regulationsLoaded) { loadRegulations(); regulationsLoaded = true; }
+                    if (pageId === 'page-scenarios' && !scenariosLoaded) { loadScenarios(); scenariosLoaded = true; }
+                    if (pageId === 'page-devices' && !devicesLoaded) { loadDevices(); devicesLoaded = true; }
                 });
             });
 
             // ============================================================
-            // 2. РАДИО
+            // 2. РАДИО (без изменений)
             // ============================================================
             let radioStations = [];
             let currentStationIndex = 0;
@@ -1391,7 +1179,7 @@
             }
 
             // ============================================================
-            // 5. ФОТО (с увеличением)
+            // 5. ФОТО (без изменений)
             // ============================================================
             async function loadPhotos() {
                 if (window._photoLoaded) return;
@@ -1672,13 +1460,380 @@
             }
 
             // ============================================================
-            // 9. ЗАПУСК
+            // 9. НОВЫЕ РАЗДЕЛЫ
+            // ============================================================
+
+            // 9.1 КАРТЫ (Leaflet)
+            let currentPolygonId = null;
+            let mapInstance = null;
+            let mapInitialized = false;
+            let layerGroups = {};
+
+            async function loadMaps() {
+                const select = document.getElementById('polygon-select');
+                const container = document.getElementById('map-container');
+                const layersContainer = document.getElementById('map-layers');
+                const loading = document.getElementById('map-loading');
+
+                try {
+                    const response = await fetch('maps_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить данные карт');
+                    const data = await response.json();
+                    if (!data.polygons || data.polygons.length === 0) {
+                        loading.style.display = 'block';
+                        loading.innerHTML = 'Нет доступных полигонов';
+                        return;
+                    }
+
+                    // Заполняем выпадающий список
+                    select.innerHTML = '';
+                    data.polygons.forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p.id;
+                        opt.textContent = p.name;
+                        select.appendChild(opt);
+                    });
+
+                    // Инициализация карты (один раз)
+                    if (!mapInitialized) {
+                        mapInstance = L.map('map-container', {
+                            center: data.polygons[0].center,
+                            zoom: data.polygons[0].zoom,
+                            zoomControl: true,
+                            attributionControl: true
+                        });
+                        L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+							maxZoom: 20,
+							subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+						}).addTo(mapInstance)
+                        mapInitialized = true;
+                    }
+
+                    // Загружаем первый полигон
+                    currentPolygonId = data.polygons[0].id;
+                    switchPolygon(currentPolygonId, data);
+
+                    // Обработчик изменения селектора
+                    select.addEventListener('change', function() {
+                        const id = this.value;
+                        currentPolygonId = id;
+                        switchPolygon(id, data);
+                    });
+
+                    // Ресайз карты
+                    setTimeout(() => mapInstance.invalidateSize(), 500);
+
+                } catch (error) {
+                    console.error('Ошибка загрузки карт:', error);
+                    loading.style.display = 'block';
+                    loading.innerHTML = '❌ Ошибка загрузки карт. Проверьте файл maps_data.json';
+                    loading.style.color = 'var(--red)';
+                }
+            }
+
+            function switchPolygon(polygonId, data) {
+                const polygon = data.polygons.find(p => p.id === polygonId);
+                if (!polygon) return;
+
+                // Перемещаем карту
+                mapInstance.setView(polygon.center, polygon.zoom);
+
+                // Удаляем старые слои
+                for (let key in layerGroups) {
+                    if (mapInstance.hasLayer(layerGroups[key])) {
+                        mapInstance.removeLayer(layerGroups[key]);
+                    }
+                }
+                layerGroups = {};
+
+                // Создаём новые слои
+                const layersContainer = document.getElementById('map-layers');
+                layersContainer.innerHTML = '';
+
+                polygon.layers.forEach(layerData => {
+                    const group = L.layerGroup();
+                    layerGroups[layerData.id] = group;
+
+                    // Загружаем GeoJSON
+                    if (layerData.url) {
+                        fetch(layerData.url)
+                            .then(res => res.json())
+                            .then(geojson => {
+                                L.geoJSON(geojson, {
+                                    style: layerData.style || { color: '#ff6600', weight: 2 },
+                                    onEachFeature: function(feature, layer) {
+                                        if (feature.properties && feature.properties.name) {
+                                            layer.bindPopup(feature.properties.name);
+                                        }
+                                    }
+                                }).addTo(group);
+                            })
+                            .catch(err => console.warn('Ошибка загрузки GeoJSON:', err));
+                    } else if (layerData.geojson) {
+                        L.geoJSON(layerData.geojson, {
+                            style: layerData.style || { color: '#ff6600', weight: 2 }
+                        }).addTo(group);
+                    }
+
+                    // Добавляем группу на карту, если видим
+                    if (layerData.visible !== false) {
+                        mapInstance.addLayer(group);
+                    }
+
+                    // Чекбокс
+                    const cbWrapper = document.createElement('div');
+                    cbWrapper.className = 'map-layer-item';
+                    const cb = document.createElement('input');
+                    cb.type = 'checkbox';
+                    cb.id = `layer-${layerData.id}`;
+                    cb.checked = layerData.visible !== false;
+                    const label = document.createElement('label');
+                    label.htmlFor = `layer-${layerData.id}`;
+                    label.textContent = layerData.name || layerData.id;
+
+                    cb.addEventListener('change', function() {
+                        if (this.checked) {
+                            mapInstance.addLayer(layerGroups[layerData.id]);
+                        } else {
+                            mapInstance.removeLayer(layerGroups[layerData.id]);
+                        }
+                    });
+
+                    cbWrapper.appendChild(cb);
+                    cbWrapper.appendChild(label);
+                    layersContainer.appendChild(cbWrapper);
+                });
+
+                // Добавляем заголовок "Слои:" если есть слои
+                if (polygon.layers.length > 0) {
+                    const header = document.createElement('div');
+                    header.style.cssText = 'margin-top:8px; font-weight:700; color: var(--text-muted);';
+                    header.textContent = 'Слои:';
+                    layersContainer.prepend(header);
+                }
+
+                // Обновляем размер карты
+                setTimeout(() => mapInstance.invalidateSize(), 100);
+            }
+
+            // 9.2 УСТАВ
+            async function loadRegulations() {
+                const container = document.getElementById('regulationsContainer');
+                try {
+                    const response = await fetch('regulations_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить устав');
+                    const data = await response.json();
+                    if (!data.sections || data.sections.length === 0) {
+                        container.innerHTML = `<div class="no-data">Разделы устава отсутствуют</div>`;
+                        return;
+                    }
+                    container.innerHTML = '';
+                    const tree = document.createElement('div');
+                    tree.className = 'atak-tree';
+                    data.sections.forEach(section => {
+                        const node = createAtakNode(section, 0);
+                        tree.appendChild(node);
+                    });
+                    container.appendChild(tree);
+                } catch (error) {
+                    console.error('Ошибка загрузки устава:', error);
+                    container.innerHTML =
+                        `<div class="error-msg">❌ Ошибка загрузки устава. Проверьте файл regulations_data.json</div>`;
+                }
+            }
+
+            // 9.3 СЦЕНАРИИ
+            async function loadScenarios() {
+                const container = document.getElementById('scenariosContainer');
+                try {
+                    const response = await fetch('scenarios_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить сценарии');
+                    const data = await response.json();
+                    if (!data.scenarios || data.scenarios.length === 0) {
+                        container.innerHTML = `<div class="no-data">Сценариев пока нет</div>`;
+                        return;
+                    }
+                    container.innerHTML = '';
+                    data.scenarios.forEach((scenario, index) => {
+                        const card = document.createElement('div');
+                        card.className = 'item-card';
+
+                        const titleDiv = document.createElement('div');
+                        titleDiv.className = 'item-title';
+                        titleDiv.innerHTML = `
+                            <span>${scenario.title || 'Без названия'}</span>
+                            <span class="arrow">▶</span>
+                        `;
+                        card.appendChild(titleDiv);
+
+                        const details = document.createElement('div');
+                        details.className = 'item-details';
+
+                        if (scenario.description) {
+                            const desc = document.createElement('div');
+                            desc.className = 'item-description';
+                            desc.textContent = scenario.description;
+                            details.appendChild(desc);
+                        }
+
+                        if (scenario.map_image) {
+                            const mapImg = document.createElement('img');
+                            mapImg.src = scenario.map_image;
+                            mapImg.className = 'item-map';
+                            mapImg.style.height = 'auto';
+                            mapImg.style.border = '1px solid var(--border-color)';
+                            details.appendChild(mapImg);
+                        }
+
+                        const linksDiv = document.createElement('div');
+                        linksDiv.className = 'item-links';
+                        if (scenario.full_text_link) {
+                            const a = document.createElement('a');
+                            a.href = scenario.full_text_link;
+                            a.target = '_blank';
+                            a.textContent = '📄 Полный текст';
+                            linksDiv.appendChild(a);
+                        }
+                        if (scenario.video_link) {
+                            const a = document.createElement('a');
+                            a.href = scenario.video_link;
+                            a.target = '_blank';
+                            a.textContent = '🎥 Видео';
+                            linksDiv.appendChild(a);
+                        }
+                        if (linksDiv.children.length > 0) {
+                            details.appendChild(linksDiv);
+                        }
+
+                        card.appendChild(details);
+
+                        titleDiv.addEventListener('click', function() {
+                            const isOpen = details.classList.contains('open');
+                            if (isOpen) {
+                                details.classList.remove('open');
+                                this.querySelector('.arrow').classList.remove('open');
+                            } else {
+                                details.classList.add('open');
+                                this.querySelector('.arrow').classList.add('open');
+                            }
+                        });
+
+                        container.appendChild(card);
+                    });
+                } catch (error) {
+                    console.error('Ошибка загрузки сценариев:', error);
+                    container.innerHTML =
+                        `<div class="error-msg">❌ Ошибка загрузки сценариев. Проверьте файл scenarios_data.json</div>`;
+                }
+            }
+
+            // 9.4 ДЕВАЙСЫ
+            async function loadDevices() {
+                const container = document.getElementById('devicesContainer');
+                try {
+                    const response = await fetch('devices_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить устройства');
+                    const data = await response.json();
+                    if (!data.devices || data.devices.length === 0) {
+                        container.innerHTML = `<div class="no-data">Устройств пока нет</div>`;
+                        return;
+                    }
+                    container.innerHTML = '';
+                    data.devices.forEach((device, index) => {
+                        const card = document.createElement('div');
+                        card.className = 'item-card';
+
+                        const titleDiv = document.createElement('div');
+                        titleDiv.className = 'item-title';
+                        titleDiv.innerHTML = `
+                            <span>${device.name || 'Без названия'}</span>
+                            <span class="arrow">▶</span>
+                        `;
+                        card.appendChild(titleDiv);
+
+                        const details = document.createElement('div');
+                        details.className = 'item-details';
+
+                        if (device.description) {
+                            const desc = document.createElement('div');
+                            desc.className = 'item-description';
+                            desc.textContent = device.description;
+                            details.appendChild(desc);
+                        }
+
+                        if (device.photo) {
+                            const photo = document.createElement('img');
+                            photo.src = device.photo;
+                            photo.className = 'item-photo';
+                            photo.style.maxWidth = '100%';
+                            photo.style.border = '1px solid var(--border-color)';
+                            details.appendChild(photo);
+                        }
+
+                        if (device.video_link) {
+                            const videoDiv = document.createElement('div');
+                            videoDiv.className = 'item-video';
+                            const iframe = document.createElement('iframe');
+                            iframe.width = '100%';
+                            iframe.height = '315';
+                            iframe.src = device.video_link;
+                            iframe.style.border = 'none';
+                            iframe.allowFullscreen = true;
+                            videoDiv.appendChild(iframe);
+                            details.appendChild(videoDiv);
+                        }
+
+                        const linksDiv = document.createElement('div');
+                        linksDiv.className = 'item-links';
+                        if (device.schematic_link) {
+                            const a = document.createElement('a');
+                            a.href = device.schematic_link;
+                            a.target = '_blank';
+                            a.textContent = '📐 Схема';
+                            linksDiv.appendChild(a);
+                        }
+                        if (device.docs_link) {
+                            const a = document.createElement('a');
+                            a.href = device.docs_link;
+                            a.target = '_blank';
+                            a.textContent = '📄 Документация';
+                            linksDiv.appendChild(a);
+                        }
+                        if (linksDiv.children.length > 0) {
+                            details.appendChild(linksDiv);
+                        }
+
+                        card.appendChild(details);
+
+                        titleDiv.addEventListener('click', function() {
+                            const isOpen = details.classList.contains('open');
+                            if (isOpen) {
+                                details.classList.remove('open');
+                                this.querySelector('.arrow').classList.remove('open');
+                            } else {
+                                details.classList.add('open');
+                                this.querySelector('.arrow').classList.add('open');
+                            }
+                        });
+
+                        container.appendChild(card);
+                    });
+                } catch (error) {
+                    console.error('Ошибка загрузки устройств:', error);
+                    container.innerHTML =
+                        `<div class="error-msg">❌ Ошибка загрузки устройств. Проверьте файл devices_data.json</div>`;
+                }
+            }
+
+            // ============================================================
+            // 10. ЗАПУСК
             // ============================================================
             window.onload = function() {
                 loadRadioData();
                 loadLogs();
                 initCalculator();
             };
+
         })();
     </script>
 </body>

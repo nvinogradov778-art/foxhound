@@ -1,0 +1,97 @@
+{
+  "polygons": [
+    {
+      "id": "lyaminskaya",
+      "name": "Ляминская (Ханты-Мансийск)",
+      "center": [60.988196203784931,69.069136161586997],
+      "zoom": 14,
+      "layers": [
+        {
+          "id": "podlozhka",
+          "name": "Подложка",
+          "url": "geojson/lyaminskaya/Подложка.geojson",
+          "visible": true,
+          "style": {
+            "color": "#888888",
+            "weight": 1,
+            "fillOpacity": 0.2,
+            "opacity": 0.8
+          }
+        },
+        {
+          "id": "dorogi",
+          "name": "Дороги",
+          "url": "geojson/lyaminskaya/Дороги.geojson",
+          "visible": true,
+          "style": {
+            "color": "#ff6600",
+            "weight": 3,
+            "opacity": 0.9
+          }
+        },
+        {
+          "id": "magistral",
+          "name": "Магистраль",
+          "url": "geojson/lyaminskaya/Магистраль.geojson",
+          "visible": true,
+          "style": {
+            "color": "#ffaa00",
+            "weight": 4,
+            "opacity": 0.9
+          }
+        },
+        {
+          "id": "tropy",
+          "name": "Тропы",
+          "url": "geojson/lyaminskaya/Тропы.geojson",
+          "visible": true,
+          "style": {
+            "color": "#33cc33",
+            "weight": 2,
+            "opacity": 0.8,
+            "dashArray": "5, 5"
+          }
+        },
+        {
+          "id": "les",
+          "name": "Лес",
+          "url": "geojson/lyaminskaya/Лес.geojson",
+          "visible": true,
+          "style": {
+            "color": "#2e7d32",
+            "weight": 1,
+            "fillColor": "#2e7d32",
+            "fillOpacity": 0.4
+          }
+        },
+        {
+          "id": "zdaniya",
+          "name": "Здания",
+          "url": "geojson/lyaminskaya/Здания.geojson",
+          "visible": true,
+          "style": {
+            "color": "#ff3333",
+            "weight": 2,
+            "fillColor": "#ff3333",
+            "fillOpacity": 0.3
+          }
+        }
+      ]
+    },
+    {
+      "id": "polygon2",
+      "name": "Новый полигон",
+      "center": [55.0, 60.0],
+      "zoom": 13,
+      "layers": [
+        {
+          "id": "layer1",
+          "name": "Слой 1",
+          "url": "geojson/polygon2/слой1.geojson",
+          "visible": true,
+          "style": { "color": "#ff00ff", "weight": 2 }
+        }
+      ]
+    }
+  ]
+}
