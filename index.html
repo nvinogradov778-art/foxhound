@@ -887,7 +887,7 @@
         <div class="header">
             <img src="logo-foxhound.png" alt="FOXHOUND LOGO" class="logo-image" />
             <h1>FOXHOUND</h1>
-            <div class="subtitle">Группа высокотехнологичных операций</div>
+            <div class="subtitle">Страйкбольная команда</div>
 
             <div class="header-links">
                 <button class="header-link main active" data-page="page-home">🏠 Главная</button>
@@ -909,16 +909,16 @@
         <div id="page-home" class="page active">
             <div class="quote">«На поле боя нет места надежде. Здесь есть только расчет и воля к победе».</div>
             <h2>О команде</h2>
-            <p>Мы взяли название в честь легендарного отряда из мира <em>Metal Gear</em>. Там FOXHOUND был элитой, которая решала задачи не числом, а интеллектом и новейшими разработками. Мы переносим этот подход в реальный страйкбол.</p>
-            <p>Мы — инженерно-тактическая группа. Наш приоритет — техническое превосходство и дисциплина. Мы не просто играем, мы внедряем технологии в каждый выезд.</p>
+            <p>Наша команда названа в честь культового отряда из вселенной Metal Gear, чей подход к операциям стал нашей главной философией. FOXHOUND — это элита, решающая задачи за счет превосходства в тактике и технологиях.</p>
+            <p>Мы проецируем эти принципы на реальный страйкбол. Нашими приоритетами являются строгая дисциплина, инженерный расчет и техническое превосходство. Каждая игра для нас — это комплексная интеграция современных технологий в тактический игровой процесс.</p>
             <h2>Наши задачи</h2>
             <div class="tasks-grid">
-                <div class="task-card"><strong>🛠 Разработка</strong> Создаем свои игровые устройства и софт. Паяльник и код — такое же оружие, как и привод.</div>
-                <div class="task-card"><strong>⚙️ Технический апгрейд</strong> Мы сами доводим снаряжение до идеала. Глубокий тюнинг приводов, установка умной электроники и тонкая настройка систем.</div>
-                <div class="task-card"><strong>📡 Навигация и связь</strong> Мастерское владение картами и радиоэфиром. Внедряем современные протоколы связи и знаем полигон лучше противника.</div>
-                <div class="task-card"><strong>⚡ Тактическая гибкость</strong> Ставим на маневренность и слаженность. Отработанные действия в группе позволяют переигрывать оппонента.</div>
-                <div class="task-card"><strong>🤝 Атмосфера</strong> FOXHOUND — это не только стрельба. Мы ценим качественный отдых, адекватное общение и выезды в кругу своих.</div>
-                <div class="task-card"><strong>🌲 Снаряжение</strong> Наш стандарт — Woodland и Ranger Green (RG). Ориентируемся на современный MARSOC.</div>
+                <div class="task-card"><strong>🛠 Разработка</strong> Проектируем уникальные игровые устройства и софт. Паяльник и код — полноценное оружие наравне с приводом.</div>
+                <div class="task-card"><strong>⚙️ Технический апгрейд</strong> Доводим снаряжение до идеала. Глубокий тюнинг, интеграция умной электроники и прецизионная настройка систем.</div>
+                <div class="task-card"><strong>📡 Навигация и связь</strong> Внедряем современные протоколы связи и цифровые карты. Полный контроль радиоэфира и знание полигона.</div>
+                <div class="task-card"><strong>⚡ Тактическая гибкость</strong> Ставим на маневренность, дисциплину и слаженность. Четкие действия группы гарантируют победу над превосходящим противником.</div>
+                <div class="task-card"><strong>🤝 Атмосфера</strong> FOXHOUND — это братство. Ценим адекватность, надежность, качественный отдых и выезды в кругу своих.</div>
+                <div class="task-card"><strong>🌲 Снаряжение</strong> Единый командный стиль в расцветках Woodland и Ranger Green.</div>
             </div>
             <h2>Полевое Радио</h2>
             <div class="radio-station">
@@ -1996,103 +1996,116 @@
             }
 
             // ============================================================
-            // 12. ДЕВАЙСЫ
-            // ============================================================
-            async function loadDevices() {
-                const container = document.getElementById('devicesContainer');
-                try {
-                    const response = await fetch('devices_data.json');
-                    if (!response.ok) throw new Error('Не удалось загрузить устройства');
-                    const data = await response.json();
-                    if (!data.devices || data.devices.length === 0) {
-                        container.innerHTML = `<div class="no-data">Устройств пока нет</div>`;
-                        return;
-                    }
-                    container.innerHTML = '';
-                    data.devices.forEach((device, index) => {
-                        const card = document.createElement('div');
-                        card.className = 'item-card';
+			// 12. ДЕВАЙСЫ
+			// ============================================================
+			async function loadDevices() {
+				const container = document.getElementById('devicesContainer');
+				try {
+					const response = await fetch('devices_data.json');
+					if (!response.ok) throw new Error('Не удалось загрузить устройства');
+					const data = await response.json();
+					if (!data.devices || data.devices.length === 0) {
+						container.innerHTML = `<div class="no-data">Устройств пока нет</div>`;
+						return;
+					}
+					container.innerHTML = '';
+					data.devices.forEach((device, index) => {
+						const card = document.createElement('div');
+						card.className = 'item-card';
 
-                        const titleDiv = document.createElement('div');
-                        titleDiv.className = 'item-title';
-                        titleDiv.innerHTML = `
-                            <span>${device.name || 'Без названия'}</span>
-                            <span class="arrow">▶</span>
-                        `;
-                        card.appendChild(titleDiv);
+						const titleDiv = document.createElement('div');
+						titleDiv.className = 'item-title';
+						titleDiv.innerHTML = `
+							<span>${device.name || 'Без названия'}</span>
+							<span class="arrow">▶</span>
+						`;
+						card.appendChild(titleDiv);
 
-                        const details = document.createElement('div');
-                        details.className = 'item-details';
+						const details = document.createElement('div');
+						details.className = 'item-details';
 
-                        if (device.description) {
-                            const desc = document.createElement('div');
-                            desc.className = 'item-description';
-                            desc.textContent = device.description;
-                            details.appendChild(desc);
-                        }
+						// 1. ФОТО
+						if (device.photo) {
+							const photo = document.createElement('img');
+							photo.src = device.photo;
+							photo.className = 'item-photo';
+							photo.style.maxWidth = '100%';
+							photo.style.border = '1px solid var(--border-color)';
+							details.appendChild(photo);
+						}
 
-                        if (device.photo) {
-                            const photo = document.createElement('img');
-                            photo.src = device.photo;
-                            photo.className = 'item-photo';
-                            photo.style.maxWidth = '100%';
-                            photo.style.border = '1px solid var(--border-color)';
-                            details.appendChild(photo);
-                        }
+						// 2. ОПИСАНИЕ (теперь ПЕРЕД видео)
+						if (device.description) {
+							const desc = document.createElement('div');
+							desc.className = 'item-description';
+							desc.textContent = device.description;
+							details.appendChild(desc);
+						}
 
-                        if (device.video_link) {
-                            const videoDiv = document.createElement('div');
-                            videoDiv.className = 'item-video';
-                            const iframe = document.createElement('iframe');
-                            iframe.width = '100%';
-                            iframe.height = '315';
-                            iframe.src = device.video_link;
-                            iframe.style.border = 'none';
-                            iframe.allowFullscreen = true;
-                            videoDiv.appendChild(iframe);
-                            details.appendChild(videoDiv);
-                        }
+						// 3. ВИДЕО (теперь ПОСЛЕ описания)
+						if (device.video_link) {
+							const videoDiv = document.createElement('div');
+							videoDiv.className = 'item-video';
+							const iframe = document.createElement('iframe');
+							iframe.width = '100%';
+							iframe.height = '315';
+							iframe.src = device.video_link;
+							iframe.style.border = 'none';
+							iframe.allowFullscreen = true;
+							videoDiv.appendChild(iframe);
+							details.appendChild(videoDiv);
+						}
 
-                        const linksDiv = document.createElement('div');
-                        linksDiv.className = 'item-links';
-                        if (device.schematic_link) {
-                            const a = document.createElement('a');
-                            a.href = device.schematic_link;
-                            a.target = '_blank';
-                            a.textContent = '📐 Схема';
-                            linksDiv.appendChild(a);
-                        }
-                        if (device.docs_link) {
-                            const a = document.createElement('a');
-                            a.href = device.docs_link;
-                            a.target = '_blank';
-                            a.textContent = '📄 Документация';
-                            linksDiv.appendChild(a);
-                        }
-                        if (linksDiv.children.length > 0) {
-                            details.appendChild(linksDiv);
-                        }
+						// 4. ФАЙЛЫ
+						const linksDiv = document.createElement('div');
+						linksDiv.className = 'item-links';
+						if (device.schematic_link) {
+							const a = document.createElement('a');
+							a.href = device.schematic_link;
+							a.target = '_blank';
+							a.textContent = '📐 Схема';
+							linksDiv.appendChild(a);
+						}
+						if (device.docs_link) {
+							const a = document.createElement('a');
+							a.href = device.docs_link;
+							a.target = '_blank';
+							a.textContent = '📄 Документация';
+							linksDiv.appendChild(a);
+						}
+						if (device.files && device.files.length > 0) {
+							device.files.forEach(file => {
+								const a = document.createElement('a');
+								a.href = file.link;
+								a.target = '_blank';
+								a.textContent = file.name;
+								linksDiv.appendChild(a);
+							});
+						}
+						if (linksDiv.children.length > 0) {
+							details.appendChild(linksDiv);
+						}
 
-                        card.appendChild(details);
+						card.appendChild(details);
 
-                        titleDiv.addEventListener('click', function() {
-                            const isOpen = details.classList.contains('open');
-                            if (isOpen) {
-                                details.classList.remove('open');
-                                this.querySelector('.arrow').classList.remove('open');
-                            } else {
-                                details.classList.add('open');
-                                this.querySelector('.arrow').classList.add('open');
-                            }
-                        });
+						titleDiv.addEventListener('click', function() {
+							const isOpen = details.classList.contains('open');
+							if (isOpen) {
+								details.classList.remove('open');
+								this.querySelector('.arrow').classList.remove('open');
+							} else {
+								details.classList.add('open');
+								this.querySelector('.arrow').classList.add('open');
+							}
+						});
 
-                        container.appendChild(card);
-                    });
-                } catch (error) {
-                    console.error('Ошибка загрузки устройств:', error);
-                    container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки устройств. Проверьте файл devices_data.json</div>`;
-                }
-            }
+						container.appendChild(card);
+					});
+				} catch (error) {
+					console.error('Ошибка загрузки устройств:', error);
+					container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки устройств. Проверьте файл devices_data.json</div>`;
+				}
+			}
 
             // ============================================================
             // 13. ЗАПУСК
