@@ -667,14 +667,18 @@
                 font-size: 14px;
                 letter-spacing: 2px;
             }
+
+            /* УВЕЛИЧЕННЫЕ КНОПКИ НАВИГАЦИИ */
             .header-link {
-                font-size: 11px;
-                padding: 4px 8px;
-                letter-spacing: 0.3px;
+                font-size: 16px;
+                padding: 10px 16px;
+                letter-spacing: 0.5px;
+                border-radius: 6px;
             }
             .header-links {
-                gap: 3px;
+                gap: 6px;
             }
+
             h2 {
                 font-size: 20px;
                 margin: 30px 0 12px;
@@ -793,13 +797,18 @@
                 font-size: 12px;
                 letter-spacing: 1px;
             }
+
+            /* ЕЩЁ КРУПНЕЕ ДЛЯ МАЛЕНЬКИХ ЭКРАНОВ */
             .header-link {
-                font-size: 10px;
-                padding: 3px 6px;
+                font-size: 15px;
+                padding: 8px 14px;
+                letter-spacing: 0.5px;
+                border-radius: 6px;
             }
             .header-links {
-                gap: 2px;
+                gap: 5px;
             }
+
             .radio-display .freq-tag {
                 font-size: 13px;
             }
@@ -1996,116 +2005,112 @@
             }
 
             // ============================================================
-			// 12. ДЕВАЙСЫ
-			// ============================================================
-			async function loadDevices() {
-				const container = document.getElementById('devicesContainer');
-				try {
-					const response = await fetch('devices_data.json');
-					if (!response.ok) throw new Error('Не удалось загрузить устройства');
-					const data = await response.json();
-					if (!data.devices || data.devices.length === 0) {
-						container.innerHTML = `<div class="no-data">Устройств пока нет</div>`;
-						return;
-					}
-					container.innerHTML = '';
-					data.devices.forEach((device, index) => {
-						const card = document.createElement('div');
-						card.className = 'item-card';
+            // 12. ДЕВАЙСЫ
+            // ============================================================
+            async function loadDevices() {
+                const container = document.getElementById('devicesContainer');
+                try {
+                    const response = await fetch('devices_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить устройства');
+                    const data = await response.json();
+                    if (!data.devices || data.devices.length === 0) {
+                        container.innerHTML = `<div class="no-data">Устройств пока нет</div>`;
+                        return;
+                    }
+                    container.innerHTML = '';
+                    data.devices.forEach((device, index) => {
+                        const card = document.createElement('div');
+                        card.className = 'item-card';
 
-						const titleDiv = document.createElement('div');
-						titleDiv.className = 'item-title';
-						titleDiv.innerHTML = `
-							<span>${device.name || 'Без названия'}</span>
-							<span class="arrow">▶</span>
-						`;
-						card.appendChild(titleDiv);
+                        const titleDiv = document.createElement('div');
+                        titleDiv.className = 'item-title';
+                        titleDiv.innerHTML = `
+                            <span>${device.name || 'Без названия'}</span>
+                            <span class="arrow">▶</span>
+                        `;
+                        card.appendChild(titleDiv);
 
-						const details = document.createElement('div');
-						details.className = 'item-details';
+                        const details = document.createElement('div');
+                        details.className = 'item-details';
 
-						// 1. ФОТО
-						if (device.photo) {
-							const photo = document.createElement('img');
-							photo.src = device.photo;
-							photo.className = 'item-photo';
-							photo.style.maxWidth = '100%';
-							photo.style.border = '1px solid var(--border-color)';
-							details.appendChild(photo);
-						}
+                        if (device.photo) {
+                            const photo = document.createElement('img');
+                            photo.src = device.photo;
+                            photo.className = 'item-photo';
+                            photo.style.maxWidth = '100%';
+                            photo.style.border = '1px solid var(--border-color)';
+                            details.appendChild(photo);
+                        }
 
-						// 2. ОПИСАНИЕ (теперь ПЕРЕД видео)
-						if (device.description) {
-							const desc = document.createElement('div');
-							desc.className = 'item-description';
-							desc.textContent = device.description;
-							details.appendChild(desc);
-						}
+                        if (device.description) {
+                            const desc = document.createElement('div');
+                            desc.className = 'item-description';
+                            desc.textContent = device.description;
+                            details.appendChild(desc);
+                        }
 
-						// 3. ВИДЕО (теперь ПОСЛЕ описания)
-						if (device.video_link) {
-							const videoDiv = document.createElement('div');
-							videoDiv.className = 'item-video';
-							const iframe = document.createElement('iframe');
-							iframe.width = '100%';
-							iframe.height = '315';
-							iframe.src = device.video_link;
-							iframe.style.border = 'none';
-							iframe.allowFullscreen = true;
-							videoDiv.appendChild(iframe);
-							details.appendChild(videoDiv);
-						}
+                        if (device.video_link) {
+                            const videoDiv = document.createElement('div');
+                            videoDiv.className = 'item-video';
+                            const iframe = document.createElement('iframe');
+                            iframe.width = '100%';
+                            iframe.height = '315';
+                            iframe.src = device.video_link;
+                            iframe.style.border = 'none';
+                            iframe.allowFullscreen = true;
+                            videoDiv.appendChild(iframe);
+                            details.appendChild(videoDiv);
+                        }
 
-						// 4. ФАЙЛЫ
-						const linksDiv = document.createElement('div');
-						linksDiv.className = 'item-links';
-						if (device.schematic_link) {
-							const a = document.createElement('a');
-							a.href = device.schematic_link;
-							a.target = '_blank';
-							a.textContent = '📐 Схема';
-							linksDiv.appendChild(a);
-						}
-						if (device.docs_link) {
-							const a = document.createElement('a');
-							a.href = device.docs_link;
-							a.target = '_blank';
-							a.textContent = '📄 Документация';
-							linksDiv.appendChild(a);
-						}
-						if (device.files && device.files.length > 0) {
-							device.files.forEach(file => {
-								const a = document.createElement('a');
-								a.href = file.link;
-								a.target = '_blank';
-								a.textContent = file.name;
-								linksDiv.appendChild(a);
-							});
-						}
-						if (linksDiv.children.length > 0) {
-							details.appendChild(linksDiv);
-						}
+                        const linksDiv = document.createElement('div');
+                        linksDiv.className = 'item-links';
+                        if (device.schematic_link) {
+                            const a = document.createElement('a');
+                            a.href = device.schematic_link;
+                            a.target = '_blank';
+                            a.textContent = '📐 Схема';
+                            linksDiv.appendChild(a);
+                        }
+                        if (device.docs_link) {
+                            const a = document.createElement('a');
+                            a.href = device.docs_link;
+                            a.target = '_blank';
+                            a.textContent = '📄 Документация';
+                            linksDiv.appendChild(a);
+                        }
+                        if (device.files && device.files.length > 0) {
+                            device.files.forEach(file => {
+                                const a = document.createElement('a');
+                                a.href = file.link;
+                                a.target = '_blank';
+                                a.textContent = file.name;
+                                linksDiv.appendChild(a);
+                            });
+                        }
+                        if (linksDiv.children.length > 0) {
+                            details.appendChild(linksDiv);
+                        }
 
-						card.appendChild(details);
+                        card.appendChild(details);
 
-						titleDiv.addEventListener('click', function() {
-							const isOpen = details.classList.contains('open');
-							if (isOpen) {
-								details.classList.remove('open');
-								this.querySelector('.arrow').classList.remove('open');
-							} else {
-								details.classList.add('open');
-								this.querySelector('.arrow').classList.add('open');
-							}
-						});
+                        titleDiv.addEventListener('click', function() {
+                            const isOpen = details.classList.contains('open');
+                            if (isOpen) {
+                                details.classList.remove('open');
+                                this.querySelector('.arrow').classList.remove('open');
+                            } else {
+                                details.classList.add('open');
+                                this.querySelector('.arrow').classList.add('open');
+                            }
+                        });
 
-						container.appendChild(card);
-					});
-				} catch (error) {
-					console.error('Ошибка загрузки устройств:', error);
-					container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки устройств. Проверьте файл devices_data.json</div>`;
-				}
-			}
+                        container.appendChild(card);
+                    });
+                } catch (error) {
+                    console.error('Ошибка загрузки устройств:', error);
+                    container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки устройств. Проверьте файл devices_data.json</div>`;
+                }
+            }
 
             // ============================================================
             // 13. ЗАПУСК
