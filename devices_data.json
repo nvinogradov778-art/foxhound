@@ -4,8 +4,8 @@
       "id": "esp32_timer",
       "name": "Программируемый игровой таймер (ESP32 + OLED)",
       "description": "Автономное устройство для судейства страйкбольных игр. Позволяет настроить количество жизней, общее время матча и интервал между волнами. Отображает обратный отсчёт, оставшиеся жизни и прогресс волны на OLED-экране. Управляется четырьмя кнопками, имеет звуковое сопровождение (клики, старт, окончание, волна). Работает на базе микроконтроллера ESP32, прошивается на MicroPython.",
-      "photo": "devices/timer.jpg",
-      "video_link": "https://www.youtube.com/embed/ВАШ_ИД_ВИДЕО",
+      "photo": "devices/timer.webp",
+      "video_link": "https://vk.ru/video_ext.php?oid=-239972469&id=456239030",
       "files": [
         {
           "name": "Инструкция пользователя (PDF)",
@@ -13,11 +13,11 @@
         },
         {
           "name": "Исходный код (main.py)",
-          "link": "https://github.com/ваш_репозиторий/timer/main.py"
+          "link": "https://github.com/nvinogradov778-art/foxhound-dev/blob/main/%D0%9C%D0%B5%D1%80%D1%82%D0%B2%D1%8F%D0%BA/main.py"
         },
         {
           "name": "Драйвер OLED (ssd1306.py)",
-          "link": "https://github.com/ваш_репозиторий/timer/ssd1306.py"
+          "link": "https://github.com/nvinogradov778-art/foxhound-dev/blob/main/%D0%9C%D0%B5%D1%80%D1%82%D0%B2%D1%8F%D0%BA/ssd1306.py"
         }
       ]
     }

@@ -4,11 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <title>FOXHOUND — Инженерно-тактическая страйкбольная команда</title>
+    
+    <!-- ===== ПРЕДЗАГРУЗКА ШРИФТОВ ===== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet" />
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- ===== LEAFLET CSS (загружается с print, чтобы не блокировать рендеринг) ===== -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"></noscript>
+    
+    <!-- ===== ПРЕДЗАГРУЗКА КРИТИЧЕСКИХ РЕСУРСОВ ===== -->
+    <link rel="preload" href="logo-foxhound.webp" as="image">
+    <!-- Заменяем preload для GIF на MP4 -->
+    <link rel="preload" href="background.mp4" as="video" type="video/mp4">
+    
     <style>
-        /* ===== ПЕРЕМЕННЫЕ ===== */
+        /* ===== ВСЕ СТИЛИ ВНУТРИ (как было) ===== */
         :root {
             --bg-color: #0a0a0a;
             --panel-bg: #111111;
@@ -65,7 +77,6 @@
             z-index: 1;
         }
 
-        /* ===== ШАПКА ===== */
         .header {
             text-align: center;
             border-bottom: 2px solid var(--border-color);
@@ -126,7 +137,6 @@
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
         }
 
-        /* ===== НАВИГАЦИЯ ===== */
         .header-links {
             display: flex;
             flex-wrap: wrap;
@@ -178,7 +188,6 @@
             opacity: 1;
         }
 
-        /* ===== СТРАНИЦЫ ===== */
         .page {
             display: none;
             animation: fadeIn 0.3s ease;
@@ -191,7 +200,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ===== ОБЩИЕ СТИЛИ ===== */
         .quote {
             background: var(--glass-bg);
             padding: 16px 20px;
@@ -234,7 +242,6 @@
             font-size: 16px;
         }
 
-        /* ===== ГЛАВНАЯ ===== */
         .tasks-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -267,7 +274,6 @@
             letter-spacing: 1px;
         }
 
-        /* ===== РАДИО ===== */
         .radio-station {
             background: #0a0a0a;
             border: 2px solid var(--accent-color);
@@ -362,7 +368,6 @@
             border-color: var(--accent-color);
         }
 
-        /* ===== БОРТОВОЙ ЖУРНАЛ ===== */
         .log-container {
             background: #0d0d0d;
             border: 1px solid var(--accent-color);
@@ -385,7 +390,6 @@
             font-weight: 700;
         }
 
-        /* ===== ПРАВИЛА ===== */
         .rules-list {
             list-style: none;
         }
@@ -404,7 +408,6 @@
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
         }
 
-        /* ===== КНОПКИ ===== */
         .join-btn,
         .vk-btn {
             display: block;
@@ -443,7 +446,6 @@
             box-shadow: 0 0 30px rgba(51,153,255,0.3);
         }
 
-        /* ===== КАЛЬКУЛЯТОР ===== */
         .param-group { background: var(--glass-bg); border: 1px solid var(--accent-color); padding: 20px; margin-bottom: 20px; }
         .slider-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
         .slider-row label { min-width: 110px; font-weight: 700; color: #fff; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 0.5px; font-size: 15px; }
@@ -466,7 +468,6 @@
         .status-msg.ok { border-color: var(--green); color: var(--green); }
         .status-msg.fail { border-color: var(--red); color: var(--red); }
 
-        /* ===== ФОТО ===== */
         .gallery-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
         @media (min-width: 600px) {
             .gallery-grid { grid-template-columns: 1fr 1fr; }
@@ -481,13 +482,11 @@
         .no-data { grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted); font-style: italic; }
         .error-msg { grid-column: 1 / -1; padding: 20px; text-align: center; color: var(--red); border: 1px solid var(--red); background: rgba(255,51,51,0.05); }
 
-        /* ===== LIGHTBOX ===== */
         #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; cursor: pointer; }
         #lightbox img { max-width: 90%; max-height: 90%; object-fit: contain; border: 2px solid var(--accent-color); box-shadow: 0 0 50px rgba(255,102,0,0.3); }
         #lightbox .close-btn { position: absolute; top: 20px; right: 30px; font-size: 40px; color: #fff; cursor: pointer; font-family: 'PT Sans', sans-serif; font-weight: 700; transition: 0.2s; }
         #lightbox .close-btn:hover { color: var(--accent-color); transform: scale(1.2); }
 
-        /* ===== ОПЕРАТИВНИКИ ===== */
         .operator-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
         @media (min-width: 600px) {
             .operator-grid { grid-template-columns: 1fr 1fr; }
@@ -501,7 +500,6 @@
         .operator-desc { color: var(--text-muted); font-size: 15px; line-height: 1.5; }
         .operator-spec { display: inline-block; background: rgba(255,102,0,0.12); border: 1px solid var(--accent-color); padding: 2px 12px; font-size: 13px; color: var(--accent-color); margin-top: 8px; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; font-weight: 700; }
 
-        /* ===== ИНСТРУКЦИИ ===== */
         .docs-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
         @media (min-width: 600px) {
             .docs-grid { grid-template-columns: 1fr 1fr; }
@@ -513,7 +511,6 @@
         .doc-card .doc-link { display: inline-block; color: var(--blue); text-decoration: none; font-weight: 700; border: 1px solid var(--blue); padding: 4px 14px; transition: all 0.2s; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 1px; }
         .doc-card .doc-link:hover { background: var(--blue); color: #0a0a0a; }
 
-        /* ===== ATAK ===== */
         .atak-tree { margin-top: 10px; }
         .atak-node { margin-left: 0; }
         .atak-node .node-header { cursor: pointer; padding: 10px 15px; background: var(--glass-bg); border: 1px solid var(--accent-color); margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s; user-select: none; font-family: 'PT Sans', sans-serif; font-size: 16px; }
@@ -531,14 +528,12 @@
         .node-leaf .node-header:hover { border-color: var(--border-color); }
         .node-leaf .node-header .arrow { display: none; }
 
-        /* ===== КАРТЫ ===== */
         #map-container { height: 500px; border: 1px solid var(--accent-color); margin: 10px 0; background: #1a1a1a; }
         .map-layer-item { display: flex; align-items: center; gap: 10px; padding: 4px 0; }
         .map-layer-item input[type="checkbox"] { accent-color: var(--accent-color); width: 16px; height: 16px; }
         .map-layer-item label { color: var(--text-color); font-size: 14px; cursor: pointer; }
         .leaflet-control-attribution { color: #666 !important; font-size: 10px !important; }
 
-        /* ===== СЦЕНАРИИ И ДЕВАЙСЫ ===== */
         .item-card {
             background: var(--glass-bg);
             border: 1px solid var(--accent-color);
@@ -651,7 +646,6 @@
             margin-bottom: 6px;
         }
 
-        /* ===== МОБИЛЬНАЯ АДАПТАЦИЯ ===== */
         @media (max-width: 768px) {
             body {
                 padding: 20px 10px;
@@ -667,8 +661,6 @@
                 font-size: 14px;
                 letter-spacing: 2px;
             }
-
-            /* УВЕЛИЧЕННЫЕ КНОПКИ НАВИГАЦИИ */
             .header-link {
                 font-size: 16px;
                 padding: 10px 16px;
@@ -678,7 +670,6 @@
             .header-links {
                 gap: 6px;
             }
-
             h2 {
                 font-size: 20px;
                 margin: 30px 0 12px;
@@ -797,8 +788,6 @@
                 font-size: 12px;
                 letter-spacing: 1px;
             }
-
-            /* ЕЩЁ КРУПНЕЕ ДЛЯ МАЛЕНЬКИХ ЭКРАНОВ */
             .header-link {
                 font-size: 15px;
                 padding: 8px 14px;
@@ -808,7 +797,6 @@
             .header-links {
                 gap: 5px;
             }
-
             .radio-display .freq-tag {
                 font-size: 13px;
             }
@@ -874,7 +862,6 @@
             }
         }
 
-        /* ===== Сброс анимаций для мобильных (опционально) ===== */
         @media (prefers-reduced-motion: reduce) {
             * {
                 animation-duration: 0.01ms !important;
@@ -886,15 +873,18 @@
 </head>
 <body>
 
-    <video class="video-background" autoplay muted loop playsinline poster="poster.jpg">
-        <source src="background.mp4" type="video/mp4" />
+    <!-- Фон (MP4) -->
+    <video class="video-background" autoplay muted loop playsinline>
+        <source src="background.mp4" type="video/mp4">
+        <!-- Если браузер не поддерживает MP4, можно добавить fallback -->
+        Ваш браузер не поддерживает видео.
     </video>
 
     <div class="container">
 
         <!-- ===== ШАПКА ===== -->
         <div class="header">
-            <img src="logo-foxhound.png" alt="FOXHOUND LOGO" class="logo-image" />
+            <img src="logo-foxhound.webp" alt="FOXHOUND LOGO" class="logo-image" loading="lazy" />
             <h1>FOXHOUND</h1>
             <div class="subtitle">Страйкбольная команда</div>
 
@@ -1072,10 +1062,10 @@
         <img id="lightbox-img" src="" alt="Увеличенное фото" />
     </div>
 
-    <!-- ===== ПОДКЛЮЧАЕМ LEAFLET ===== -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- ===== ПОДКЛЮЧАЕМ LEAFLET (асинхронно) ===== -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 
-    <script>
+    <script defer>
         // ===== LIGHTBOX =====
         function openLightbox(imgSrc) {
             const lightbox = document.getElementById('lightbox');
@@ -1434,7 +1424,7 @@
                         card.className = 'photo-card';
 
                         const img = document.createElement('img');
-                        img.src = photo.image || 'placeholder.jpg';
+                        img.src = photo.image || 'placeholder.webp';
                         img.alt = photo.title || 'Фото';
                         img.loading = 'lazy';
                         img.onerror = function() {
@@ -1505,6 +1495,7 @@
                             const img = document.createElement('img');
                             img.src = op.photo;
                             img.alt = op.name || 'Оператор';
+                            img.loading = 'lazy';
                             img.onerror = function() {
                                 this.style.display = 'none';
                                 avatar.textContent = op.avatar || '👤';
@@ -1860,7 +1851,7 @@
             }
 
             // ============================================================
-            // 11. СЦЕНАРИИ (удалён блок radio)
+            // 11. СЦЕНАРИИ
             // ============================================================
             async function loadScenarios() {
                 const container = document.getElementById('scenariosContainer');
@@ -1904,6 +1895,7 @@
                             iframe.src = scenario.video_link;
                             iframe.style.border = 'none';
                             iframe.allowFullscreen = true;
+                            iframe.loading = 'lazy';
                             videoDiv.appendChild(iframe);
                             details.appendChild(videoDiv);
                         }
@@ -1932,6 +1924,7 @@
                                 if (phase.map_image) {
                                     const img = document.createElement('img');
                                     img.src = phase.map_image;
+                                    img.loading = 'lazy';
                                     img.style.cssText = 'max-width:100%; height:auto; border:1px solid var(--border-color); margin-top:6px;';
                                     img.alt = phase.name;
                                     phaseBlock.appendChild(img);
@@ -2037,6 +2030,7 @@
                             const photo = document.createElement('img');
                             photo.src = device.photo;
                             photo.className = 'item-photo';
+                            photo.loading = 'lazy';
                             photo.style.maxWidth = '100%';
                             photo.style.border = '1px solid var(--border-color)';
                             details.appendChild(photo);
@@ -2058,6 +2052,7 @@
                             iframe.src = device.video_link;
                             iframe.style.border = 'none';
                             iframe.allowFullscreen = true;
+                            iframe.loading = 'lazy';
                             videoDiv.appendChild(iframe);
                             details.appendChild(videoDiv);
                         }
@@ -2115,11 +2110,11 @@
             // ============================================================
             // 13. ЗАПУСК
             // ============================================================
-            window.onload = function() {
+            document.addEventListener('DOMContentLoaded', function() {
                 loadRadioData();
                 loadLogs();
                 initCalculator();
-            };
+            });
 
         })();
     </script>

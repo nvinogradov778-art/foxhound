@@ -10,19 +10,19 @@
           "name": "Фаза 1: Прорыв к VIP",
           "time": "00:00 – 20:00",
           "description": "Спецназ штурмует здание, Ополчение держит оборону. ",
-          "map_image": "scenarios/BHD/ЧЕРНЫЙ ЯСТРЕБ Ф1.png"
+          "map_image": "scenarios/BHD/ЧЕРНЫЙ ЯСТРЕБ Ф1.webp"
         },
         {
           "name": "Фаза 2: Параллельная эвакуация",
           "time": "20:00 – 40:00",
           "description": "Падение вертолёта, активация пилота. Паралельная эвакуация VIPa и пилота",
-          "map_image": "scenarios/BHD/ЧЕРНЫЙ ЯСТРЕБ ф2.png"
+          "map_image": "scenarios/BHD/ЧЕРНЫЙ ЯСТРЕБ ф2.webp"
         },
         {
           "name": "Фаза 3: Осада базы",
           "time": "40:00 – 60:00",
           "description": "Спецназ удерживает базу с 1 жизнью, Ополчение штурмует волнами",
-          "map_image": "scenarios/BHD/ЧЕРНЫЙ ЯСТРЕБ ф3.png"
+          "map_image": "scenarios/BHD/ЧЕРНЫЙ ЯСТРЕБ ф3.webp"
         }
       ],
       "inventory": [

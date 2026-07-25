@@ -3,7 +3,7 @@
     {
       "name": "ЕРЕТИК",
       "avatar": "🗿",
-      "photo": "operators/heretic.jpg",
+      "photo": "operators/heretic.webp",
       "role": "Командир отряда",
       "description": "Основатель и главный идеолог FOXHOUND. Определяет вектор технического развития, отвечает за стратегическое планирование и боевую координацию.",
       "specialization": "Стратегия / Тактика"
@@ -43,7 +43,7 @@
     {
       "name": "Нексор",
       "avatar": "👾",
-      "photo": "operators/nexor.jpg",
+      "photo": "operators/nexor.webp",
       "role": "Заместитель командира команды по работе с личным составом",
       "description": "Отвечает за внутренний климат и боевой дух отряда.",
       "specialization": "Военная психология / Управление кадрами"
