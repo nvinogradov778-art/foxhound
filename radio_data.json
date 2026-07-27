@@ -89,6 +89,33 @@
         { "title": "HEAVYWEIGHT — НОКТУ", "src": "radio/playlist_playlist_stil/21.mp3" },
         { "title": "NUMBERS — НОКТУ, RAYBAX", "src": "radio/playlist_playlist_stil/22.mp3" }
       ]
+    },
+	{
+        "id": "russian_dark_toska",
+		"name": "CH 6: Русский пост-панк & индастриал",
+		"frequency": "217.25",
+		"purpose": "ЧАСТОТА - МЕЛАНХОЛИЯ",
+		"desc": "Личный канал Командира отряда. Исключительно русскоязычный сборник мрачного пост-панка, индастриала и тяжёлого рока.",
+		"tracks": [
+          { "title": "Дайте Мне Один Патрон (feat. Ю. Шевчук) — АНГЕЛ НЕБЕС", "src": "radio/playlist_russian_dark_toska/2.mp3" },
+          { "title": "Когда погаснет солнце — Свидетельство О Смерти", "src": "radio/playlist_russian_dark_toska/3.mp3" },
+          { "title": "Собаке собачья смерть — Свидетельство О Смерти", "src": "radio/playlist_russian_dark_toska/4.mp3" },
+          { "title": "Беспонтовый пирожок — Гражданская оборона", "src": "radio/playlist_russian_dark_toska/5.mp3" },
+          { "title": "Тишина — Molchat Doma", "src": "radio/playlist_russian_dark_toska/7.mp3" },
+          { "title": "обосранный герой — мой друг магнитофон/свидетельство о смерти", "src": "radio/playlist_russian_dark_toska/8.mp3" },
+          { "title": "Winter Nostalgia — Project 03/Valeria Reine/Висельник", "src": "radio/playlist_russian_dark_toska/9.mp3" },
+          { "title": "ANØMALY — VOJ", "src": "radio/playlist_russian_dark_toska/10.mp3" },
+          { "title": "Моя маленькая дрянь — Свидетельство О Смерти", "src": "radio/playlist_russian_dark_toska/11.mp3" },
+          { "title": "Петля — Свидетельство О Смерти", "src": "radio/playlist_russian_dark_toska/12.mp3" },
+          { "title": "Посвящение — Свидетельство О Смерти", "src": "radio/playlist_russian_dark_toska/13.mp3" },
+          { "title": "Рваная дыра — Свидетельство О Смерти", "src": "radio/playlist_russian_dark_toska/14.mp3" },
+          { "title": "Долгая счастливая жизнь — Гражданская оборона", "src": "radio/playlist_russian_dark_toska/15.mp3" },
+          { "title": "Я предпочту тебе — Свидетельство О Смерти", "src": "radio/playlist_russian_dark_toska/16.mp3" },
+          { "title": "По шанхайсхим подвалам — Твин Пикс", "src": "radio/playlist_russian_dark_toska/17.mp3" },
+          { "title": "Крыши — Molchat Doma", "src": "radio/playlist_russian_dark_toska/18.mp3" },
+          { "title": "Скованные одной цепью — Наутилус Помпилиус", "src": "radio/playlist_russian_dark_toska/19.mp3" }
+       ] 
     }
   ]
+  
 }
