@@ -7,7 +7,10 @@
       "purpose": "ЧЕЛОВЕК, ПРОДАВШИЙ МИР",
       "desc": "Главная тема команды FOXHOUND.",
       "tracks": [
-        { "title": "The Man Who Sold The World", "src": "radio/playlist_mgs/man_who_sold_the_world.mp3" }
+        {
+          "title": "The Man Who Sold The World",
+          "src": "radio/playlist_mgs/man_who_sold_the_world.mp3"
+        }
       ]
     },
     {
@@ -17,11 +20,258 @@
       "purpose": "ЧАСТОТА — ПОДГОТОВКА И СБОРЫ",
       "desc": "Классика русского рока и мрачный вайб для вдумчивой работы над снарягой и приводами.",
       "tracks": [
-        { "title": "Полковнику никто не пишет — БИ - 2", "src": "radio/playlist_rock/1.mp3" },
-        { "title": "Черные птицы - Наутилус Помпилиус", "src": "radio/playlist_rock/2.mp3" },
-        { "title": "Черная Луна - Агата Кристи", "src": "radio/playlist_rock/3.mp3" },
-        { "title": "Пластинки - Дурной Вкус", "src": "radio/playlist_rock/4.mp3" },
-        { "title": "Спокойная ночь - Кино", "src": "radio/playlist_rock/5.mp3" }
+        {
+          "title": "Полковнику никто не пишет — БИ - 2",
+          "src": "radio/playlist_rock/1.mp3"
+        },
+        {
+          "title": "Черные птицы - Наутилус Помпилиус",
+          "src": "radio/playlist_rock/2.mp3"
+        },
+        {
+          "title": "Черная Луна - Агата Кристи",
+          "src": "radio/playlist_rock/3.mp3"
+        },
+        {
+          "title": "Пластинки - Дурной Вкус",
+          "src": "radio/playlist_rock/4.mp3"
+        },
+        {
+          "title": "Спокойная ночь - Кино",
+          "src": "radio/playlist_rock/5.mp3"
+        },
+        {
+          "title": "Скованные одной цепью — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/6.mp3"
+        },
+        {
+          "title": "Солдат — 5nizza",
+          "src": "radio/playlist_rock/7.mp3"
+        },
+        {
+          "title": "Праздник общей беды — Наутилус Помпилус",
+          "src": "radio/playlist_rock/8.mp3"
+        },
+        {
+          "title": "Ковёр-вертолёт — Агата Кристи",
+          "src": "radio/playlist_rock/9.mp3"
+        },
+        {
+          "title": "На заре — Альянс",
+          "src": "radio/playlist_rock/10.mp3"
+        },
+        {
+          "title": "Смерти нет — Альянс",
+          "src": "radio/playlist_rock/11.mp3"
+        },
+        {
+          "title": "Спички — Анимация",
+          "src": "radio/playlist_rock/12.mp3"
+        },
+        {
+          "title": "Привет, сестрёнка — Ребята с нашего двора",
+          "src": "radio/playlist_rock/13.mp3"
+        },
+        {
+          "title": "Родина — ДДТ",
+          "src": "radio/playlist_rock/14.mp3"
+        },
+        {
+          "title": "Wehikuł czasu — Dżem",
+          "src": "radio/playlist_rock/15.mp3"
+        },
+        {
+          "title": "Arahja — Kult",
+          "src": "radio/playlist_rock/16.mp3"
+        },
+        {
+          "title": "Czarne słońca — Kult",
+          "src": "radio/playlist_rock/17.mp3"
+        },
+        {
+          "title": "Пачка сигарет — Кино",
+          "src": "radio/playlist_rock/18.mp3"
+        },
+        {
+          "title": "Апрель — Кино",
+          "src": "radio/playlist_rock/19.mp3"
+        },
+        {
+          "title": "Хочу перемен — Кино",
+          "src": "radio/playlist_rock/20.mp3"
+        },
+        {
+          "title": "Раньше в твоих глазах — Кино",
+          "src": "radio/playlist_rock/21.mp3"
+        },
+        {
+          "title": "Восьмиклассница — Кино",
+          "src": "radio/playlist_rock/22.mp3"
+        },
+        {
+          "title": "Кукушка — Кино",
+          "src": "radio/playlist_rock/23.mp3"
+        },
+        {
+          "title": "Разреши мне — Кино",
+          "src": "radio/playlist_rock/24.mp3"
+        },
+        {
+          "title": "Ночь — Кино",
+          "src": "radio/playlist_rock/25.mp3"
+        },
+        {
+          "title": "Стань птицей — Кино",
+          "src": "radio/playlist_rock/26.mp3"
+        },
+        {
+          "title": "Дождь для нас — Кино",
+          "src": "radio/playlist_rock/27.mp3"
+        },
+        {
+          "title": "Закрой за мной дверь я ухожу — Кино",
+          "src": "radio/playlist_rock/28.mp3"
+        },
+        {
+          "title": "Сказка — Кино",
+          "src": "radio/playlist_rock/29.mp3"
+        },
+        {
+          "title": "Печаль — Кино",
+          "src": "radio/playlist_rock/30.mp3"
+        },
+        {
+          "title": "Весна — Кино",
+          "src": "radio/playlist_rock/31.mp3"
+        },
+        {
+          "title": "Кончится лето — Кино",
+          "src": "radio/playlist_rock/32.mp3"
+        },
+        {
+          "title": "Солнечные дни — Кино",
+          "src": "radio/playlist_rock/33.mp3"
+        },
+        {
+          "title": "Транквилизатор — Кино",
+          "src": "radio/playlist_rock/34.mp3"
+        },
+        {
+          "title": "Дерево — Кино",
+          "src": "radio/playlist_rock/35.mp3"
+        },
+        {
+          "title": "Следи за собой — Кино",
+          "src": "radio/playlist_rock/36.mp3"
+        },
+        {
+          "title": "Когда твоя девушка больна — Кино",
+          "src": "radio/playlist_rock/37.mp3"
+        },
+        {
+          "title": "Kryzysowa Narzeczona — Lady Pank",
+          "src": "radio/playlist_rock/38.mp3"
+        },
+        {
+          "title": "Последнее письмо — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/39.mp3"
+        },
+        {
+          "title": "Сыграем в ящик — Лёша Маэстро & Атри",
+          "src": "radio/playlist_rock/40.mp3"
+        },
+        {
+          "title": "Я не та — Марина Журавлева",
+          "src": "radio/playlist_rock/41.mp3"
+        },
+        {
+          "title": "Зеленоглазое такси — Михаил Боярский",
+          "src": "radio/playlist_rock/42.mp3"
+        },
+        {
+          "title": "Acidland — Myslovitz",
+          "src": "radio/playlist_rock/43.mp3"
+        },
+        {
+          "title": "Летучая мышь — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/44.mp3"
+        },
+        {
+          "title": "Буги с косой — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/45.mp3"
+        },
+        {
+          "title": "Чугада — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/46.mp3"
+        },
+        {
+          "title": "Бриллиантовые дороги — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/47.mp3"
+        },
+        {
+          "title": "Доктор твоего тела — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/48.mp3"
+        },
+        {
+          "title": "Летучий фрегат — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/49.mp3"
+        },
+        {
+          "title": "Шар цвета хаки — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/50.mp3"
+        },
+        {
+          "title": "Одинокая птица — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/51.mp3"
+        },
+        {
+          "title": "Утро Полины — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/52.mp3"
+        },
+        {
+          "title": "Тихие игры — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/53.mp3"
+        },
+        {
+          "title": "Титаник — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/54.mp3"
+        },
+        {
+          "title": "Прогулки по воде — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/55.mp3"
+        },
+        {
+          "title": "Падал теплый снег — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/56.mp3"
+        },
+        {
+          "title": "Белая стена — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/57.mp3"
+        },
+        {
+          "title": "Взгляд с экрана — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/58.mp3"
+        },
+        {
+          "title": "Крылья — Наутилус Помпилиус",
+          "src": "radio/playlist_rock/59.mp3"
+        },
+        {
+          "title": "Tak... Tak... To Ja — Obywatel G.C.",
+          "src": "radio/playlist_rock/60.mp3"
+        },
+        {
+          "title": "Zaopiekuj się mną — Rezerwat",
+          "src": "radio/playlist_rock/61.mp3"
+        },
+        {
+          "title": "Бесполезно — Валентин Стрыкало",
+          "src": "radio/playlist_rock/62.mp3"
+        },
+        {
+          "title": "Никуда не надо — Плейлист Венкова",
+          "src": "radio/playlist_rock/63.mp3"
+        }
       ]
     },
     {
@@ -31,14 +281,370 @@
       "purpose": "ЧАСТОТА — ЛАБОРАТОРИЯ",
       "desc": "Пост-панк, индастриал и электроника. Музыка для кода, пайки и 3D-печати",
       "tracks": [
-        { "title": "Heretic — Frayle", "src": "radio/playlist_laboratory/1.mp3" },
-        { "title": "Клетка — Molchat Doma", "src": "radio/playlist_laboratory/2.mp3" },
-        { "title": "Судно (Борис Рижий) — Molchat Doma", "src": "radio/playlist_laboratory/3.mp3" },
-        { "title": "Волны — Molchat Doma", "src": "radio/playlist_laboratory/4.mp3" },
-        { "title": "Тоска — Molchat Doma", "src": "radio/playlist_laboratory/5.mp3" },
-        { "title": "Trava u Doma (Geoffrey Day Remix) — Geoffplaysguitar, Земляне, Atomic Heart", "src": "radio/playlist_laboratory/6.mp3" },
-        { "title": "Кому-то в мире весело — Где Фантом?", "src": "radio/playlist_laboratory/7.mp3" },
-        { "title": "Пикник - Из мышеловки — Пикник", "src": "radio/playlist_laboratory/8.mp3" }
+        {
+          "title": "Heretic — Frayle",
+          "src": "radio/playlist_laboratory/1.mp3"
+        },
+        {
+          "title": "Клетка — Molchat Doma",
+          "src": "radio/playlist_laboratory/2.mp3"
+        },
+        {
+          "title": "Судно (Борис Рижий) — Molchat Doma",
+          "src": "radio/playlist_laboratory/3.mp3"
+        },
+        {
+          "title": "Волны — Molchat Doma",
+          "src": "radio/playlist_laboratory/4.mp3"
+        },
+        {
+          "title": "Тоска — Molchat Doma",
+          "src": "radio/playlist_laboratory/5.mp3"
+        },
+        {
+          "title": "Trava u Doma (Geoffrey Day Remix) — Geoffplaysguitar, Земляне, Atomic Heart",
+          "src": "radio/playlist_laboratory/6.mp3"
+        },
+        {
+          "title": "Кому-то в мире весело — Где Фантом?",
+          "src": "radio/playlist_laboratory/7.mp3"
+        },
+        {
+          "title": "Пикник - Из мышеловки — Пикник",
+          "src": "radio/playlist_laboratory/8.mp3"
+        },
+        {
+          "title": "Когда погаснет солнце — Свидетельство О Смерти",
+          "src": "radio/playlist_laboratory/9.mp3"
+        },
+        {
+          "title": "Собаке собачья смерть — Свидетельство О Смерти",
+          "src": "radio/playlist_laboratory/10.mp3"
+        },
+        {
+          "title": "Тишина — Molchat Doma",
+          "src": "radio/playlist_laboratory/11.mp3"
+        },
+        {
+          "title": "обосранный герой — мой друг магнитофон/свидетельство о смерти",
+          "src": "radio/playlist_laboratory/12.mp3"
+        },
+        {
+          "title": "Winter Nostalgia — Project 03/Valeria Reine/Висельник",
+          "src": "radio/playlist_laboratory/13.mp3"
+        },
+        {
+          "title": "ANØMALY — VOJ",
+          "src": "radio/playlist_laboratory/14.mp3"
+        },
+        {
+          "title": "Моя маленькая дрянь — Свидетельство О Смерти",
+          "src": "radio/playlist_laboratory/15.mp3"
+        },
+        {
+          "title": "Петля — Свидетельство О Смерти",
+          "src": "radio/playlist_laboratory/16.mp3"
+        },
+        {
+          "title": "Посвящение — Свидетельство О Смерти",
+          "src": "radio/playlist_laboratory/17.mp3"
+        },
+        {
+          "title": "Рваная дыра — Свидетельство О Смерти",
+          "src": "radio/playlist_laboratory/18.mp3"
+        },
+        {
+          "title": "Я предпочту тебе — Свидетельство О Смерти",
+          "src": "radio/playlist_laboratory/19.mp3"
+        },
+        {
+          "title": "По шанхайсхим подвалам — Твин Пикс",
+          "src": "radio/playlist_laboratory/20.mp3"
+        },
+        {
+          "title": "Крыши — Molchat Doma",
+          "src": "radio/playlist_laboratory/21.mp3"
+        },
+        {
+          "title": "Ад из красных цветов — Англия",
+          "src": "radio/playlist_laboratory/22.mp3"
+        },
+        {
+          "title": "Трюмы кораблей — BLAZH",
+          "src": "radio/playlist_laboratory/23.mp3"
+        },
+        {
+          "title": "Отпусти — Бессоница",
+          "src": "radio/playlist_laboratory/24.mp3"
+        },
+        {
+          "title": "Бордовая рубашка — Бессоница",
+          "src": "radio/playlist_laboratory/25.mp3"
+        },
+        {
+          "title": "80 — Буерак",
+          "src": "radio/playlist_laboratory/26.mp3"
+        },
+        {
+          "title": "Нет любви — Буерак",
+          "src": "radio/playlist_laboratory/27.mp3"
+        },
+        {
+          "title": "Среди них ты — Буерак",
+          "src": "radio/playlist_laboratory/28.mp3"
+        },
+        {
+          "title": "Ставлю на зеро — Черниковская Хата",
+          "src": "radio/playlist_laboratory/29.mp3"
+        },
+        {
+          "title": "Ты Не Верь Слезам — Черниковская Хата",
+          "src": "radio/playlist_laboratory/30.mp3"
+        },
+        {
+          "title": "Нажми на кнопку — Черниковская Хата",
+          "src": "radio/playlist_laboratory/31.mp3"
+        },
+        {
+          "title": "Спектакль окончен — Черниковская Хата",
+          "src": "radio/playlist_laboratory/32.mp3"
+        },
+        {
+          "title": "Белая Ночь — Черниковская Хата",
+          "src": "radio/playlist_laboratory/33.mp3"
+        },
+        {
+          "title": "Плохая погода — Corn Wave",
+          "src": "radio/playlist_laboratory/34.mp3"
+        },
+        {
+          "title": "Summer playlist — Corn Wave",
+          "src": "radio/playlist_laboratory/35.mp3"
+        },
+        {
+          "title": "Не надо себе врать — Дисциплина Безбольной Биты",
+          "src": "radio/playlist_laboratory/36.mp3"
+        },
+        {
+          "title": "Еду домой — Дисциплина Безбольной Биты",
+          "src": "radio/playlist_laboratory/37.mp3"
+        },
+        {
+          "title": "Зря — Дисциплина Безбольной Биты",
+          "src": "radio/playlist_laboratory/38.mp3"
+        },
+        {
+          "title": "Навсегда — ЭЛЕКТРОЦОЙ",
+          "src": "radio/playlist_laboratory/39.mp3"
+        },
+        {
+          "title": "Strange Dance — Технология",
+          "src": "radio/playlist_laboratory/40.mp3"
+        },
+        {
+          "title": "Панельные окраины — грань",
+          "src": "radio/playlist_laboratory/41.mp3"
+        },
+        {
+          "title": "Пояс — Karluv Tyn",
+          "src": "radio/playlist_laboratory/42.mp3"
+        },
+        {
+          "title": "Бродяга — Karluv Tyn",
+          "src": "radio/playlist_laboratory/43.mp3"
+        },
+        {
+          "title": "Союз — Конец Электроники",
+          "src": "radio/playlist_laboratory/44.mp3"
+        },
+        {
+          "title": "Ночь — Конец Электроники",
+          "src": "radio/playlist_laboratory/45.mp3"
+        },
+        {
+          "title": "25 — культодиночества",
+          "src": "radio/playlist_laboratory/46.mp3"
+        },
+        {
+          "title": "Самолеты — Луна",
+          "src": "radio/playlist_laboratory/47.mp3"
+        },
+        {
+          "title": "Дискотека — Молчат Дома",
+          "src": "radio/playlist_laboratory/48.mp3"
+        },
+        {
+          "title": "Ответа нет — Молчат Дома",
+          "src": "radio/playlist_laboratory/49.mp3"
+        },
+        {
+          "title": "Прогноз — Молчат Дома",
+          "src": "radio/playlist_laboratory/50.mp3"
+        },
+        {
+          "title": "Кыши — Молчат Дома",
+          "src": "radio/playlist_laboratory/51.mp3"
+        },
+        {
+          "title": "Танцевать — Молчат Дома",
+          "src": "radio/playlist_laboratory/52.mp3"
+        },
+        {
+          "title": "Люди Надоели — Молчат Дома",
+          "src": "radio/playlist_laboratory/53.mp3"
+        },
+        {
+          "title": "Гимн Монолита — S.T.A.L.K.E.R.",
+          "src": "radio/playlist_laboratory/54.mp3"
+        },
+        {
+          "title": "Электрический ток — Увула",
+          "src": "radio/playlist_laboratory/55.mp3"
+        },
+        {
+          "title": "Навеки — Peremotka",
+          "src": "radio/playlist_laboratory/56.mp3"
+        },
+        {
+          "title": "Я видел сон — Peremotka",
+          "src": "radio/playlist_laboratory/57.mp3"
+        },
+        {
+          "title": "Портрет — Увула",
+          "src": "radio/playlist_laboratory/58.mp3"
+        },
+        {
+          "title": "Засыпай — Ssshhhiiittt!",
+          "src": "radio/playlist_laboratory/59.mp3"
+        },
+        {
+          "title": "Все в порядке, все пройдет — Несогласие",
+          "src": "radio/playlist_laboratory/60.mp3"
+        },
+        {
+          "title": "Смысл жизни — Несогласие",
+          "src": "radio/playlist_laboratory/61.mp3"
+        },
+        {
+          "title": "Ccopa — Offline Meetup",
+          "src": "radio/playlist_laboratory/62.mp3"
+        },
+        {
+          "title": "Здравствуй — Перемотка",
+          "src": "radio/playlist_laboratory/63.mp3"
+        },
+        {
+          "title": "Старое кино — Перемотка",
+          "src": "radio/playlist_laboratory/64.mp3"
+        },
+        {
+          "title": "Встречная — Перемотка",
+          "src": "radio/playlist_laboratory/65.mp3"
+        },
+        {
+          "title": "Нападение — Ploho",
+          "src": "radio/playlist_laboratory/66.mp3"
+        },
+        {
+          "title": "Город устал — Ploho",
+          "src": "radio/playlist_laboratory/67.mp3"
+        },
+        {
+          "title": "Пустота — Ploho",
+          "src": "radio/playlist_laboratory/68.mp3"
+        },
+        {
+          "title": "Вечер грустных пар — Ploho",
+          "src": "radio/playlist_laboratory/69.mp3"
+        },
+        {
+          "title": "По краю острова — Ploho",
+          "src": "radio/playlist_laboratory/70.mp3"
+        },
+        {
+          "title": "Хотеть тепла — Ploho",
+          "src": "radio/playlist_laboratory/71.mp3"
+        },
+        {
+          "title": "Молодость — Ploho",
+          "src": "radio/playlist_laboratory/72.mp3"
+        },
+        {
+          "title": "Долго - долго — Радиомай",
+          "src": "radio/playlist_laboratory/73.mp3"
+        },
+        {
+          "title": "уходи — спаржа",
+          "src": "radio/playlist_laboratory/74.mp3"
+        },
+        {
+          "title": "19 — Ssshhhiiittt!",
+          "src": "radio/playlist_laboratory/75.mp3"
+        },
+        {
+          "title": "Восемь — Ssshhhiiittt!",
+          "src": "radio/playlist_laboratory/76.mp3"
+        },
+        {
+          "title": "Май — Ssshhhiiittt!",
+          "src": "radio/playlist_laboratory/77.mp3"
+        },
+        {
+          "title": "Больше нет — Ssshhhiiittt!",
+          "src": "radio/playlist_laboratory/78.mp3"
+        },
+        {
+          "title": "Корабль — Ssshhhiiittt!",
+          "src": "radio/playlist_laboratory/79.mp3"
+        },
+        {
+          "title": "Самыи грустныи — Ssshhhiiittt!",
+          "src": "radio/playlist_laboratory/80.mp3"
+        },
+        {
+          "title": "Спустя года — Стереополина",
+          "src": "radio/playlist_laboratory/81.mp3"
+        },
+        {
+          "title": "Облака Весны — оварищ Астроном",
+          "src": "radio/playlist_laboratory/82.mp3"
+        },
+        {
+          "title": "Секрет — Творожное Озеро",
+          "src": "radio/playlist_laboratory/83.mp3"
+        },
+        {
+          "title": "Сколько — Увула",
+          "src": "radio/playlist_laboratory/84.mp3"
+        },
+        {
+          "title": "Лузер — Увула",
+          "src": "radio/playlist_laboratory/85.mp3"
+        },
+        {
+          "title": "Тайна — Увула",
+          "src": "radio/playlist_laboratory/86.mp3"
+        },
+        {
+          "title": "Мы — Увула",
+          "src": "radio/playlist_laboratory/87.mp3"
+        },
+        {
+          "title": "Ты и твоя тень — Увула",
+          "src": "radio/playlist_laboratory/88.mp3"
+        },
+        {
+          "title": "Новый твой — Увула",
+          "src": "radio/playlist_laboratory/89.mp3"
+        },
+        {
+          "title": "Возвращайся — angel vox",
+          "src": "radio/playlist_laboratory/90.mp3"
+        },
+        {
+          "title": "По Разбитым Бутылкам — Юго-Запад",
+          "src": "radio/playlist_laboratory/91.mp3"
+        }
       ]
     },
     {
@@ -48,15 +654,122 @@
       "purpose": "ЧАСТОТА - ПОЛЕВОЙ ВЫХОД",
       "desc": "Самый мощный и драйвовый контент для дороги на полигон и боевого настроя",
       "tracks": [
-        { "title": "Прорвёмся! Опера` (Любэ 35. Всё опять начинается. Трибьют) — RADIO TAPOK, Игорь Матвиенко", "src": "radio/playlist_pole/1.mp3" },
-        { "title": "Мёртвый Город — СОЛОВЕЙ", "src": "radio/playlist_pole/2.mp3" },
-        { "title": "Инструкция по Выживанию (Instructions for Survival) - Афганский Синдром (Afghan Syndrom) — Rel1sh", "src": "radio/playlist_pole/3.mp3" },
-        { "title": "В диапазоне — Порнофильмы, Котляров Владимир Андреевич", "src": "radio/playlist_pole/4.mp3" },
-        { "title": "Павел Пламенев и iwantsummer – Антиматерия — Plamenev", "src": "radio/playlist_pole/5.mp3" },
-        { "title": "Ingermanland — Plamenev, Pavel Plamenev, Лёша Хельга, Sofiko Kardava", "src": "radio/playlist_pole/7.mp3" },
-        { "title": "Он увидел солнце — Гражданская оборона, Егор Летов", "src": "radio/playlist_pole/8.mp3" },
-        { "title": "Последняя битва — Norma Tale", "src": "radio/playlist_pole/9.mp3" },
-        { "title": "Про дурачка — Гражданская оборона, Егор Летов", "src": "radio/playlist_pole/10.mp3" }
+        {
+          "title": "Прорвёмся! Опера` (Любэ 35. Всё опять начинается. Трибьют) — RADIO TAPOK, Игорь Матвиенко",
+          "src": "radio/playlist_pole/1.mp3"
+        },
+        {
+          "title": "Мёртвый Город — СОЛОВЕЙ",
+          "src": "radio/playlist_pole/2.mp3"
+        },
+        {
+          "title": "Инструкция по Выживанию (Instructions for Survival) - Афганский Синдром (Afghan Syndrom) — Rel1sh",
+          "src": "radio/playlist_pole/3.mp3"
+        },
+        {
+          "title": "В диапазоне — Порнофильмы, Котляров Владимир Андреевич",
+          "src": "radio/playlist_pole/4.mp3"
+        },
+        {
+          "title": "Павел Пламенев и iwantsummer – Антиматерия — Plamenev",
+          "src": "radio/playlist_pole/5.mp3"
+        },
+        {
+          "title": "Ingermanland — Plamenev, Pavel Plamenev, Лёша Хельга, Sofiko Kardava",
+          "src": "radio/playlist_pole/7.mp3"
+        },
+        {
+          "title": "Он увидел солнце — Гражданская оборона, Егор Летов",
+          "src": "radio/playlist_pole/8.mp3"
+        },
+        {
+          "title": "Последняя битва — Norma Tale",
+          "src": "radio/playlist_pole/9.mp3"
+        },
+        {
+          "title": "Про дурачка — Гражданская оборона, Егор Летов",
+          "src": "radio/playlist_pole/10.mp3"
+        },
+        {
+          "title": "Дайте Мне Один Патрон (feat. Ю. Шевчук) — АНГЕЛ НЕБЕС",
+          "src": "radio/playlist_pole/10.mp3"
+        },
+        {
+          "title": "Беспонтовый пирожок — Гражданская оборона",
+          "src": "radio/playlist_pole/11.mp3"
+        },
+        {
+          "title": "Долгая счастливая жизнь — Гражданская оборона",
+          "src": "radio/playlist_pole/12.mp3"
+        },
+        {
+          "title": "Караван — Александр Розенбаум",
+          "src": "radio/playlist_pole/13.mp3"
+        },
+        {
+          "title": "Беспечный ангел — Ария",
+          "src": "radio/playlist_pole/14.mp3"
+        },
+        {
+          "title": "Монолог пилота «Чёрного тюльпана» — Александр Розенбаум",
+          "src": "radio/playlist_pole/15.mp3"
+        },
+        {
+          "title": "Карабах — Имам Алимсултанов",
+          "src": "radio/playlist_pole/16.mp3"
+        },
+        {
+          "title": "Батальонная разведка — Каскад",
+          "src": "radio/playlist_pole/17.mp3"
+        },
+        {
+          "title": "Чечня — Юрий Прибылов (и группа «Обратная сторона»)",
+          "src": "radio/playlist_pole/18.mp3"
+        },
+        {
+          "title": "Mam dość — Kryzys",
+          "src": "radio/playlist_pole/19.mp3"
+        },
+        {
+          "title": "Позови меня тихо по имени — Любэ",
+          "src": "radio/playlist_pole/20.mp3"
+        },
+        {
+          "title": "Солдат — Любэ",
+          "src": "radio/playlist_pole/21.mp3"
+        },
+        {
+          "title": "Комбат — Любэ",
+          "src": "radio/playlist_pole/22.mp3"
+        },
+        {
+          "title": "Давай за — Любэ",
+          "src": "radio/playlist_pole/23.mp3"
+        },
+        {
+          "title": "Луговая трава — Любэ",
+          "src": "radio/playlist_pole/24.mp3"
+        },
+        {
+          "title": "Мы уходим — Каскад",
+          "src": "radio/playlist_pole/25.mp3"
+        },
+        {
+          "title": "Мы за ценой не постоим — Песни нашего века",
+          "src": "radio/playlist_pole/26.mp3"
+        },
+        {
+          "title": "Тихий Суицид — Радикальный Метод",
+          "src": "radio/playlist_pole/27.mp3"
+        },
+        {
+          "title": "Афган — Александр Дорошенко",
+          "src": "radio/playlist_pole/28.mp3"
+        },
+        {
+          "title": "Ранены мы в душу тобой, Афганистан — Неизвестен",
+          "src": "radio/playlist_pole/29.mp3"
+        }
       ]
     },
     {
@@ -66,56 +779,95 @@
       "purpose": "ЧАСТОТА - СТИЛЬ",
       "desc": "Сборка разных композиций для активного или монотонного времяпрепровождения под звучный и субъективно стильный саунд (Автор - Nexor)",
       "tracks": [
-        { "title": "¡Adiós, pedrilas! — 2rbina 2rista", "src": "radio/playlist_playlist_stil/1.mp3" },
-        { "title": "40 DAYS (Low Bass by Ivanich) — (41-44Hz) GREEN ORXNGE, Sagath", "src": "radio/playlist_playlist_stil/2.mp3" },
-        { "title": "Resident Evil HUNK Theme Remix (RE2 x RE9) | Human Unit Never Killed — ArsChronica", "src": "radio/playlist_playlist_stil/3.mp3" },
-        { "title": "The Forgotten Soldier (Metal Remix) — ArsChronica", "src": "radio/playlist_playlist_stil/4.mp3" },
-        { "title": "Железные челюсти — CHAIN$AWSQUAD, SARCOFUCK", "src": "radio/playlist_playlist_stil/5.mp3" },
-        { "title": "мне просто лень — CHAIN$AWSQUAD, Terror Letov, gan4o", "src": "radio/playlist_playlist_stil/6.mp3" },
-        { "title": "Я люблю людей как гвоздь в горле — CHAIN$AWSQUAD, UMERTVIE", "src": "radio/playlist_playlist_stil/7.mp3" },
-        { "title": "RAIDEN — DEATHCHANNEL", "src": "radio/playlist_playlist_stil/8.mp3" },
-        { "title": "One Tap — DEATHCHANNEL feat. Terror Letov", "src": "radio/playlist_playlist_stil/9.mp3" },
-        { "title": "KURU — DEATHCHANNEL, BLOODSET", "src": "radio/playlist_playlist_stil/10.mp3" },
-        { "title": "Violence Suppressor — Irving Force", "src": "radio/playlist_playlist_stil/11.mp3" },
-        { "title": "Раньше было лучше — Sagath, МОЛОДОСТЬ ВНУТРИ", "src": "radio/playlist_playlist_stil/12.mp3" },
-        { "title": "Мёртвый рейв — SCREAMPUNK", "src": "radio/playlist_playlist_stil/13.mp3" },
-        { "title": "АКТ 5. BIG BOY THINGS — TERROR LETOV feat. CARVACULT, FORGOTTEN GOD", "src": "radio/playlist_playlist_stil/14.mp3" },
-        { "title": "АКТ 3. НОРАДРЕНАЛИН — TERROR LETOV feat. SAGATH", "src": "radio/playlist_playlist_stil/15.mp3" },
-        { "title": "Метал командос — The Starkillers", "src": "radio/playlist_playlist_stil/16.mp3" },
-        { "title": "Мы все уже в аду — The Starkillers", "src": "radio/playlist_playlist_stil/17.mp3" },
-        { "title": "I'M DONE — whoami.wav", "src": "radio/playlist_playlist_stil/18.mp3" },
-        { "title": "Встань иди — Мертвецы", "src": "radio/playlist_playlist_stil/19.mp3" },
-        { "title": "Хокку — Мертвецы", "src": "radio/playlist_playlist_stil/20.mp3" },
-        { "title": "HEAVYWEIGHT — НОКТУ", "src": "radio/playlist_playlist_stil/21.mp3" },
-        { "title": "NUMBERS — НОКТУ, RAYBAX", "src": "radio/playlist_playlist_stil/22.mp3" }
+        {
+          "title": "¡Adiós, pedrilas! — 2rbina 2rista",
+          "src": "radio/playlist_playlist_stil/1.mp3"
+        },
+        {
+          "title": "40 DAYS (Low Bass by Ivanich) — (41-44Hz) GREEN ORXNGE, Sagath",
+          "src": "radio/playlist_playlist_stil/2.mp3"
+        },
+        {
+          "title": "Resident Evil HUNK Theme Remix (RE2 x RE9) | Human Unit Never Killed — ArsChronica",
+          "src": "radio/playlist_playlist_stil/3.mp3"
+        },
+        {
+          "title": "The Forgotten Soldier (Metal Remix) — ArsChronica",
+          "src": "radio/playlist_playlist_stil/4.mp3"
+        },
+        {
+          "title": "Железные челюсти — CHAIN$AWSQUAD, SARCOFUCK",
+          "src": "radio/playlist_playlist_stil/5.mp3"
+        },
+        {
+          "title": "мне просто лень — CHAIN$AWSQUAD, Terror Letov, gan4o",
+          "src": "radio/playlist_playlist_stil/6.mp3"
+        },
+        {
+          "title": "Я люблю людей как гвоздь в горле — CHAIN$AWSQUAD, UMERTVIE",
+          "src": "radio/playlist_playlist_stil/7.mp3"
+        },
+        {
+          "title": "RAIDEN — DEATHCHANNEL",
+          "src": "radio/playlist_playlist_stil/8.mp3"
+        },
+        {
+          "title": "One Tap — DEATHCHANNEL feat. Terror Letov",
+          "src": "radio/playlist_playlist_stil/9.mp3"
+        },
+        {
+          "title": "KURU — DEATHCHANNEL, BLOODSET",
+          "src": "radio/playlist_playlist_stil/10.mp3"
+        },
+        {
+          "title": "Violence Suppressor — Irving Force",
+          "src": "radio/playlist_playlist_stil/11.mp3"
+        },
+        {
+          "title": "Раньше было лучше — Sagath, МОЛОДОСТЬ ВНУТРИ",
+          "src": "radio/playlist_playlist_stil/12.mp3"
+        },
+        {
+          "title": "Мёртвый рейв — SCREAMPUNK",
+          "src": "radio/playlist_playlist_stil/13.mp3"
+        },
+        {
+          "title": "АКТ 5. BIG BOY THINGS — TERROR LETOV feat. CARVACULT, FORGOTTEN GOD",
+          "src": "radio/playlist_playlist_stil/14.mp3"
+        },
+        {
+          "title": "АКТ 3. НОРАДРЕНАЛИН — TERROR LETOV feat. SAGATH",
+          "src": "radio/playlist_playlist_stil/15.mp3"
+        },
+        {
+          "title": "Метал командос — The Starkillers",
+          "src": "radio/playlist_playlist_stil/16.mp3"
+        },
+        {
+          "title": "Мы все уже в аду — The Starkillers",
+          "src": "radio/playlist_playlist_stil/17.mp3"
+        },
+        {
+          "title": "I'M DONE — whoami.wav",
+          "src": "radio/playlist_playlist_stil/18.mp3"
+        },
+        {
+          "title": "Встань иди — Мертвецы",
+          "src": "radio/playlist_playlist_stil/19.mp3"
+        },
+        {
+          "title": "Хокку — Мертвецы",
+          "src": "radio/playlist_playlist_stil/20.mp3"
+        },
+        {
+          "title": "HEAVYWEIGHT — НОКТУ",
+          "src": "radio/playlist_playlist_stil/21.mp3"
+        },
+        {
+          "title": "NUMBERS — НОКТУ, RAYBAX",
+          "src": "radio/playlist_playlist_stil/22.mp3"
+        }
       ]
-    },
-	{
-        "id": "russian_dark_toska",
-		"name": "CH 6: Русский пост-панк & индастриал",
-		"frequency": "217.25",
-		"purpose": "ЧАСТОТА - МЕЛАНХОЛИЯ",
-		"desc": "Личный канал Командира отряда. Исключительно русскоязычный сборник мрачного пост-панка, индастриала и тяжёлого рока.",
-		"tracks": [
-          { "title": "Дайте Мне Один Патрон (feat. Ю. Шевчук) — АНГЕЛ НЕБЕС", "src": "radio/playlist_russian_dark_toska/2.mp3" },
-          { "title": "Когда погаснет солнце — Свидетельство О Смерти", "src": "radio/playlist_russian_dark_toska/3.mp3" },
-          { "title": "Собаке собачья смерть — Свидетельство О Смерти", "src": "radio/playlist_russian_dark_toska/4.mp3" },
-          { "title": "Беспонтовый пирожок — Гражданская оборона", "src": "radio/playlist_russian_dark_toska/5.mp3" },
-          { "title": "Тишина — Molchat Doma", "src": "radio/playlist_russian_dark_toska/7.mp3" },
-          { "title": "обосранный герой — мой друг магнитофон/свидетельство о смерти", "src": "radio/playlist_russian_dark_toska/8.mp3" },
-          { "title": "Winter Nostalgia — Project 03/Valeria Reine/Висельник", "src": "radio/playlist_russian_dark_toska/9.mp3" },
-          { "title": "ANØMALY — VOJ", "src": "radio/playlist_russian_dark_toska/10.mp3" },
-          { "title": "Моя маленькая дрянь — Свидетельство О Смерти", "src": "radio/playlist_russian_dark_toska/11.mp3" },
-          { "title": "Петля — Свидетельство О Смерти", "src": "radio/playlist_russian_dark_toska/12.mp3" },
-          { "title": "Посвящение — Свидетельство О Смерти", "src": "radio/playlist_russian_dark_toska/13.mp3" },
-          { "title": "Рваная дыра — Свидетельство О Смерти", "src": "radio/playlist_russian_dark_toska/14.mp3" },
-          { "title": "Долгая счастливая жизнь — Гражданская оборона", "src": "radio/playlist_russian_dark_toska/15.mp3" },
-          { "title": "Я предпочту тебе — Свидетельство О Смерти", "src": "radio/playlist_russian_dark_toska/16.mp3" },
-          { "title": "По шанхайсхим подвалам — Твин Пикс", "src": "radio/playlist_russian_dark_toska/17.mp3" },
-          { "title": "Крыши — Molchat Doma", "src": "radio/playlist_russian_dark_toska/18.mp3" },
-          { "title": "Скованные одной цепью — Наутилус Помпилиус", "src": "radio/playlist_russian_dark_toska/19.mp3" }
-       ] 
     }
   ]
-  
 }

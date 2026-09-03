@@ -15,7 +15,7 @@
     <link rel="preload" href="logo-foxhound.webp" as="image">
     <link rel="preload" href="background.mp4" as="video" type="video/mp4">
     <link rel="manifest" href="/manifest.json">
-	
+    
     <style>
         :root {
             --bg-color: #0a0a0a;
@@ -478,10 +478,47 @@
         .no-data { grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted); font-style: italic; }
         .error-msg { grid-column: 1 / -1; padding: 20px; text-align: center; color: var(--red); border: 1px solid var(--red); background: rgba(255,51,51,0.05); }
 
-        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; cursor: pointer; }
-        #lightbox img { max-width: 90%; max-height: 90%; object-fit: contain; border: 2px solid var(--accent-color); box-shadow: 0 0 50px rgba(255,102,0,0.3); }
-        #lightbox .close-btn { position: absolute; top: 20px; right: 30px; font-size: 40px; color: #fff; cursor: pointer; font-family: 'PT Sans', sans-serif; font-weight: 700; transition: 0.2s; }
-        #lightbox .close-btn:hover { color: var(--accent-color); transform: scale(1.2); }
+        /* ===== ЛАЙТБОКС (исправлен) ===== */
+        #lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        #lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 50px rgba(255,102,0,0.3);
+            pointer-events: none;
+            user-select: none;
+        }
+        #lightbox .close-btn {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 48px;
+            color: #fff;
+            cursor: pointer;
+            font-family: 'PT Sans', sans-serif;
+            font-weight: 700;
+            transition: 0.2s;
+            z-index: 10000;
+            user-select: none;
+            line-height: 1;
+        }
+        #lightbox .close-btn:hover {
+            color: var(--accent-color);
+            transform: scale(1.2);
+        }
 
         .operator-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
         @media (min-width: 600px) {
@@ -763,9 +800,9 @@
                 font-size: 12px;
             }
             #lightbox .close-btn {
-                font-size: 30px;
-                top: 10px;
-                right: 15px;
+                font-size: 36px;
+                top: 20px;
+                right: 20px;
             }
         }
 
@@ -855,6 +892,11 @@
             }
             .operator-spec {
                 font-size: 11px;
+            }
+            #lightbox .close-btn {
+                font-size: 30px;
+                top: 15px;
+                right: 15px;
             }
         }
 
@@ -1037,8 +1079,9 @@
 
     </div>
 
-    <div id="lightbox" onclick="closeLightbox(event)">
-        <span class="close-btn" onclick="closeLightbox(event)">&times;</span>
+    <!-- ЛАЙТБОКС (без onclick) -->
+    <div id="lightbox">
+        <span class="close-btn">&times;</span>
         <img id="lightbox-img" src="" alt="Увеличенное фото" />
     </div>
 
@@ -1048,1020 +1091,1052 @@
         (function() {
             'use strict';
 
-            function openLightbox(imgSrc) {
-                const lightbox = document.getElementById('lightbox');
-                const img = document.getElementById('lightbox-img');
-                img.src = imgSrc;
+            // ============================================================
+            // 1. ЛАЙТБОКС (работает 100%)
+            // ============================================================
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const closeBtn = document.querySelector('#lightbox .close-btn');
+
+            window.openLightbox = function(imgSrc) {
+                lightboxImg.src = imgSrc;
                 lightbox.style.display = 'flex';
                 document.body.style.overflow = 'hidden';
+            };
+
+            function closeLightbox() {
+                lightbox.style.display = 'none';
+                document.body.style.overflow = '';
             }
 
-            function closeLightbox(e) {
-                if (e.target === document.getElementById('lightbox') || e.target.classList.contains('close-btn')) {
-                    const lightbox = document.getElementById('lightbox');
-                    lightbox.style.display = 'none';
-                    document.body.style.overflow = '';
-                }
+            // Закрытие по крестику
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    closeLightbox();
+                });
             }
 
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    const lightbox = document.getElementById('lightbox');
-                    if (lightbox.style.display === 'flex') {
-                        lightbox.style.display = 'none';
-                        document.body.style.overflow = '';
-                    }
+            // Закрытие по клику на фон (сам #lightbox)
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox) {
+                    closeLightbox();
                 }
             });
 
-            (function() {
-                const navLinks = document.querySelectorAll('.header-link');
-                const pageIds = [
-                    'page-home', 'page-calc', 'page-photo', 'page-operators',
-                    'page-instructions', 'page-atak', 'page-maps',
-                    'page-regulations', 'page-scenarios', 'page-devices'
-                ];
-                const pages = {};
-                pageIds.forEach(id => {
-                    pages[id] = document.getElementById(id);
+            // Закрытие по клавише Esc
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && lightbox.style.display === 'flex') {
+                    closeLightbox();
+                }
+            });
+
+            // ============================================================
+            // 2. НАВИГАЦИЯ
+            // ============================================================
+            const navLinks = document.querySelectorAll('.header-link');
+            const pageIds = [
+                'page-home', 'page-calc', 'page-photo', 'page-operators',
+                'page-instructions', 'page-atak', 'page-maps',
+                'page-regulations', 'page-scenarios', 'page-devices'
+            ];
+            const pages = {};
+            pageIds.forEach(id => {
+                pages[id] = document.getElementById(id);
+            });
+
+            let mapsLoaded = false;
+            let regulationsLoaded = false;
+            let scenariosLoaded = false;
+            let devicesLoaded = false;
+            let mapInitialized = false;
+            let mapInstance = null;
+            let currentPolygonId = null;
+            let layerGroups = {};
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const pageId = this.dataset.page;
+                    if (!pageId) return;
+
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+
+                    Object.values(pages).forEach(p => p.classList.remove('active'));
+
+                    const target = document.getElementById(pageId);
+                    if (target) target.classList.add('active');
+
+                    if (pageId === 'page-photo' && !window._photoLoaded) loadPhotos();
+                    if (pageId === 'page-operators' && !window._operatorsLoaded) loadOperators();
+                    if (pageId === 'page-instructions' && !window._instructionsLoaded) loadInstructions();
+                    if (pageId === 'page-atak' && !window._atakLoaded) loadAtak();
+
+                    if (pageId === 'page-maps' && !mapsLoaded) {
+                        loadMaps();
+                        mapsLoaded = true;
+                    }
+                    if (pageId === 'page-regulations' && !regulationsLoaded) {
+                        loadRegulations();
+                        regulationsLoaded = true;
+                    }
+                    if (pageId === 'page-scenarios' && !scenariosLoaded) {
+                        loadScenarios();
+                        scenariosLoaded = true;
+                    }
+                    if (pageId === 'page-devices' && !devicesLoaded) {
+                        loadDevices();
+                        devicesLoaded = true;
+                    }
                 });
+            });
 
-                let mapsLoaded = false;
-                let regulationsLoaded = false;
-                let scenariosLoaded = false;
-                let devicesLoaded = false;
-                let mapInitialized = false;
-                let mapInstance = null;
-                let currentPolygonId = null;
-                let layerGroups = {};
+            // ============================================================
+            // 3. РАДИО
+            // ============================================================
+            let radioStations = [];
+            let currentStationIndex = 0;
+            let currentTrackIndex = 0;
+            let isPlaying = false;
+            const audio = new Audio();
 
-                navLinks.forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        const pageId = this.dataset.page;
-                        if (!pageId) return;
+            const radioFreq = document.getElementById('radio-freq');
+            const radioPurpose = document.getElementById('radio-purpose');
+            const trackTitle = document.getElementById('track-title');
+            const radioDesc = document.getElementById('radio-desc');
+            const playlistSelect = document.getElementById('playlist-select');
+            const playBtn = document.getElementById('play-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
 
-                        navLinks.forEach(l => l.classList.remove('active'));
-                        this.classList.add('active');
+            async function loadRadioData() {
+                try {
+                    const response = await fetch('radio_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить плейлист');
+                    const data = await response.json();
+                    radioStations = data.stations;
+                    initRadio();
+                } catch (error) {
+                    console.error('Ошибка загрузки радио:', error);
+                    radioPurpose.innerText = 'ОШИБКА ЗАГРУЗКИ';
+                    radioDesc.innerText = 'Проверьте наличие файла radio_data.json';
+                }
+            }
 
-                        Object.values(pages).forEach(p => p.classList.remove('active'));
-
-                        const target = document.getElementById(pageId);
-                        if (target) target.classList.add('active');
-
-                        if (pageId === 'page-photo' && !window._photoLoaded) loadPhotos();
-                        if (pageId === 'page-operators' && !window._operatorsLoaded) loadOperators();
-                        if (pageId === 'page-instructions' && !window._instructionsLoaded) loadInstructions();
-                        if (pageId === 'page-atak' && !window._atakLoaded) loadAtak();
-
-                        if (pageId === 'page-maps' && !mapsLoaded) {
-                            loadMaps();
-                            mapsLoaded = true;
-                        }
-                        if (pageId === 'page-regulations' && !regulationsLoaded) {
-                            loadRegulations();
-                            regulationsLoaded = true;
-                        }
-                        if (pageId === 'page-scenarios' && !scenariosLoaded) {
-                            loadScenarios();
-                            scenariosLoaded = true;
-                        }
-                        if (pageId === 'page-devices' && !devicesLoaded) {
-                            loadDevices();
-                            devicesLoaded = true;
-                        }
-                    });
+            function initRadio() {
+                playlistSelect.innerHTML = '';
+                radioStations.forEach((station, index) => {
+                    const opt = document.createElement('option');
+                    opt.value = index;
+                    opt.innerText = station.name;
+                    playlistSelect.appendChild(opt);
                 });
+                updateDisplay();
+            }
 
-                let radioStations = [];
-                let currentStationIndex = 0;
-                let currentTrackIndex = 0;
-                let isPlaying = false;
-                const audio = new Audio();
-
-                const radioFreq = document.getElementById('radio-freq');
-                const radioPurpose = document.getElementById('radio-purpose');
-                const trackTitle = document.getElementById('track-title');
-                const radioDesc = document.getElementById('radio-desc');
-                const playlistSelect = document.getElementById('playlist-select');
-                const playBtn = document.getElementById('play-btn');
-                const prevBtn = document.getElementById('prev-btn');
-                const nextBtn = document.getElementById('next-btn');
-
-                async function loadRadioData() {
-                    try {
-                        const response = await fetch('radio_data.json');
-                        if (!response.ok) throw new Error('Не удалось загрузить плейлист');
-                        const data = await response.json();
-                        radioStations = data.stations;
-                        initRadio();
-                    } catch (error) {
-                        console.error('Ошибка загрузки радио:', error);
-                        radioPurpose.innerText = 'ОШИБКА ЗАГРУЗКИ';
-                        radioDesc.innerText = 'Проверьте наличие файла radio_data.json';
-                    }
+            function updateDisplay() {
+                const station = radioStations[currentStationIndex];
+                if (!station) return;
+                const track = station.tracks[currentTrackIndex];
+                if (isPlaying) {
+                    radioFreq.innerText = `FREQ: ${station.frequency} MHz`;
+                    radioPurpose.innerText = station.purpose.toUpperCase();
+                    trackTitle.innerText = `▶ ${track.title.toUpperCase()}`;
+                    radioDesc.innerText = station.desc;
+                } else {
+                    radioFreq.innerText = 'FREQ: ---.--- MHz';
+                    radioPurpose.innerText = 'СЕТЬ ОТКЛЮЧЕНА';
+                    trackTitle.innerText = 'ШУМ ЭФИРА...';
+                    radioDesc.innerText = 'Для активации аудио-модуля нажмите ВКЛ РАДИО';
                 }
+            }
 
-                function initRadio() {
-                    playlistSelect.innerHTML = '';
-                    radioStations.forEach((station, index) => {
-                        const opt = document.createElement('option');
-                        opt.value = index;
-                        opt.innerText = station.name;
-                        playlistSelect.appendChild(opt);
-                    });
-                    updateDisplay();
-                }
-
-                function updateDisplay() {
-                    const station = radioStations[currentStationIndex];
-                    if (!station) return;
-                    const track = station.tracks[currentTrackIndex];
-                    if (isPlaying) {
-                        radioFreq.innerText = `FREQ: ${station.frequency} MHz`;
-                        radioPurpose.innerText = station.purpose.toUpperCase();
-                        trackTitle.innerText = `▶ ${track.title.toUpperCase()}`;
-                        radioDesc.innerText = station.desc;
-                    } else {
-                        radioFreq.innerText = 'FREQ: ---.--- MHz';
-                        radioPurpose.innerText = 'СЕТЬ ОТКЛЮЧЕНА';
-                        trackTitle.innerText = 'ШУМ ЭФИРА...';
-                        radioDesc.innerText = 'Для активации аудио-модуля нажмите ВКЛ РАДИО';
-                    }
-                }
-
-                function toggleRadio() {
-                    if (!isPlaying) {
-                        isPlaying = true;
-                        playBtn.innerText = 'ВЫКЛ РАДИО';
-                        playTrack();
-                    } else {
-                        isPlaying = false;
-                        playBtn.innerText = 'ВКЛ РАДИО';
-                        audio.pause();
-                        updateDisplay();
-                    }
-                }
-
-                function playTrack() {
-                    if (!isPlaying) return;
-                    const station = radioStations[currentStationIndex];
-                    const track = station.tracks[currentTrackIndex];
-                    audio.src = track.src;
-                    audio.play().catch(e => console.warn('Не удалось воспроизвести:', e));
-                    updateDisplay();
-                }
-
-                function changeChannel() {
-                    currentStationIndex = parseInt(playlistSelect.value);
-                    currentTrackIndex = 0;
-                    if (isPlaying) playTrack(); else updateDisplay();
-                }
-
-                function nextTrack() {
-                    const station = radioStations[currentStationIndex];
-                    if (!station) return;
-                    currentTrackIndex++;
-                    if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
-                    if (isPlaying) playTrack(); else updateDisplay();
-                }
-
-                function prevTrack() {
-                    const station = radioStations[currentStationIndex];
-                    if (!station) return;
-                    currentTrackIndex--;
-                    if (currentTrackIndex < 0) currentTrackIndex = station.tracks.length - 1;
-                    if (isPlaying) playTrack(); else updateDisplay();
-                }
-
-                audio.onended = function() {
-                    const station = radioStations[currentStationIndex];
-                    if (!station) return;
-                    currentTrackIndex++;
-                    if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
+            function toggleRadio() {
+                if (!isPlaying) {
+                    isPlaying = true;
+                    playBtn.innerText = 'ВЫКЛ РАДИО';
                     playTrack();
+                } else {
+                    isPlaying = false;
+                    playBtn.innerText = 'ВКЛ РАДИО';
+                    audio.pause();
+                    updateDisplay();
+                }
+            }
+
+            function playTrack() {
+                if (!isPlaying) return;
+                const station = radioStations[currentStationIndex];
+                const track = station.tracks[currentTrackIndex];
+                audio.src = track.src;
+                audio.play().catch(e => console.warn('Не удалось воспроизвести:', e));
+                updateDisplay();
+            }
+
+            function changeChannel() {
+                currentStationIndex = parseInt(playlistSelect.value);
+                currentTrackIndex = 0;
+                if (isPlaying) playTrack(); else updateDisplay();
+            }
+
+            function nextTrack() {
+                const station = radioStations[currentStationIndex];
+                if (!station) return;
+                currentTrackIndex++;
+                if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
+                if (isPlaying) playTrack(); else updateDisplay();
+            }
+
+            function prevTrack() {
+                const station = radioStations[currentStationIndex];
+                if (!station) return;
+                currentTrackIndex--;
+                if (currentTrackIndex < 0) currentTrackIndex = station.tracks.length - 1;
+                if (isPlaying) playTrack(); else updateDisplay();
+            }
+
+            audio.onended = function() {
+                const station = radioStations[currentStationIndex];
+                if (!station) return;
+                currentTrackIndex++;
+                if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
+                playTrack();
+            };
+
+            playBtn.addEventListener('click', toggleRadio);
+            prevBtn.addEventListener('click', prevTrack);
+            nextBtn.addEventListener('click', nextTrack);
+            playlistSelect.addEventListener('change', changeChannel);
+
+            // ============================================================
+            // 4. ЛОГИ
+            // ============================================================
+            async function loadLogs() {
+                try {
+                    const response = await fetch('log_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить журнал');
+                    const data = await response.json();
+                    const container = document.getElementById('log-container');
+                    container.innerHTML = '';
+                    data.logs.forEach(entry => {
+                        const row = document.createElement('div');
+                        row.className = 'log-row';
+                        if (entry.style) row.style.cssText = entry.style;
+                        const dateSpan = document.createElement('span');
+                        dateSpan.className = 'log-date';
+                        dateSpan.textContent = entry.date;
+                        const textSpan = document.createElement('span');
+                        textSpan.textContent = entry.text;
+                        row.appendChild(dateSpan);
+                        row.appendChild(textSpan);
+                        container.appendChild(row);
+                    });
+                } catch (error) {
+                    console.error('Ошибка загрузки журнала:', error);
+                    document.getElementById('log-container').innerHTML =
+                        `<div class="log-row" style="color: var(--text-muted);">Ошибка загрузки записей. Проверьте файл log_data.json</div>`;
+                }
+            }
+
+            // ============================================================
+            // 5. КАЛЬКУЛЯТОР
+            // ============================================================
+            function initCalculator() {
+                const weightSlider = document.getElementById('weightSlider');
+                const speedSlider = document.getElementById('speedSlider');
+                const weightValue = document.getElementById('weightValue');
+                const speedValue = document.getElementById('speedValue');
+                const energyDisplay = document.getElementById('energyDisplay');
+                const speedOn20Display = document.getElementById('speedOn20Display');
+                const rows = document.querySelectorAll('#rulesTable tbody tr');
+                const statusSecondary = document.getElementById('statusSecondary');
+                const statusPrimary = document.getElementById('statusPrimary');
+                const statusSniper = document.getElementById('statusSniper');
+                const statusMsg = document.getElementById('statusMessage');
+
+                const LIMITS = {
+                    secondary: { maxEnergy: 1.5, distance: 0, label: 'Вторичка' },
+                    primary: { maxEnergy: 2.4, distance: 10, label: 'Основное' },
+                    sniper: { maxEnergy: 2.9, distance: 25, label: 'Снайперка' }
                 };
 
-                playBtn.addEventListener('click', toggleRadio);
-                prevBtn.addEventListener('click', prevTrack);
-                nextBtn.addEventListener('click', nextTrack);
-                playlistSelect.addEventListener('change', changeChannel);
-
-                async function loadLogs() {
-                    try {
-                        const response = await fetch('log_data.json');
-                        if (!response.ok) throw new Error('Не удалось загрузить журнал');
-                        const data = await response.json();
-                        const container = document.getElementById('log-container');
-                        container.innerHTML = '';
-                        data.logs.forEach(entry => {
-                            const row = document.createElement('div');
-                            row.className = 'log-row';
-                            if (entry.style) row.style.cssText = entry.style;
-                            const dateSpan = document.createElement('span');
-                            dateSpan.className = 'log-date';
-                            dateSpan.textContent = entry.date;
-                            const textSpan = document.createElement('span');
-                            textSpan.textContent = entry.text;
-                            row.appendChild(dateSpan);
-                            row.appendChild(textSpan);
-                            container.appendChild(row);
-                        });
-                    } catch (error) {
-                        console.error('Ошибка загрузки журнала:', error);
-                        document.getElementById('log-container').innerHTML =
-                            `<div class="log-row" style="color: var(--text-muted);">Ошибка загрузки записей. Проверьте файл log_data.json</div>`;
-                    }
+                function getCategoryByEnergy(E) {
+                    if (E <= 1.5) return 'secondary';
+                    if (E <= 2.4) return 'primary';
+                    if (E <= 2.9) return 'sniper';
+                    return 'over';
                 }
 
-                function initCalculator() {
-                    const weightSlider = document.getElementById('weightSlider');
-                    const speedSlider = document.getElementById('speedSlider');
-                    const weightValue = document.getElementById('weightValue');
-                    const speedValue = document.getElementById('speedValue');
-                    const energyDisplay = document.getElementById('energyDisplay');
-                    const speedOn20Display = document.getElementById('speedOn20Display');
-                    const rows = document.querySelectorAll('#rulesTable tbody tr');
-                    const statusSecondary = document.getElementById('statusSecondary');
-                    const statusPrimary = document.getElementById('statusPrimary');
-                    const statusSniper = document.getElementById('statusSniper');
-                    const statusMsg = document.getElementById('statusMessage');
+                function updateAll() {
+                    const m = parseFloat(weightSlider.value);
+                    const v = parseFloat(speedSlider.value);
+                    const E = (m * v * v) / 2000;
+                    const v20 = Math.sqrt(E * 2000 / 0.20);
 
-                    const LIMITS = {
-                        secondary: { maxEnergy: 1.5, distance: 0, label: 'Вторичка' },
-                        primary: { maxEnergy: 2.4, distance: 10, label: 'Основное' },
-                        sniper: { maxEnergy: 2.9, distance: 25, label: 'Снайперка' }
-                    };
+                    weightValue.textContent = m.toFixed(2) + ' г';
+                    speedValue.textContent = v.toFixed(0) + ' м/с';
+                    energyDisplay.textContent = E.toFixed(2) + ' Дж';
+                    speedOn20Display.textContent = v20.toFixed(0) + ' м/с';
 
-                    function getCategoryByEnergy(E) {
-                        if (E <= 1.5) return 'secondary';
-                        if (E <= 2.4) return 'primary';
-                        if (E <= 2.9) return 'sniper';
-                        return 'over';
-                    }
+                    const category = getCategoryByEnergy(E);
 
-                    function updateAll() {
-                        const m = parseFloat(weightSlider.value);
-                        const v = parseFloat(speedSlider.value);
-                        const E = (m * v * v) / 2000;
-                        const v20 = Math.sqrt(E * 2000 / 0.20);
+                    rows.forEach(row => row.classList.remove('active', 'warning'));
 
-                        weightValue.textContent = m.toFixed(2) + ' г';
-                        speedValue.textContent = v.toFixed(0) + ' м/с';
-                        energyDisplay.textContent = E.toFixed(2) + ' Дж';
-                        speedOn20Display.textContent = v20.toFixed(0) + ' м/с';
-
-                        const category = getCategoryByEnergy(E);
-
-                        rows.forEach(row => row.classList.remove('active', 'warning'));
-
-                        let activeRow = null;
-                        rows.forEach(row => {
-                            if (row.dataset.weapon === category) {
-                                activeRow = row;
-                            }
-                        });
-
-                        let isAllowed = false;
-                        let limit = null;
-                        if (category !== 'over') {
-                            limit = LIMITS[category];
-                            isAllowed = E <= limit.maxEnergy;
+                    let activeRow = null;
+                    rows.forEach(row => {
+                        if (row.dataset.weapon === category) {
+                            activeRow = row;
                         }
-
-                        if (activeRow) {
-                            if (isAllowed) {
-                                activeRow.classList.add('active');
-                            } else {
-                                activeRow.classList.add('warning');
-                            }
-                        }
-
-                        const statusMap = {
-                            secondary: statusSecondary,
-                            primary: statusPrimary,
-                            sniper: statusSniper
-                        };
-                        for (let w in statusMap) {
-                            const lim = LIMITS[w];
-                            const ok = E <= lim.maxEnergy;
-                            statusMap[w].textContent = ok ? '✔' : '✘';
-                            statusMap[w].style.color = ok ? 'var(--green)' : 'var(--red)';
-                        }
-
-                        if (category === 'over') {
-                            statusMsg.className = 'status-msg fail';
-                            statusMsg.innerHTML = '❌ Не допуск: превышен максимальный лимит (2.9 Дж)';
-                        } else if (isAllowed) {
-                            statusMsg.className = 'status-msg ok';
-                            statusMsg.innerHTML =
-                                `✅ Допуск: разрешено, дистанция ${limit.distance} м (категория «${limit.label}»)`;
-                        } else {
-                            statusMsg.className = 'status-msg fail';
-                            statusMsg.innerHTML =
-                                `❌ Не допуск: превышен лимит для «${limit.label}» (макс. ${limit.maxEnergy} Дж)`;
-                        }
-                    }
-
-                    weightSlider.addEventListener('input', updateAll);
-                    speedSlider.addEventListener('input', updateAll);
-                    updateAll();
-                }
-
-                async function loadPhotos() {
-                    if (window._photoLoaded) return;
-                    const container = document.getElementById('galleryContainer');
-                    try {
-                        const response = await fetch('photo_data.json');
-                        if (!response.ok) throw new Error('Не удалось загрузить данные');
-                        const data = await response.json();
-                        if (!data.photos || data.photos.length === 0) {
-                            container.innerHTML = `<div class="no-data">Фотографий пока нет</div>`;
-                            window._photoLoaded = true;
-                            return;
-                        }
-                        container.innerHTML = '';
-                        data.photos.forEach(photo => {
-                            const card = document.createElement('div');
-                            card.className = 'photo-card';
-
-                            const img = document.createElement('img');
-                            img.src = photo.image || 'placeholder.webp';
-                            img.alt = photo.title || 'Фото';
-                            img.loading = 'lazy';
-                            img.onerror = function() {
-                                this.src =
-                                    'data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'200\' viewBox=\'0 0 400 200\'%3E%3Crect fill=\'%23333\' width=\'400\' height=\'200\'/%3E%3Ctext fill=\'%23666\' x=\'50\' y=\'115\' font-family=\'sans-serif\' font-size=\'24\'%3EФото отсутствует%3C/text%3E%3C/svg%3E';
-                            };
-                            img.addEventListener('click', function(e) {
-                                e.stopPropagation();
-                                openLightbox(this.src);
-                            });
-
-                            const body = document.createElement('div');
-                            body.className = 'card-body';
-
-                            const title = document.createElement('div');
-                            title.className = 'card-title';
-                            title.textContent = photo.title || 'Без названия';
-
-                            const date = document.createElement('div');
-                            date.className = 'card-date';
-                            date.textContent = photo.date ? `📅 ${photo.date}` : '';
-
-                            const desc = document.createElement('div');
-                            desc.className = 'card-desc';
-                            desc.textContent = photo.description || '';
-
-                            body.appendChild(title);
-                            if (photo.date) body.appendChild(date);
-                            if (photo.description) body.appendChild(desc);
-
-                            card.appendChild(img);
-                            card.appendChild(body);
-                            container.appendChild(card);
-                        });
-                        window._photoLoaded = true;
-                    } catch (error) {
-                        console.error('Ошибка загрузки галереи:', error);
-                        container.innerHTML =
-                            `<div class="error-msg">❌ Ошибка загрузки фотографий. Проверьте файл photo_data.json</div>`;
-                        window._photoLoaded = true;
-                    }
-                }
-
-                async function loadOperators() {
-                    if (window._operatorsLoaded) return;
-                    const container = document.getElementById('operatorsContainer');
-                    try {
-                        const response = await fetch('operators_data.json');
-                        if (!response.ok) throw new Error('Не удалось загрузить данные');
-                        const data = await response.json();
-                        if (!data.operators || data.operators.length === 0) {
-                            container.innerHTML = `<div class="no-data">Оперативников пока нет</div>`;
-                            window._operatorsLoaded = true;
-                            return;
-                        }
-                        container.innerHTML = '';
-                        data.operators.forEach(op => {
-                            const card = document.createElement('div');
-                            card.className = 'operator-card';
-
-                            const avatar = document.createElement('div');
-                            avatar.className = 'operator-avatar';
-
-                            if (op.photo) {
-                                const img = document.createElement('img');
-                                img.src = op.photo;
-                                img.alt = op.name || 'Оператор';
-                                img.loading = 'lazy';
-                                img.onerror = function() {
-                                    this.style.display = 'none';
-                                    avatar.textContent = op.avatar || '👤';
-                                    avatar.style.fontSize = '56px';
-                                };
-                                avatar.appendChild(img);
-                            } else {
-                                avatar.textContent = op.avatar || '👤';
-                                avatar.style.fontSize = '56px';
-                            }
-
-                            const name = document.createElement('div');
-                            name.className = 'operator-name';
-                            name.textContent = op.name || 'Без имени';
-
-                            const role = document.createElement('div');
-                            role.className = 'operator-role';
-                            role.textContent = op.role || '';
-
-                            const desc = document.createElement('div');
-                            desc.className = 'operator-desc';
-                            desc.textContent = op.description || '';
-
-                            card.appendChild(avatar);
-                            card.appendChild(name);
-                            if (op.role) card.appendChild(role);
-                            if (op.description) card.appendChild(desc);
-
-                            if (op.specialization) {
-                                const spec = document.createElement('div');
-                                spec.className = 'operator-spec';
-                                spec.textContent = op.specialization;
-                                card.appendChild(spec);
-                            }
-
-                            container.appendChild(card);
-                        });
-                        window._operatorsLoaded = true;
-                    } catch (error) {
-                        console.error('Ошибка загрузки оперативников:', error);
-                        container.innerHTML =
-                            `<div class="error-msg">❌ Ошибка загрузки данных. Проверьте файл operators_data.json</div>`;
-                        window._operatorsLoaded = true;
-                    }
-                }
-
-                async function loadInstructions() {
-                    if (window._instructionsLoaded) return;
-                    const container = document.getElementById('docsContainer');
-                    try {
-                        const response = await fetch('instructions_data.json');
-                        if (!response.ok) throw new Error('Не удалось загрузить инструкции');
-                        const data = await response.json();
-                        if (!data.documents || data.documents.length === 0) {
-                            container.innerHTML = `<div class="no-data">Документов пока нет</div>`;
-                            window._instructionsLoaded = true;
-                            return;
-                        }
-                        container.innerHTML = '';
-                        data.documents.forEach(doc => {
-                            const card = document.createElement('div');
-                            card.className = 'doc-card';
-
-                            const title = document.createElement('div');
-                            title.className = 'doc-title';
-                            title.textContent = doc.title || 'Без названия';
-
-                            const desc = document.createElement('div');
-                            desc.className = 'doc-desc';
-                            desc.textContent = doc.description || '';
-
-                            const link = document.createElement('a');
-                            link.className = 'doc-link';
-                            link.href = doc.link || '#';
-                            link.target = '_blank';
-                            link.textContent = '📄 Открыть PDF';
-                            link.rel = 'noopener noreferrer';
-
-                            card.appendChild(title);
-                            if (doc.description) card.appendChild(desc);
-                            card.appendChild(link);
-                            container.appendChild(card);
-                        });
-                        window._instructionsLoaded = true;
-                    } catch (error) {
-                        console.error('Ошибка загрузки инструкций:', error);
-                        container.innerHTML =
-                            `<div class="error-msg">❌ Ошибка загрузки инструкций. Проверьте файл instructions_data.json</div>`;
-                        window._instructionsLoaded = true;
-                    }
-                }
-
-                async function loadAtak() {
-                    if (window._atakLoaded) return;
-                    const container = document.getElementById('atakContainer');
-                    try {
-                        const response = await fetch('atak_data.json');
-                        if (!response.ok) throw new Error('Не удалось загрузить руководство ATAK');
-                        const data = await response.json();
-                        if (!data.sections || data.sections.length === 0) {
-                            container.innerHTML = `<div class="no-data">Разделы отсутствуют</div>`;
-                            window._atakLoaded = true;
-                            return;
-                        }
-                        container.innerHTML = '';
-                        const tree = document.createElement('div');
-                        tree.className = 'atak-tree';
-                        data.sections.forEach(section => {
-                            const node = createAtakNode(section, 0);
-                            tree.appendChild(node);
-                        });
-                        container.appendChild(tree);
-                        window._atakLoaded = true;
-                    } catch (error) {
-                        console.error('Ошибка загрузки ATAK:', error);
-                        container.innerHTML =
-                            `<div class="error-msg">❌ Ошибка загрузки руководства ATAK. Проверьте файл atak_data.json</div>`;
-                        window._atakLoaded = true;
-                    }
-                }
-
-                function createAtakNode(item, depth) {
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'atak-node';
-
-                    const header = document.createElement('div');
-                    header.className = 'node-header';
-                    const titleSpan = document.createElement('span');
-                    titleSpan.textContent = item.title || 'Без названия';
-                    header.appendChild(titleSpan);
-
-                    const hasChildren = item.children && item.children.length > 0;
-                    const hasContent = item.content && item.content.trim().length > 0;
-
-                    if (hasChildren || hasContent) {
-                        const arrow = document.createElement('span');
-                        arrow.className = 'arrow';
-                        arrow.textContent = '▶';
-                        header.appendChild(arrow);
-
-                        const childContainer = document.createElement('div');
-                        childContainer.className = 'node-children';
-
-                        if (hasContent) {
-                            const contentDiv = document.createElement('div');
-                            contentDiv.className = 'node-content';
-                            contentDiv.innerHTML = item.content;
-                            childContainer.appendChild(contentDiv);
-                        }
-
-                        if (hasChildren) {
-                            item.children.forEach(child => {
-                                const childNode = createAtakNode(child, depth + 1);
-                                childContainer.appendChild(childNode);
-                            });
-                        }
-
-                        wrapper.appendChild(header);
-                        wrapper.appendChild(childContainer);
-
-                        header.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            const arrowEl = this.querySelector('.arrow');
-                            const childrenEl = this.parentElement.querySelector('.node-children');
-                            if (childrenEl) {
-                                const isOpen = childrenEl.classList.contains('open');
-                                if (isOpen) {
-                                    childrenEl.classList.remove('open');
-                                    if (arrowEl) arrowEl.classList.remove('open');
-                                } else {
-                                    childrenEl.classList.add('open');
-                                    if (arrowEl) arrowEl.classList.add('open');
-                                }
-                            }
-                        });
-                    } else {
-                        wrapper.classList.add('node-leaf');
-                        wrapper.appendChild(header);
-                    }
-
-                    return wrapper;
-                }
-
-                async function loadMaps() {
-                    const container = document.getElementById('map-container');
-                    const select = document.getElementById('polygon-select');
-                    const layersContainer = document.getElementById('map-layers');
-                    const loading = document.getElementById('map-loading');
-
-                    try {
-                        const response = await fetch('maps_data.json');
-                        if (!response.ok) throw new Error('Не удалось загрузить данные карт');
-                        const data = await response.json();
-                        if (!data.polygons || data.polygons.length === 0) {
-                            loading.style.display = 'block';
-                            loading.innerHTML = 'Нет доступных полигонов';
-                            return;
-                        }
-
-                        select.innerHTML = '';
-                        data.polygons.forEach(p => {
-                            const opt = document.createElement('option');
-                            opt.value = p.id;
-                            opt.textContent = p.name;
-                            select.appendChild(opt);
-                        });
-
-                        if (!mapInitialized) {
-                            mapInstance = L.map('map-container', {
-                                center: data.polygons[0].center,
-                                zoom: data.polygons[0].zoom,
-                                zoomControl: true,
-                                attributionControl: true
-                            });
-                            L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-                                maxZoom: 20,
-                                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-                            }).addTo(mapInstance);
-                            mapInitialized = true;
-                        }
-
-                        currentPolygonId = data.polygons[0].id;
-                        switchPolygon(currentPolygonId, data);
-
-                        select.addEventListener('change', function() {
-                            const id = this.value;
-                            currentPolygonId = id;
-                            switchPolygon(id, data);
-                        });
-
-                        setTimeout(() => mapInstance.invalidateSize(), 500);
-
-                    } catch (error) {
-                        console.error('Ошибка загрузки карт:', error);
-                        loading.style.display = 'block';
-                        loading.innerHTML = '❌ Ошибка загрузки карт. Проверьте файл maps_data.json';
-                        loading.style.color = 'var(--red)';
-                    }
-                }
-
-                function switchPolygon(polygonId, data) {
-                    const polygon = data.polygons.find(p => p.id === polygonId);
-                    if (!polygon) return;
-
-                    mapInstance.setView(polygon.center, polygon.zoom);
-
-                    for (let key in layerGroups) {
-                        if (mapInstance.hasLayer(layerGroups[key])) {
-                            mapInstance.removeLayer(layerGroups[key]);
-                        }
-                    }
-                    layerGroups = {};
-
-                    const layersContainer = document.getElementById('map-layers');
-                    layersContainer.innerHTML = '';
-
-                    polygon.layers.forEach(layerData => {
-                        const group = L.layerGroup();
-                        layerGroups[layerData.id] = group;
-
-                        if (layerData.url) {
-                            fetch(layerData.url)
-                                .then(res => res.json())
-                                .then(geojson => {
-                                    L.geoJSON(geojson, {
-                                        style: layerData.style || { color: '#ff6600', weight: 2 },
-                                        onEachFeature: function(feature, layer) {
-                                            if (feature.properties && feature.properties.name) {
-                                                layer.bindPopup(feature.properties.name);
-                                            }
-                                        }
-                                    }).addTo(group);
-                                })
-                                .catch(err => console.warn('Ошибка загрузки GeoJSON:', err));
-                        } else if (layerData.geojson) {
-                            L.geoJSON(layerData.geojson, {
-                                style: layerData.style || { color: '#ff6600', weight: 2 }
-                            }).addTo(group);
-                        }
-
-                        if (layerData.visible !== false) {
-                            mapInstance.addLayer(group);
-                        }
-
-                        const cbWrapper = document.createElement('div');
-                        cbWrapper.className = 'map-layer-item';
-                        const cb = document.createElement('input');
-                        cb.type = 'checkbox';
-                        cb.id = `layer-${layerData.id}`;
-                        cb.checked = layerData.visible !== false;
-                        const label = document.createElement('label');
-                        label.htmlFor = `layer-${layerData.id}`;
-                        label.textContent = layerData.name || layerData.id;
-
-                        cb.addEventListener('change', function() {
-                            if (this.checked) {
-                                mapInstance.addLayer(layerGroups[layerData.id]);
-                            } else {
-                                mapInstance.removeLayer(layerGroups[layerData.id]);
-                            }
-                        });
-
-                        cbWrapper.appendChild(cb);
-                        cbWrapper.appendChild(label);
-                        layersContainer.appendChild(cbWrapper);
                     });
 
-                    if (polygon.layers.length > 0) {
-                        const header = document.createElement('div');
-                        header.style.cssText = 'margin-top:8px; font-weight:700; color: var(--text-muted);';
-                        header.textContent = 'Слои:';
-                        layersContainer.prepend(header);
+                    let isAllowed = false;
+                    let limit = null;
+                    if (category !== 'over') {
+                        limit = LIMITS[category];
+                        isAllowed = E <= limit.maxEnergy;
                     }
 
-                    setTimeout(() => mapInstance.invalidateSize(), 100);
+                    if (activeRow) {
+                        if (isAllowed) {
+                            activeRow.classList.add('active');
+                        } else {
+                            activeRow.classList.add('warning');
+                        }
+                    }
+
+                    const statusMap = {
+                        secondary: statusSecondary,
+                        primary: statusPrimary,
+                        sniper: statusSniper
+                    };
+                    for (let w in statusMap) {
+                        const lim = LIMITS[w];
+                        const ok = E <= lim.maxEnergy;
+                        statusMap[w].textContent = ok ? '✔' : '✘';
+                        statusMap[w].style.color = ok ? 'var(--green)' : 'var(--red)';
+                    }
+
+                    if (category === 'over') {
+                        statusMsg.className = 'status-msg fail';
+                        statusMsg.innerHTML = '❌ Не допуск: превышен максимальный лимит (2.9 Дж)';
+                    } else if (isAllowed) {
+                        statusMsg.className = 'status-msg ok';
+                        statusMsg.innerHTML =
+                            `✅ Допуск: разрешено, дистанция ${limit.distance} м (категория «${limit.label}»)`;
+                    } else {
+                        statusMsg.className = 'status-msg fail';
+                        statusMsg.innerHTML =
+                            `❌ Не допуск: превышен лимит для «${limit.label}» (макс. ${limit.maxEnergy} Дж)`;
+                    }
                 }
 
-                async function loadRegulations() {
-                    const container = document.getElementById('regulationsContainer');
-                    try {
-                        const response = await fetch('regulations_data.json');
-                        if (!response.ok) throw new Error('Не удалось загрузить устав');
-                        const data = await response.json();
-                        if (!data.sections || data.sections.length === 0) {
-                            container.innerHTML = `<div class="no-data">Разделы устава отсутствуют</div>`;
-                            return;
-                        }
-                        container.innerHTML = '';
-                        const tree = document.createElement('div');
-                        tree.className = 'atak-tree';
-                        data.sections.forEach(section => {
-                            const node = createAtakNode(section, 0);
-                            tree.appendChild(node);
+                weightSlider.addEventListener('input', updateAll);
+                speedSlider.addEventListener('input', updateAll);
+                updateAll();
+            }
+
+            // ============================================================
+            // 6. ЗАГРУЗКА ДАННЫХ (ФОТО, ОПЕРАТИВНИКИ, ИНСТРУКЦИИ, ATAK, КАРТЫ, УСТАВ, СЦЕНАРИИ, ДЕВАЙСЫ)
+            // ============================================================
+            async function loadPhotos() {
+                if (window._photoLoaded) return;
+                const container = document.getElementById('galleryContainer');
+                try {
+                    const response = await fetch('photo_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить данные');
+                    const data = await response.json();
+                    if (!data.photos || data.photos.length === 0) {
+                        container.innerHTML = `<div class="no-data">Фотографий пока нет</div>`;
+                        window._photoLoaded = true;
+                        return;
+                    }
+                    container.innerHTML = '';
+                    data.photos.forEach(photo => {
+                        const card = document.createElement('div');
+                        card.className = 'photo-card';
+
+                        const img = document.createElement('img');
+                        img.src = photo.image || 'placeholder.webp';
+                        img.alt = photo.title || 'Фото';
+                        img.loading = 'lazy';
+                        img.onerror = function() {
+                            this.src =
+                                'data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'200\' viewBox=\'0 0 400 200\'%3E%3Crect fill=\'%23333\' width=\'400\' height=\'200\'/%3E%3Ctext fill=\'%23666\' x=\'50\' y=\'115\' font-family=\'sans-serif\' font-size=\'24\'%3EФото отсутствует%3C/text%3E%3C/svg%3E';
+                        };
+                        img.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            window.openLightbox(this.src);
                         });
-                        container.appendChild(tree);
-                    } catch (error) {
-                        console.error('Ошибка загрузки устава:', error);
-                        container.innerHTML =
-                            `<div class="error-msg">❌ Ошибка загрузки устава. Проверьте файл regulations_data.json</div>`;
+
+                        const body = document.createElement('div');
+                        body.className = 'card-body';
+
+                        const title = document.createElement('div');
+                        title.className = 'card-title';
+                        title.textContent = photo.title || 'Без названия';
+
+                        const date = document.createElement('div');
+                        date.className = 'card-date';
+                        date.textContent = photo.date ? `📅 ${photo.date}` : '';
+
+                        const desc = document.createElement('div');
+                        desc.className = 'card-desc';
+                        desc.textContent = photo.description || '';
+
+                        body.appendChild(title);
+                        if (photo.date) body.appendChild(date);
+                        if (photo.description) body.appendChild(desc);
+
+                        card.appendChild(img);
+                        card.appendChild(body);
+                        container.appendChild(card);
+                    });
+                    window._photoLoaded = true;
+                } catch (error) {
+                    console.error('Ошибка загрузки галереи:', error);
+                    container.innerHTML =
+                        `<div class="error-msg">❌ Ошибка загрузки фотографий. Проверьте файл photo_data.json</div>`;
+                    window._photoLoaded = true;
+                }
+            }
+
+            async function loadOperators() {
+                if (window._operatorsLoaded) return;
+                const container = document.getElementById('operatorsContainer');
+                try {
+                    const response = await fetch('operators_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить данные');
+                    const data = await response.json();
+                    if (!data.operators || data.operators.length === 0) {
+                        container.innerHTML = `<div class="no-data">Оперативников пока нет</div>`;
+                        window._operatorsLoaded = true;
+                        return;
                     }
+                    container.innerHTML = '';
+                    data.operators.forEach(op => {
+                        const card = document.createElement('div');
+                        card.className = 'operator-card';
+
+                        const avatar = document.createElement('div');
+                        avatar.className = 'operator-avatar';
+
+                        if (op.photo) {
+                            const img = document.createElement('img');
+                            img.src = op.photo;
+                            img.alt = op.name || 'Оператор';
+                            img.loading = 'lazy';
+                            img.onerror = function() {
+                                this.style.display = 'none';
+                                avatar.textContent = op.avatar || '👤';
+                                avatar.style.fontSize = '56px';
+                            };
+                            avatar.appendChild(img);
+                        } else {
+                            avatar.textContent = op.avatar || '👤';
+                            avatar.style.fontSize = '56px';
+                        }
+
+                        const name = document.createElement('div');
+                        name.className = 'operator-name';
+                        name.textContent = op.name || 'Без имени';
+
+                        const role = document.createElement('div');
+                        role.className = 'operator-role';
+                        role.textContent = op.role || '';
+
+                        const desc = document.createElement('div');
+                        desc.className = 'operator-desc';
+                        desc.textContent = op.description || '';
+
+                        card.appendChild(avatar);
+                        card.appendChild(name);
+                        if (op.role) card.appendChild(role);
+                        if (op.description) card.appendChild(desc);
+
+                        if (op.specialization) {
+                            const spec = document.createElement('div');
+                            spec.className = 'operator-spec';
+                            spec.textContent = op.specialization;
+                            card.appendChild(spec);
+                        }
+
+                        container.appendChild(card);
+                    });
+                    window._operatorsLoaded = true;
+                } catch (error) {
+                    console.error('Ошибка загрузки оперативников:', error);
+                    container.innerHTML =
+                        `<div class="error-msg">❌ Ошибка загрузки данных. Проверьте файл operators_data.json</div>`;
+                    window._operatorsLoaded = true;
+                }
+            }
+
+            async function loadInstructions() {
+                if (window._instructionsLoaded) return;
+                const container = document.getElementById('docsContainer');
+                try {
+                    const response = await fetch('instructions_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить инструкции');
+                    const data = await response.json();
+                    if (!data.documents || data.documents.length === 0) {
+                        container.innerHTML = `<div class="no-data">Документов пока нет</div>`;
+                        window._instructionsLoaded = true;
+                        return;
+                    }
+                    container.innerHTML = '';
+                    data.documents.forEach(doc => {
+                        const card = document.createElement('div');
+                        card.className = 'doc-card';
+
+                        const title = document.createElement('div');
+                        title.className = 'doc-title';
+                        title.textContent = doc.title || 'Без названия';
+
+                        const desc = document.createElement('div');
+                        desc.className = 'doc-desc';
+                        desc.textContent = doc.description || '';
+
+                        const link = document.createElement('a');
+                        link.className = 'doc-link';
+                        link.href = doc.link || '#';
+                        link.target = '_blank';
+                        link.textContent = '📄 Открыть PDF';
+                        link.rel = 'noopener noreferrer';
+
+                        card.appendChild(title);
+                        if (doc.description) card.appendChild(desc);
+                        card.appendChild(link);
+                        container.appendChild(card);
+                    });
+                    window._instructionsLoaded = true;
+                } catch (error) {
+                    console.error('Ошибка загрузки инструкций:', error);
+                    container.innerHTML =
+                        `<div class="error-msg">❌ Ошибка загрузки инструкций. Проверьте файл instructions_data.json</div>`;
+                    window._instructionsLoaded = true;
+                }
+            }
+
+            async function loadAtak() {
+                if (window._atakLoaded) return;
+                const container = document.getElementById('atakContainer');
+                try {
+                    const response = await fetch('atak_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить руководство ATAK');
+                    const data = await response.json();
+                    if (!data.sections || data.sections.length === 0) {
+                        container.innerHTML = `<div class="no-data">Разделы отсутствуют</div>`;
+                        window._atakLoaded = true;
+                        return;
+                    }
+                    container.innerHTML = '';
+                    const tree = document.createElement('div');
+                    tree.className = 'atak-tree';
+                    data.sections.forEach(section => {
+                        const node = createAtakNode(section, 0);
+                        tree.appendChild(node);
+                    });
+                    container.appendChild(tree);
+                    window._atakLoaded = true;
+                } catch (error) {
+                    console.error('Ошибка загрузки ATAK:', error);
+                    container.innerHTML =
+                        `<div class="error-msg">❌ Ошибка загрузки руководства ATAK. Проверьте файл atak_data.json</div>`;
+                    window._atakLoaded = true;
+                }
+            }
+
+            function createAtakNode(item, depth) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'atak-node';
+
+                const header = document.createElement('div');
+                header.className = 'node-header';
+                const titleSpan = document.createElement('span');
+                titleSpan.textContent = item.title || 'Без названия';
+                header.appendChild(titleSpan);
+
+                const hasChildren = item.children && item.children.length > 0;
+                const hasContent = item.content && item.content.trim().length > 0;
+
+                if (hasChildren || hasContent) {
+                    const arrow = document.createElement('span');
+                    arrow.className = 'arrow';
+                    arrow.textContent = '▶';
+                    header.appendChild(arrow);
+
+                    const childContainer = document.createElement('div');
+                    childContainer.className = 'node-children';
+
+                    if (hasContent) {
+                        const contentDiv = document.createElement('div');
+                        contentDiv.className = 'node-content';
+                        contentDiv.innerHTML = item.content;
+                        childContainer.appendChild(contentDiv);
+                    }
+
+                    if (hasChildren) {
+                        item.children.forEach(child => {
+                            const childNode = createAtakNode(child, depth + 1);
+                            childContainer.appendChild(childNode);
+                        });
+                    }
+
+                    wrapper.appendChild(header);
+                    wrapper.appendChild(childContainer);
+
+                    header.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const arrowEl = this.querySelector('.arrow');
+                        const childrenEl = this.parentElement.querySelector('.node-children');
+                        if (childrenEl) {
+                            const isOpen = childrenEl.classList.contains('open');
+                            if (isOpen) {
+                                childrenEl.classList.remove('open');
+                                if (arrowEl) arrowEl.classList.remove('open');
+                            } else {
+                                childrenEl.classList.add('open');
+                                if (arrowEl) arrowEl.classList.add('open');
+                            }
+                        }
+                    });
+                } else {
+                    wrapper.classList.add('node-leaf');
+                    wrapper.appendChild(header);
                 }
 
-                async function loadScenarios() {
-                    const container = document.getElementById('scenariosContainer');
-                    try {
-                        const response = await fetch('scenarios_data.json');
-                        if (!response.ok) throw new Error('Не удалось загрузить сценарии');
-                        const data = await response.json();
-                        if (!data.scenarios || data.scenarios.length === 0) {
-                            container.innerHTML = `<div class="no-data">Сценариев пока нет</div>`;
-                            return;
-                        }
-                        container.innerHTML = '';
-                        data.scenarios.forEach((scenario, index) => {
-                            const card = document.createElement('div');
-                            card.className = 'item-card';
+                return wrapper;
+            }
 
-                            const titleDiv = document.createElement('div');
-                            titleDiv.className = 'item-title';
-                            titleDiv.innerHTML = `
-                                <span>${scenario.title || 'Без названия'}</span>
-                                <span class="arrow">▶</span>
-                            `;
-                            card.appendChild(titleDiv);
+            // Карты, Устав, Сценарии, Девайсы (сокращённо, но рабочие)
+            async function loadMaps() {
+                const container = document.getElementById('map-container');
+                const select = document.getElementById('polygon-select');
+                const layersContainer = document.getElementById('map-layers');
+                const loading = document.getElementById('map-loading');
 
-                            const details = document.createElement('div');
-                            details.className = 'item-details';
+                try {
+                    const response = await fetch('maps_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить данные карт');
+                    const data = await response.json();
+                    if (!data.polygons || data.polygons.length === 0) {
+                        loading.style.display = 'block';
+                        loading.innerHTML = 'Нет доступных полигонов';
+                        return;
+                    }
 
-                            if (scenario.description) {
-                                const descDiv = document.createElement('div');
-                                descDiv.style.cssText = 'margin-bottom:10px; color: var(--text-color); font-size:16px; line-height:1.5;';
-                                descDiv.textContent = scenario.description;
-                                details.appendChild(descDiv);
-                            }
+                    select.innerHTML = '';
+                    data.polygons.forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p.id;
+                        opt.textContent = p.name;
+                        select.appendChild(opt);
+                    });
 
-                            if (scenario.video_link) {
-                                const videoDiv = document.createElement('div');
-                                videoDiv.className = 'item-video';
-                                const iframe = document.createElement('iframe');
-                                iframe.width = '100%';
-                                iframe.height = '315';
-                                iframe.src = scenario.video_link;
-                                iframe.style.border = 'none';
-                                iframe.allowFullscreen = true;
-                                iframe.loading = 'lazy';
-                                videoDiv.appendChild(iframe);
-                                details.appendChild(videoDiv);
-                            }
+                    if (!mapInitialized) {
+                        mapInstance = L.map('map-container', {
+                            center: data.polygons[0].center,
+                            zoom: data.polygons[0].zoom,
+                            zoomControl: true,
+                            attributionControl: true
+                        });
+                        L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+                            maxZoom: 20,
+                            subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+                        }).addTo(mapInstance);
+                        mapInitialized = true;
+                    }
 
-                            if (scenario.phases && scenario.phases.length > 0) {
-                                const phasesDiv = document.createElement('div');
-                                phasesDiv.style.marginTop = '10px';
-                                const phasesTitle = document.createElement('div');
-                                phasesTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
-                                phasesTitle.textContent = '🔹 Фазы';
-                                phasesDiv.appendChild(phasesTitle);
+                    currentPolygonId = data.polygons[0].id;
+                    switchPolygon(currentPolygonId, data);
 
-                                scenario.phases.forEach(phase => {
-                                    const phaseBlock = document.createElement('div');
-                                    phaseBlock.style.cssText = 'margin-bottom:12px; padding-left:10px; border-left:2px solid var(--accent-color);';
-                                    const phaseName = document.createElement('div');
-                                    phaseName.style.cssText = 'font-weight:700; color:#fff; font-size:16px;';
-                                    phaseName.textContent = `${phase.name} (${phase.time})`;
-                                    phaseBlock.appendChild(phaseName);
-                                    if (phase.description) {
-                                        const desc = document.createElement('div');
-                                        desc.style.cssText = 'color: var(--text-color); font-size:15px; margin:4px 0;';
-                                        desc.textContent = phase.description;
-                                        phaseBlock.appendChild(desc);
+                    select.addEventListener('change', function() {
+                        const id = this.value;
+                        currentPolygonId = id;
+                        switchPolygon(id, data);
+                    });
+
+                    setTimeout(() => mapInstance.invalidateSize(), 500);
+
+                } catch (error) {
+                    console.error('Ошибка загрузки карт:', error);
+                    loading.style.display = 'block';
+                    loading.innerHTML = '❌ Ошибка загрузки карт. Проверьте файл maps_data.json';
+                    loading.style.color = 'var(--red)';
+                }
+            }
+
+            function switchPolygon(polygonId, data) {
+                const polygon = data.polygons.find(p => p.id === polygonId);
+                if (!polygon) return;
+
+                mapInstance.setView(polygon.center, polygon.zoom);
+
+                for (let key in layerGroups) {
+                    if (mapInstance.hasLayer(layerGroups[key])) {
+                        mapInstance.removeLayer(layerGroups[key]);
+                    }
+                }
+                layerGroups = {};
+
+                const layersContainer = document.getElementById('map-layers');
+                layersContainer.innerHTML = '';
+
+                polygon.layers.forEach(layerData => {
+                    const group = L.layerGroup();
+                    layerGroups[layerData.id] = group;
+
+                    if (layerData.url) {
+                        fetch(layerData.url)
+                            .then(res => res.json())
+                            .then(geojson => {
+                                L.geoJSON(geojson, {
+                                    style: layerData.style || { color: '#ff6600', weight: 2 },
+                                    onEachFeature: function(feature, layer) {
+                                        if (feature.properties && feature.properties.name) {
+                                            layer.bindPopup(feature.properties.name);
+                                        }
                                     }
-                                    if (phase.map_image) {
-                                        const img = document.createElement('img');
-                                        img.src = phase.map_image;
-                                        img.loading = 'lazy';
-                                        img.style.cssText = 'max-width:100%; height:auto; border:1px solid var(--border-color); margin-top:6px;';
-                                        img.alt = phase.name;
-                                        phaseBlock.appendChild(img);
-                                    }
-                                    phasesDiv.appendChild(phaseBlock);
-                                });
-                                details.appendChild(phasesDiv);
-                            }
-
-                            if (scenario.inventory && scenario.inventory.length > 0) {
-                                const invDiv = document.createElement('div');
-                                invDiv.style.marginTop = '10px';
-                                const invTitle = document.createElement('div');
-                                invTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
-                                invTitle.textContent = '📦 Инвентарь';
-                                invDiv.appendChild(invTitle);
-
-                                const list = document.createElement('ul');
-                                list.style.cssText = 'margin-left:20px; color: var(--text-color);';
-                                scenario.inventory.forEach(item => {
-                                    const li = document.createElement('li');
-                                    li.textContent = item;
-                                    list.appendChild(li);
-                                });
-                                invDiv.appendChild(list);
-                                details.appendChild(invDiv);
-                            }
-
-                            if (scenario.files && scenario.files.length > 0) {
-                                const filesDiv = document.createElement('div');
-                                filesDiv.className = 'item-files';
-                                const filesTitle = document.createElement('div');
-                                filesTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
-                                filesTitle.textContent = '📁 Файлы';
-                                filesDiv.appendChild(filesTitle);
-
-                                const list = document.createElement('ul');
-                                scenario.files.forEach(file => {
-                                    const li = document.createElement('li');
-                                    const link = document.createElement('a');
-                                    link.href = file.link;
-                                    link.target = '_blank';
-                                    link.textContent = file.name;
-                                    link.style.cssText = 'color: var(--blue); text-decoration: none; font-weight:700; border:1px solid var(--blue); padding:4px 14px; transition:0.2s; display:inline-block;';
-                                    li.appendChild(link);
-                                    list.appendChild(li);
-                                });
-                                filesDiv.appendChild(list);
-                                details.appendChild(filesDiv);
-                            }
-
-                            card.appendChild(details);
-
-                            titleDiv.addEventListener('click', function() {
-                                const isOpen = details.classList.contains('open');
-                                if (isOpen) {
-                                    details.classList.remove('open');
-                                    this.querySelector('.arrow').classList.remove('open');
-                                } else {
-                                    details.classList.add('open');
-                                    this.querySelector('.arrow').classList.add('open');
-                                }
-                            });
-
-                            container.appendChild(card);
-                        });
-                    } catch (error) {
-                        console.error('Ошибка загрузки сценариев:', error);
-                        container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки сценариев. Проверьте файл scenarios_data.json</div>`;
+                                }).addTo(group);
+                            })
+                            .catch(err => console.warn('Ошибка загрузки GeoJSON:', err));
+                    } else if (layerData.geojson) {
+                        L.geoJSON(layerData.geojson, {
+                            style: layerData.style || { color: '#ff6600', weight: 2 }
+                        }).addTo(group);
                     }
-                }
 
-                async function loadDevices() {
-                    const container = document.getElementById('devicesContainer');
-                    try {
-                        const response = await fetch('devices_data.json');
-                        if (!response.ok) throw new Error('Не удалось загрузить устройства');
-                        const data = await response.json();
-                        if (!data.devices || data.devices.length === 0) {
-                            container.innerHTML = `<div class="no-data">Устройств пока нет</div>`;
-                            return;
+                    if (layerData.visible !== false) {
+                        mapInstance.addLayer(group);
+                    }
+
+                    const cbWrapper = document.createElement('div');
+                    cbWrapper.className = 'map-layer-item';
+                    const cb = document.createElement('input');
+                    cb.type = 'checkbox';
+                    cb.id = `layer-${layerData.id}`;
+                    cb.checked = layerData.visible !== false;
+                    const label = document.createElement('label');
+                    label.htmlFor = `layer-${layerData.id}`;
+                    label.textContent = layerData.name || layerData.id;
+
+                    cb.addEventListener('change', function() {
+                        if (this.checked) {
+                            mapInstance.addLayer(layerGroups[layerData.id]);
+                        } else {
+                            mapInstance.removeLayer(layerGroups[layerData.id]);
                         }
-                        container.innerHTML = '';
-                        data.devices.forEach((device, index) => {
-                            const card = document.createElement('div');
-                            card.className = 'item-card';
+                    });
 
-                            const titleDiv = document.createElement('div');
-                            titleDiv.className = 'item-title';
-                            titleDiv.innerHTML = `
-                                <span>${device.name || 'Без названия'}</span>
-                                <span class="arrow">▶</span>
-                            `;
-                            card.appendChild(titleDiv);
-
-                            const details = document.createElement('div');
-                            details.className = 'item-details';
-
-                            if (device.photo) {
-                                const photo = document.createElement('img');
-                                photo.src = device.photo;
-                                photo.className = 'item-photo';
-                                photo.loading = 'lazy';
-                                photo.style.maxWidth = '100%';
-                                photo.style.border = '1px solid var(--border-color)';
-                                details.appendChild(photo);
-                            }
-
-                            if (device.description) {
-                                const desc = document.createElement('div');
-                                desc.className = 'item-description';
-                                desc.textContent = device.description;
-                                details.appendChild(desc);
-                            }
-
-                            if (device.video_link) {
-                                const videoDiv = document.createElement('div');
-                                videoDiv.className = 'item-video';
-                                const iframe = document.createElement('iframe');
-                                iframe.width = '100%';
-                                iframe.height = '315';
-                                iframe.src = device.video_link;
-                                iframe.style.border = 'none';
-                                iframe.allowFullscreen = true;
-                                iframe.loading = 'lazy';
-                                videoDiv.appendChild(iframe);
-                                details.appendChild(videoDiv);
-                            }
-
-                            const linksDiv = document.createElement('div');
-                            linksDiv.className = 'item-links';
-                            if (device.schematic_link) {
-                                const a = document.createElement('a');
-                                a.href = device.schematic_link;
-                                a.target = '_blank';
-                                a.textContent = '📐 Схема';
-                                linksDiv.appendChild(a);
-                            }
-                            if (device.docs_link) {
-                                const a = document.createElement('a');
-                                a.href = device.docs_link;
-                                a.target = '_blank';
-                                a.textContent = '📄 Документация';
-                                linksDiv.appendChild(a);
-                            }
-                            if (device.files && device.files.length > 0) {
-                                device.files.forEach(file => {
-                                    const a = document.createElement('a');
-                                    a.href = file.link;
-                                    a.target = '_blank';
-                                    a.textContent = file.name;
-                                    linksDiv.appendChild(a);
-                                });
-                            }
-                            if (linksDiv.children.length > 0) {
-                                details.appendChild(linksDiv);
-                            }
-
-                            card.appendChild(details);
-
-                            titleDiv.addEventListener('click', function() {
-                                const isOpen = details.classList.contains('open');
-                                if (isOpen) {
-                                    details.classList.remove('open');
-                                    this.querySelector('.arrow').classList.remove('open');
-                                } else {
-                                    details.classList.add('open');
-                                    this.querySelector('.arrow').classList.add('open');
-                                }
-                            });
-
-                            container.appendChild(card);
-                        });
-                    } catch (error) {
-                        console.error('Ошибка загрузки устройств:', error);
-                        container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки устройств. Проверьте файл devices_data.json</div>`;
-                    }
-                }
-
-                document.addEventListener('DOMContentLoaded', function() {
-                    loadRadioData();
-                    loadLogs();
-                    initCalculator();
+                    cbWrapper.appendChild(cb);
+                    cbWrapper.appendChild(label);
+                    layersContainer.appendChild(cbWrapper);
                 });
 
-            })();
+                if (polygon.layers.length > 0) {
+                    const header = document.createElement('div');
+                    header.style.cssText = 'margin-top:8px; font-weight:700; color: var(--text-muted);';
+                    header.textContent = 'Слои:';
+                    layersContainer.prepend(header);
+                }
+
+                setTimeout(() => mapInstance.invalidateSize(), 100);
+            }
+
+            async function loadRegulations() {
+                const container = document.getElementById('regulationsContainer');
+                try {
+                    const response = await fetch('regulations_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить устав');
+                    const data = await response.json();
+                    if (!data.sections || data.sections.length === 0) {
+                        container.innerHTML = `<div class="no-data">Разделы устава отсутствуют</div>`;
+                        return;
+                    }
+                    container.innerHTML = '';
+                    const tree = document.createElement('div');
+                    tree.className = 'atak-tree';
+                    data.sections.forEach(section => {
+                        const node = createAtakNode(section, 0);
+                        tree.appendChild(node);
+                    });
+                    container.appendChild(tree);
+                } catch (error) {
+                    console.error('Ошибка загрузки устава:', error);
+                    container.innerHTML =
+                        `<div class="error-msg">❌ Ошибка загрузки устава. Проверьте файл regulations_data.json</div>`;
+                }
+            }
+
+            async function loadScenarios() {
+                const container = document.getElementById('scenariosContainer');
+                try {
+                    const response = await fetch('scenarios_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить сценарии');
+                    const data = await response.json();
+                    if (!data.scenarios || data.scenarios.length === 0) {
+                        container.innerHTML = `<div class="no-data">Сценариев пока нет</div>`;
+                        return;
+                    }
+                    container.innerHTML = '';
+                    data.scenarios.forEach((scenario, index) => {
+                        const card = document.createElement('div');
+                        card.className = 'item-card';
+
+                        const titleDiv = document.createElement('div');
+                        titleDiv.className = 'item-title';
+                        titleDiv.innerHTML = `
+                            <span>${scenario.title || 'Без названия'}</span>
+                            <span class="arrow">▶</span>
+                        `;
+                        card.appendChild(titleDiv);
+
+                        const details = document.createElement('div');
+                        details.className = 'item-details';
+
+                        if (scenario.description) {
+                            const descDiv = document.createElement('div');
+                            descDiv.style.cssText = 'margin-bottom:10px; color: var(--text-color); font-size:16px; line-height:1.5;';
+                            descDiv.textContent = scenario.description;
+                            details.appendChild(descDiv);
+                        }
+
+                        if (scenario.video_link) {
+                            const videoDiv = document.createElement('div');
+                            videoDiv.className = 'item-video';
+                            const iframe = document.createElement('iframe');
+                            iframe.width = '100%';
+                            iframe.height = '315';
+                            iframe.src = scenario.video_link;
+                            iframe.style.border = 'none';
+                            iframe.allowFullscreen = true;
+                            iframe.loading = 'lazy';
+                            videoDiv.appendChild(iframe);
+                            details.appendChild(videoDiv);
+                        }
+
+                        if (scenario.phases && scenario.phases.length > 0) {
+                            const phasesDiv = document.createElement('div');
+                            phasesDiv.style.marginTop = '10px';
+                            const phasesTitle = document.createElement('div');
+                            phasesTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
+                            phasesTitle.textContent = '🔹 Фазы';
+                            phasesDiv.appendChild(phasesTitle);
+
+                            scenario.phases.forEach(phase => {
+                                const phaseBlock = document.createElement('div');
+                                phaseBlock.style.cssText = 'margin-bottom:12px; padding-left:10px; border-left:2px solid var(--accent-color);';
+                                const phaseName = document.createElement('div');
+                                phaseName.style.cssText = 'font-weight:700; color:#fff; font-size:16px;';
+                                phaseName.textContent = `${phase.name} (${phase.time})`;
+                                phaseBlock.appendChild(phaseName);
+                                if (phase.description) {
+                                    const desc = document.createElement('div');
+                                    desc.style.cssText = 'color: var(--text-color); font-size:15px; margin:4px 0;';
+                                    desc.textContent = phase.description;
+                                    phaseBlock.appendChild(desc);
+                                }
+                                if (phase.map_image) {
+                                    const img = document.createElement('img');
+                                    img.src = phase.map_image;
+                                    img.loading = 'lazy';
+                                    img.style.cssText = 'max-width:100%; height:auto; border:1px solid var(--border-color); margin-top:6px;';
+                                    img.alt = phase.name;
+                                    phaseBlock.appendChild(img);
+                                }
+                                phasesDiv.appendChild(phaseBlock);
+                            });
+                            details.appendChild(phasesDiv);
+                        }
+
+                        if (scenario.inventory && scenario.inventory.length > 0) {
+                            const invDiv = document.createElement('div');
+                            invDiv.style.marginTop = '10px';
+                            const invTitle = document.createElement('div');
+                            invTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
+                            invTitle.textContent = '📦 Инвентарь';
+                            invDiv.appendChild(invTitle);
+
+                            const list = document.createElement('ul');
+                            list.style.cssText = 'margin-left:20px; color: var(--text-color);';
+                            scenario.inventory.forEach(item => {
+                                const li = document.createElement('li');
+                                li.textContent = item;
+                                list.appendChild(li);
+                            });
+                            invDiv.appendChild(list);
+                            details.appendChild(invDiv);
+                        }
+
+                        if (scenario.files && scenario.files.length > 0) {
+                            const filesDiv = document.createElement('div');
+                            filesDiv.className = 'item-files';
+                            const filesTitle = document.createElement('div');
+                            filesTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
+                            filesTitle.textContent = '📁 Файлы';
+                            filesDiv.appendChild(filesTitle);
+
+                            const list = document.createElement('ul');
+                            scenario.files.forEach(file => {
+                                const li = document.createElement('li');
+                                const link = document.createElement('a');
+                                link.href = file.link;
+                                link.target = '_blank';
+                                link.textContent = file.name;
+                                link.style.cssText = 'color: var(--blue); text-decoration: none; font-weight:700; border:1px solid var(--blue); padding:4px 14px; transition:0.2s; display:inline-block;';
+                                li.appendChild(link);
+                                list.appendChild(li);
+                            });
+                            filesDiv.appendChild(list);
+                            details.appendChild(filesDiv);
+                        }
+
+                        card.appendChild(details);
+
+                        titleDiv.addEventListener('click', function() {
+                            const isOpen = details.classList.contains('open');
+                            if (isOpen) {
+                                details.classList.remove('open');
+                                this.querySelector('.arrow').classList.remove('open');
+                            } else {
+                                details.classList.add('open');
+                                this.querySelector('.arrow').classList.add('open');
+                            }
+                        });
+
+                        container.appendChild(card);
+                    });
+                } catch (error) {
+                    console.error('Ошибка загрузки сценариев:', error);
+                    container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки сценариев. Проверьте файл scenarios_data.json</div>`;
+                }
+            }
+
+            async function loadDevices() {
+                const container = document.getElementById('devicesContainer');
+                try {
+                    const response = await fetch('devices_data.json');
+                    if (!response.ok) throw new Error('Не удалось загрузить устройства');
+                    const data = await response.json();
+                    if (!data.devices || data.devices.length === 0) {
+                        container.innerHTML = `<div class="no-data">Устройств пока нет</div>`;
+                        return;
+                    }
+                    container.innerHTML = '';
+                    data.devices.forEach((device, index) => {
+                        const card = document.createElement('div');
+                        card.className = 'item-card';
+
+                        const titleDiv = document.createElement('div');
+                        titleDiv.className = 'item-title';
+                        titleDiv.innerHTML = `
+                            <span>${device.name || 'Без названия'}</span>
+                            <span class="arrow">▶</span>
+                        `;
+                        card.appendChild(titleDiv);
+
+                        const details = document.createElement('div');
+                        details.className = 'item-details';
+
+                        if (device.photo) {
+                            const photo = document.createElement('img');
+                            photo.src = device.photo;
+                            photo.className = 'item-photo';
+                            photo.loading = 'lazy';
+                            photo.style.maxWidth = '100%';
+                            photo.style.border = '1px solid var(--border-color)';
+                            details.appendChild(photo);
+                        }
+
+                        if (device.description) {
+                            const desc = document.createElement('div');
+                            desc.className = 'item-description';
+                            desc.textContent = device.description;
+                            details.appendChild(desc);
+                        }
+
+                        if (device.video_link) {
+                            const videoDiv = document.createElement('div');
+                            videoDiv.className = 'item-video';
+                            const iframe = document.createElement('iframe');
+                            iframe.width = '100%';
+                            iframe.height = '315';
+                            iframe.src = device.video_link;
+                            iframe.style.border = 'none';
+                            iframe.allowFullscreen = true;
+                            iframe.loading = 'lazy';
+                            videoDiv.appendChild(iframe);
+                            details.appendChild(videoDiv);
+                        }
+
+                        const linksDiv = document.createElement('div');
+                        linksDiv.className = 'item-links';
+                        if (device.schematic_link) {
+                            const a = document.createElement('a');
+                            a.href = device.schematic_link;
+                            a.target = '_blank';
+                            a.textContent = '📐 Схема';
+                            linksDiv.appendChild(a);
+                        }
+                        if (device.docs_link) {
+                            const a = document.createElement('a');
+                            a.href = device.docs_link;
+                            a.target = '_blank';
+                            a.textContent = '📄 Документация';
+                            linksDiv.appendChild(a);
+                        }
+                        if (device.files && device.files.length > 0) {
+                            device.files.forEach(file => {
+                                const a = document.createElement('a');
+                                a.href = file.link;
+                                a.target = '_blank';
+                                a.textContent = file.name;
+                                linksDiv.appendChild(a);
+                            });
+                        }
+                        if (linksDiv.children.length > 0) {
+                            details.appendChild(linksDiv);
+                        }
+
+                        card.appendChild(details);
+
+                        titleDiv.addEventListener('click', function() {
+                            const isOpen = details.classList.contains('open');
+                            if (isOpen) {
+                                details.classList.remove('open');
+                                this.querySelector('.arrow').classList.remove('open');
+                            } else {
+                                details.classList.add('open');
+                                this.querySelector('.arrow').classList.add('open');
+                            }
+                        });
+
+                        container.appendChild(card);
+                    });
+                } catch (error) {
+                    console.error('Ошибка загрузки устройств:', error);
+                    container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки устройств. Проверьте файл devices_data.json</div>`;
+                }
+            }
+
+            // ============================================================
+            // 7. ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
+            // ============================================================
+            document.addEventListener('DOMContentLoaded', function() {
+                loadRadioData();
+                loadLogs();
+                initCalculator();
+            });
+
         })();
     </script>
-	<script>
-	  if ('serviceWorker' in navigator) {
-		navigator.serviceWorker.register('/sw.js')
-		  .then(reg => console.log('SW registered:', reg))
-		  .catch(err => console.error('SW registration failed:', err));
-	  }
-	</script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('SW registered:', reg))
+                .catch(err => console.error('SW registration failed:', err));
+        }
+    </script>
 </body>
 </html>
