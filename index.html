@@ -4,19 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <title>FOXHOUND</title>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet" />
-    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"></noscript>
-    
     <link rel="preload" href="logo-foxhound.webp" as="image">
     <link rel="preload" href="background.mp4" as="video" type="video/mp4">
     <link rel="manifest" href="/manifest.json">
-    
     <style>
+        /* ===== ВСЕ СТИЛИ (без изменений) ===== */
         :root {
             --bg-color: #0a0a0a;
             --panel-bg: #111111;
@@ -29,16 +26,9 @@
             --green: #33cc33;
             --red: #ff3333;
             --blue: var(--accent-color);
-            --purple: #aa66ff;
             --shadow: 0 0 30px rgba(0,0,0,0.7);
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -50,7 +40,6 @@
             overflow-x: hidden;
             word-break: break-word;
         }
-
         .video-background {
             position: fixed;
             top: 0;
@@ -61,7 +50,6 @@
             z-index: -2;
             pointer-events: none;
         }
-
         .container {
             max-width: 1000px;
             margin: 0 auto;
@@ -72,13 +60,12 @@
             position: relative;
             z-index: 1;
         }
-
         .header {
+            position: relative;
             text-align: center;
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 25px;
             margin-bottom: 25px;
-            position: relative;
         }
         .header::after {
             content: '/// FOXHOUND ///';
@@ -94,7 +81,6 @@
             letter-spacing: 2px;
             font-family: 'PT Sans', sans-serif;
         }
-
         .logo-image {
             width: 120px;
             height: 120px;
@@ -108,11 +94,7 @@
             transition: all 0.3s;
             filter: grayscale(0.2);
         }
-        .logo-image:hover {
-            transform: scale(1.05);
-            filter: grayscale(0);
-        }
-
+        .logo-image:hover { transform: scale(1.05); filter: grayscale(0); }
         h1 {
             color: #fff;
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
@@ -123,7 +105,6 @@
             text-shadow: 0 0 20px var(--accent-glow);
             text-transform: uppercase;
         }
-
         .subtitle {
             color: var(--accent-color);
             font-size: 16px;
@@ -132,18 +113,61 @@
             letter-spacing: 4px;
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
         }
-
+        #auth-block {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            z-index: 10;
+        }
+        #auth-block .header-link {
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 4px;
+            background: transparent;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        #auth-block .header-link:hover {
+            color: #fff;
+            background: rgba(255,102,0,0.08);
+        }
+        #auth-block .profile-btn {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            background: rgba(255,102,0,0.05);
+        }
+        #auth-block .profile-btn:hover {
+            background: var(--accent-color);
+            color: #0a0a0a;
+        }
+        .nav-wrapper {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 4px 0;
+        }
         .header-links {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 4px 6px;
-            margin-top: 20px;
-            padding: 4px 0;
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
+            border: none;
+            padding: 0;
+            margin: 0;
         }
-
         .header-link {
             display: inline-block;
             background: transparent;
@@ -157,45 +181,27 @@
             transition: all 0.2s ease;
             cursor: pointer;
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            position: relative;
             border-radius: 4px;
+            white-space: nowrap;
         }
-
-        .header-link::before {
-            content: '› ';
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
         .header-link:hover {
             color: #fff;
             background: rgba(255,102,0,0.08);
         }
-        .header-link:hover::before {
-            opacity: 1;
-        }
-
         .header-link.active {
             color: var(--accent-color);
             background: rgba(255,102,0,0.12);
             box-shadow: inset 0 -2px 0 var(--accent-color);
         }
-        .header-link.active::before {
-            opacity: 1;
-        }
-
         .page {
             display: none;
             animation: fadeIn 0.3s ease;
         }
-        .page.active {
-            display: block;
-        }
+        .page.active { display: block; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .quote {
             background: var(--glass-bg);
             padding: 16px 20px;
@@ -203,9 +209,7 @@
             font-style: italic;
             color: #c9d1d9;
             border: 1px solid var(--accent-color);
-            font-family: 'PT Sans', sans-serif;
         }
-
         h2 {
             color: #fff;
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
@@ -231,24 +235,14 @@
             margin: 20px 0 10px 0;
             letter-spacing: 1px;
         }
-
-        p {
-            margin-bottom: 15px;
-            color: var(--text-color);
-            font-size: 16px;
-        }
-
+        p { margin-bottom: 15px; color: var(--text-color); font-size: 16px; }
         .tasks-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 16px;
             margin-top: 16px;
         }
-        @media (min-width: 600px) {
-            .tasks-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
+        @media (min-width: 600px) { .tasks-grid { grid-template-columns: 1fr 1fr; } }
         .task-card {
             background: var(--glass-bg);
             border: 1px solid var(--accent-color);
@@ -269,8 +263,6 @@
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
             letter-spacing: 1px;
         }
-
-        /* ===== НОВЫЙ СТИЛЬ ДЛЯ РАДИО С ПРОГРЕССОМ ===== */
         .radio-station {
             background: #0a0a0a;
             border: 2px solid var(--accent-color);
@@ -296,11 +288,7 @@
             letter-spacing: 3px;
             border: 1px solid var(--green);
         }
-        @media (min-width: 600px) {
-            .radio-station {
-                grid-template-columns: 2fr 1fr;
-            }
-        }
+        @media (min-width: 600px) { .radio-station { grid-template-columns: 2fr 1fr; } }
         .radio-display {
             background: #0a180a;
             border: 1px solid var(--green);
@@ -328,9 +316,7 @@
             line-height: 1.3;
             margin-top: 4px;
         }
-        .progress-container {
-            margin-top: 12px;
-        }
+        .progress-container { margin-top: 12px; }
         .progress-bar {
             height: 4px;
             background: #2a2a2a;
@@ -365,12 +351,15 @@
             padding: 10px;
             font-weight: 700;
             cursor: pointer;
-            text-transform: uppercase;
-            font-size: 15px;
+            font-size: 20px;
             transition: all 0.2s ease;
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
             letter-spacing: 1px;
             border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
         }
         .radio-btn:hover {
             background: var(--accent-color);
@@ -386,11 +375,6 @@
             font-family: 'PT Sans', sans-serif;
             border-radius: 4px;
         }
-        .playlist-select:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-
         .log-container {
             background: #0d0d0d;
             border: 1px solid var(--accent-color);
@@ -403,16 +387,8 @@
             border-bottom: 1px dashed #1a1a1a;
             padding-bottom: 6px;
         }
-        .log-row:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-        .log-date {
-            color: var(--accent-color);
-            margin-right: 10px;
-            font-weight: 700;
-        }
-
+        .log-row:last-child { border-bottom: none; margin-bottom: 0; }
+        .log-date { color: var(--accent-color); margin-right: 10px; font-weight: 700; }
         .rules-list {
             list-style: none;
         }
@@ -430,9 +406,7 @@
             font-weight: 700;
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
         }
-
-        .join-btn,
-        .vk-btn {
+        .join-btn, .vk-btn {
             display: block;
             width: 100%;
             text-align: center;
@@ -468,7 +442,6 @@
             color: #0a0a0a;
             box-shadow: 0 0 30px rgba(51,153,255,0.3);
         }
-
         .param-group { background: var(--glass-bg); border: 1px solid var(--accent-color); padding: 20px; margin-bottom: 20px; }
         .slider-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
         .slider-row label { min-width: 110px; font-weight: 700; color: #fff; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 0.5px; font-size: 15px; }
@@ -490,11 +463,8 @@
         .status-msg { margin-top: 15px; padding: 15px; font-weight: 700; text-align: center; background: var(--glass-bg); border: 1px solid var(--accent-color); font-size: 16px; }
         .status-msg.ok { border-color: var(--green); color: var(--green); }
         .status-msg.fail { border-color: var(--red); color: var(--red); }
-
         .gallery-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 600px) {
-            .gallery-grid { grid-template-columns: 1fr 1fr; }
-        }
+        @media (min-width: 600px) { .gallery-grid { grid-template-columns: 1fr 1fr; } }
         .photo-card { background: var(--glass-bg); border: 1px solid var(--accent-color); overflow: hidden; transition: all 0.2s; cursor: pointer; }
         .photo-card:hover { transform: scale(1.02); border-color: var(--accent-color); box-shadow: 0 0 20px var(--accent-glow); }
         .photo-card img { width: 100%; height: 200px; object-fit: cover; display: block; background: #000; }
@@ -504,8 +474,6 @@
         .photo-card .card-desc { font-size: 15px; color: var(--text-color); }
         .no-data { grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted); font-style: italic; }
         .error-msg { grid-column: 1 / -1; padding: 20px; text-align: center; color: var(--red); border: 1px solid var(--red); background: rgba(255,51,51,0.05); }
-
-        /* ===== ЛАЙТБОКС (исправлен) ===== */
         #lightbox {
             display: none;
             position: fixed;
@@ -546,11 +514,8 @@
             color: var(--accent-color);
             transform: scale(1.2);
         }
-
         .operator-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 600px) {
-            .operator-grid { grid-template-columns: 1fr 1fr; }
-        }
+        @media (min-width: 600px) { .operator-grid { grid-template-columns: 1fr 1fr; } }
         .operator-card { background: var(--glass-bg); border: 1px solid var(--accent-color); padding: 20px; transition: all 0.2s; text-align: center; }
         .operator-card:hover { transform: scale(1.02); border-color: var(--accent-color); box-shadow: 0 0 20px var(--accent-glow); }
         .operator-avatar { display: flex; justify-content: center; align-items: center; margin: 0 auto 10px; width: 100%; max-width: 120px; aspect-ratio: 1/1; background: #0d0d0d; border: 2px solid var(--border-color); overflow: hidden; font-size: 56px; }
@@ -559,18 +524,14 @@
         .operator-role { color: var(--accent-color); font-size: 15px; text-transform: uppercase; letter-spacing: 1px; margin: 5px 0 10px; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; font-weight: 700; }
         .operator-desc { color: var(--text-muted); font-size: 15px; line-height: 1.5; }
         .operator-spec { display: inline-block; background: rgba(255,102,0,0.12); border: 1px solid var(--accent-color); padding: 2px 12px; font-size: 13px; color: var(--accent-color); margin-top: 8px; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; font-weight: 700; }
-
         .docs-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
-        @media (min-width: 600px) {
-            .docs-grid { grid-template-columns: 1fr 1fr; }
-        }
+        @media (min-width: 600px) { .docs-grid { grid-template-columns: 1fr 1fr; } }
         .doc-card { background: var(--glass-bg); border: 1px solid var(--accent-color); padding: 18px; transition: all 0.2s; }
         .doc-card:hover { border-color: var(--accent-color); box-shadow: 0 0 20px var(--accent-glow); }
         .doc-card .doc-title { font-weight: 700; color: #fff; font-size: 17px; margin-bottom: 5px; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 0.5px; }
         .doc-card .doc-desc { color: var(--text-muted); font-size: 15px; margin-bottom: 10px; }
         .doc-card .doc-link { display: inline-block; color: var(--blue); text-decoration: none; font-weight: 700; border: 1px solid var(--blue); padding: 4px 14px; transition: all 0.2s; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 1px; }
         .doc-card .doc-link:hover { background: var(--blue); color: #0a0a0a; }
-
         .atak-tree { margin-top: 10px; }
         .atak-node { margin-left: 0; }
         .atak-node .node-header { cursor: pointer; padding: 10px 15px; background: var(--glass-bg); border: 1px solid var(--accent-color); margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s; user-select: none; font-family: 'PT Sans', sans-serif; font-size: 16px; }
@@ -587,13 +548,30 @@
         .node-leaf .node-header { cursor: default; background: rgba(0,0,0,0.15); }
         .node-leaf .node-header:hover { border-color: var(--border-color); }
         .node-leaf .node-header .arrow { display: none; }
-
-        #map-container { height: 500px; border: 1px solid var(--accent-color); margin: 10px 0; background: #1a1a1a; }
-        .map-layer-item { display: flex; align-items: center; gap: 10px; padding: 4px 0; }
-        .map-layer-item input[type="checkbox"] { accent-color: var(--accent-color); width: 16px; height: 16px; }
-        .map-layer-item label { color: var(--text-color); font-size: 14px; cursor: pointer; }
+        #map-container {
+            height: 500px;
+            border: 1px solid var(--accent-color);
+            margin: 10px 0;
+            background: #1a1a1a;
+            width: 100%;
+        }
+        .map-layer-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 0;
+        }
+        .map-layer-item input[type="checkbox"] {
+            accent-color: var(--accent-color);
+            width: 16px;
+            height: 16px;
+        }
+        .map-layer-item label {
+            color: var(--text-color);
+            font-size: 14px;
+            cursor: pointer;
+        }
         .leaflet-control-attribution { color: #666 !important; font-size: 10px !important; }
-
         .item-card {
             background: var(--glass-bg);
             border: 1px solid var(--accent-color);
@@ -621,35 +599,16 @@
             font-size: 14px;
             color: var(--text-muted);
         }
-        .item-card .item-title .arrow.open {
-            transform: rotate(90deg);
-        }
+        .item-card .item-title .arrow.open { transform: rotate(90deg); }
         .item-card .item-details {
             overflow: hidden;
             max-height: 0;
             transition: max-height 0.5s ease;
         }
-        .item-card .item-details.open {
-            max-height: 9999px;
-        }
-        .item-card .item-details .item-description {
-            margin-top: 10px;
-            color: var(--text-color);
-            font-size: 15px;
-        }
-        .item-card .item-details .item-map {
-            width: 100%;
-            height: 300px;
-            border: 1px solid var(--border-color);
-            margin: 10px 0;
-            background: #1a1a1a;
-        }
-        .item-card .item-details .item-links {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
+        .item-card .item-details.open { max-height: 9999px; }
+        .item-card .item-details .item-description { margin-top: 10px; color: var(--text-color); font-size: 15px; }
+        .item-card .item-details .item-map { width: 100%; height: 300px; border: 1px solid var(--border-color); margin: 10px 0; background: #1a1a1a; }
+        .item-card .item-details .item-links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
         .item-card .item-details .item-links a,
         .item-card .item-details .item-files a {
             display: inline-block;
@@ -667,20 +626,9 @@
             background: var(--blue);
             color: #0a0a0a;
         }
-        .item-card .item-details .item-photo {
-            max-width: 100%;
-            height: auto;
-            margin: 10px 0;
-            border: 1px solid var(--border-color);
-        }
-        .item-card .item-details .item-video {
-            width: 100%;
-            max-width: 560px;
-            margin: 10px 0;
-        }
-        .item-card .item-details .item-schematic {
-            margin-top: 10px;
-        }
+        .item-card .item-details .item-photo { max-width: 100%; height: auto; margin: 10px 0; border: 1px solid var(--border-color); }
+        .item-card .item-details .item-video { width: 100%; max-width: 560px; margin: 10px 0; }
+        .item-card .item-details .item-schematic { margin-top: 10px; }
         .item-card .item-details .item-schematic a {
             color: var(--accent-color);
             text-decoration: none;
@@ -695,261 +643,389 @@
             background: var(--accent-color);
             color: #0a0a0a;
         }
-        .item-card .item-details .item-files {
-            margin-top: 10px;
+        .item-card .item-details .item-files { margin-top: 10px; }
+        .item-card .item-details .item-files ul { list-style: none; padding-left: 0; }
+        .item-card .item-details .item-files ul li { margin-bottom: 6px; }
+        .profile-layout {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
         }
-        .item-card .item-details .item-files ul {
-            list-style: none;
-            padding-left: 0;
+        .profile-sidebar {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
         }
-        .item-card .item-details .item-files ul li {
-            margin-bottom: 6px;
+        .avatar-wrapper {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+        }
+        .avatar-wrapper .avatar,
+        .avatar-wrapper .avatar-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--accent-color);
+            object-fit: cover;
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: #666;
+        }
+        .avatar-wrapper .avatar { display: block; }
+        .avatar-wrapper .avatar-placeholder { display: none; }
+        .profile-sidebar .username {
+            color: #fff;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            font-size: 24px;
+            margin-top: 8px;
+        }
+        .profile-sidebar .role {
+            color: var(--accent-color);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .profile-sidebar .stats {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 6px;
+        }
+        .profile-sidebar .tab-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        .profile-sidebar .tab-menu button {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            font-size: 16px;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            text-align: left;
+            padding-left: 16px;
+        }
+        .profile-sidebar .tab-menu button:hover {
+            border-color: var(--accent-color);
+            color: #fff;
+        }
+        .profile-sidebar .tab-menu button.active-tab {
+            border-color: var(--accent-color);
+            background: rgba(255,102,0,0.1);
+            color: var(--accent-color);
+        }
+        .profile-sidebar .tab-menu .logout-btn {
+            border-color: var(--red);
+            color: var(--red);
+            margin-top: 12px;
+        }
+        .profile-sidebar .tab-menu .logout-btn:hover {
+            background: var(--red);
+            color: #0a0a0a;
+        }
+        .profile-content {
+            flex: 3;
+            min-width: 300px;
+        }
+        .profile-content .tab-pane {
+            display: none;
+        }
+        .profile-content .tab-pane.active-pane {
+            display: block;
+        }
+        .chat-messages {
+            max-height: 400px;
+            overflow-y: auto;
+            background: #0a0a0a;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .chat-message {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 6px;
+        }
+        .chat-message .avatar {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border-color);
+            object-fit: cover;
+            background: #0a0a0a;
+        }
+        .chat-message .msg-content {
+            flex: 1;
+        }
+        .chat-message .msg-content .user {
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+        .chat-message .msg-content .time {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-left: 10px;
+        }
+        .chat-message .msg-content .text {
+            color: var(--text-color);
+        }
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            background: #0a0a0a;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            border-radius: 4px;
+            font-family: 'PT Sans', sans-serif;
+        }
+        .chat-input input:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+        .chat-input button {
+            padding: 10px 20px;
+            background: var(--accent-color);
+            color: #0a0a0a;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.active-modal {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--panel-bg);
+            border: 2px solid var(--accent-color);
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+        .modal-content .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        .modal-content .close-modal:hover {
+            color: #fff;
+        }
+        .modal-content h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .modal-content label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 8px 12px;
+            background: #0a0a0a;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            border-radius: 4px;
+        }
+        .modal-content input:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+        .modal-content .btn-submit {
+            width: 100%;
+            margin-top: 16px;
+            padding: 12px;
+            background: var(--accent-color);
+            color: #0a0a0a;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            font-size: 16px;
+            letter-spacing: 1px;
+            border-radius: 4px;
+        }
+        .modal-content .btn-submit:hover {
+            background: #ff8833;
+        }
+        .modal-content .switch-form {
+            text-align: center;
+            margin-top: 12px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        .modal-content .switch-form span {
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+        .modal-content .switch-form span:hover {
+            text-decoration: underline;
+        }
+        #tab-settings {
+            padding: 10px 0;
+        }
+        #tab-settings .settings-card {
+            background: #0a0a0a;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        #tab-settings .settings-card h3 {
+            margin-top: 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+            color: var(--accent-color);
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            font-size: 18px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        #tab-settings .settings-card label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: 700;
+            color: #fff;
+            font-size: 14px;
+        }
+        #tab-settings .settings-card input[type="password"],
+        #tab-settings .settings-card input[type="file"] {
+            width: 100%;
+            padding: 8px 12px;
+            background: #111;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            border-radius: 4px;
+            font-family: 'PT Sans', sans-serif;
+        }
+        #tab-settings .settings-card input:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+        #tab-settings .settings-card .btn-submit {
+            margin-top: 12px;
+            padding: 10px 24px;
+            background: var(--accent-color);
+            color: #0a0a0a;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
+            font-size: 14px;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        #tab-settings .settings-card .btn-submit:hover {
+            background: #ff8833;
+        }
+        #tab-settings .settings-card .file-input-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        #tab-settings .settings-card .file-input-wrapper input[type="file"] {
+            flex: 1;
+            min-width: 150px;
+            background: #111;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 6px;
+        }
+        #tab-settings .settings-card .file-input-wrapper button {
+            flex-shrink: 0;
         }
 
+        /* ===== АДАПТИВ ===== */
         @media (max-width: 768px) {
-            body {
-                padding: 20px 10px;
+            body { padding: 20px 10px; }
+            .container { padding: 15px; }
+            h1 { font-size: 28px; letter-spacing: 2px; }
+            .subtitle { font-size: 14px; letter-spacing: 2px; }
+            #auth-block {
+                top: 10px;
+                right: 10px;
             }
-            .container {
-                padding: 15px;
-            }
-            h1 {
-                font-size: 28px;
-                letter-spacing: 2px;
-            }
-            .subtitle {
-                font-size: 14px;
-                letter-spacing: 2px;
-            }
-            .header-link {
-                font-size: 16px;
-                padding: 10px 16px;
-                letter-spacing: 0.5px;
-                border-radius: 6px;
-            }
-            .header-links {
-                gap: 6px;
-            }
-            h2 {
-                font-size: 20px;
-                margin: 30px 0 12px;
-            }
-            h3 {
-                font-size: 16px;
-            }
-            .quote {
-                padding: 12px 15px;
-                font-size: 14px;
-            }
-            .task-card, .doc-card, .operator-card, .photo-card .card-body, .item-card {
-                padding: 12px;
-            }
-            .radio-station {
-                padding: 15px;
-            }
-            .radio-display {
-                font-size: 13px;
-                padding: 12px;
-            }
-            .radio-display .freq-tag {
-                font-size: 15px;
-            }
-            .radio-btn {
-                font-size: 13px;
-                padding: 8px;
-            }
-            .playlist-select {
-                font-size: 13px;
-                padding: 8px;
-            }
-            .log-container {
-                font-size: 13px;
-                padding: 12px;
-            }
-            .join-btn, .vk-btn {
-                font-size: 15px;
-                padding: 14px;
-            }
-            .param-group {
-                padding: 15px;
-            }
-            .slider-row label {
-                font-size: 13px;
-                min-width: 80px;
-            }
-            .value-display {
-                font-size: 16px;
-            }
-            .result-item .value {
-                font-size: 20px;
-            }
-            .rules-table th, .rules-table td {
-                font-size: 13px;
-                padding: 8px 6px;
-            }
-            .status-msg {
-                font-size: 14px;
-                padding: 12px;
-            }
-            #map-container {
-                height: 300px;
-            }
-            .photo-card img {
-                height: 150px;
-            }
-            .item-card .item-title {
-                font-size: 16px;
-            }
-            .item-card .item-details .item-description {
-                font-size: 14px;
-            }
-            .item-card .item-details .item-links a,
-            .item-card .item-details .item-files a {
-                font-size: 13px;
-                padding: 3px 10px;
-            }
-            .item-card .item-details .item-video iframe {
-                height: 200px;
-            }
-            .operator-avatar {
-                max-width: 80px;
-            }
-            .operator-name {
-                font-size: 18px;
-            }
-            .operator-role {
-                font-size: 13px;
-            }
-            .operator-desc {
-                font-size: 13px;
-            }
-            .operator-spec {
+            #auth-block .header-link {
                 font-size: 12px;
+                padding: 4px 8px;
             }
-            #lightbox .close-btn {
-                font-size: 36px;
-                top: 20px;
-                right: 20px;
+            .header-link { font-size: 16px; padding: 10px 16px; }
+            .nav-wrapper { flex-direction: column; align-items: center; }
+            .profile-layout { flex-direction: column; }
+            .profile-sidebar { text-align: center; }
+            .profile-sidebar .tab-menu button { text-align: center; }
+            .radio-station { grid-template-columns: 1fr; }
+            #map-container { height: 300px; }
+            #lightbox .close-btn { font-size: 36px; top: 20px; right: 20px; }
+            #tab-settings .settings-card .file-input-wrapper {
+                flex-direction: column;
+                align-items: stretch;
             }
         }
-
         @media (max-width: 480px) {
-            body {
-                padding: 10px 5px;
-            }
-            .container {
-                padding: 10px;
-            }
-            h1 {
-                font-size: 24px;
-                letter-spacing: 1px;
-            }
-            .subtitle {
-                font-size: 12px;
-                letter-spacing: 1px;
-            }
-            .header-link {
-                font-size: 15px;
-                padding: 8px 14px;
-                letter-spacing: 0.5px;
-                border-radius: 6px;
-            }
-            .header-links {
-                gap: 5px;
-            }
-            .radio-display .freq-tag {
-                font-size: 13px;
-            }
-            .radio-btn {
-                font-size: 12px;
-                padding: 6px;
-            }
-            .playlist-select {
-                font-size: 12px;
-                padding: 6px;
-            }
-            .join-btn, .vk-btn {
-                font-size: 14px;
-                padding: 12px;
-            }
-            .slider-row label {
-                font-size: 12px;
-                min-width: 60px;
-            }
-            .value-display {
-                font-size: 14px;
-            }
-            .result-item .value {
-                font-size: 18px;
-            }
-            .result-item .label {
-                font-size: 11px;
-            }
-            .rules-table th, .rules-table td {
-                font-size: 12px;
-                padding: 6px 4px;
-            }
-            .status-msg {
-                font-size: 13px;
-                padding: 10px;
-            }
-            #map-container {
-                height: 250px;
-            }
-            .photo-card img {
-                height: 120px;
-            }
-            .item-card .item-title {
-                font-size: 15px;
-            }
-            .item-card .item-details .item-video iframe {
-                height: 150px;
-            }
-            .operator-avatar {
-                max-width: 60px;
-            }
-            .operator-name {
-                font-size: 16px;
-            }
-            .operator-role {
-                font-size: 12px;
-            }
-            .operator-desc {
-                font-size: 12px;
-            }
-            .operator-spec {
-                font-size: 11px;
-            }
-            #lightbox .close-btn {
-                font-size: 30px;
-                top: 15px;
-                right: 15px;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
+            body { padding: 10px 5px; }
+            .container { padding: 10px; }
+            h1 { font-size: 24px; letter-spacing: 1px; }
+            #auth-block .header-link { font-size: 11px; padding: 3px 6px; }
+            .header-link { font-size: 15px; padding: 8px 14px; }
+            .modal-content { padding: 20px; }
+            .chat-messages { max-height: 250px; }
         }
     </style>
 </head>
 <body>
-
-    <video class="video-background" autoplay muted loop playsinline>
-        <source src="background.mp4" type="video/mp4">
-        Ваш браузер не поддерживает видео.
-    </video>
-
-    <div class="container">
-
-        <div class="header">
-            <img src="logo-foxhound.webp" alt="FOXHOUND LOGO" class="logo-image" loading="lazy" />
-            <h1>FOXHOUND</h1>
-            <div class="subtitle">Страйкбольная команда</div>
-
+<video class="video-background" autoplay muted loop playsinline>
+    <source src="background.mp4" type="video/mp4">
+</video>
+<div class="container">
+    <div class="header">
+        <img src="logo-foxhound.webp" alt="FOXHOUND LOGO" class="logo-image" loading="lazy" />
+        <h1>FOXHOUND</h1>
+        <div class="subtitle">Страйкбольная команда</div>
+        <div id="auth-block">
+            <a href="#profile" id="profile-link" class="header-link profile-btn" data-page="page-profile" style="display: none;">Профиль</a>
+            <button id="login-btn" class="header-link">🔑 Войти</button>
+        </div>
+        <div class="nav-wrapper">
             <div class="header-links">
                 <button class="header-link main active" data-page="page-home">🏠 Главная</button>
                 <button class="header-link calc" data-page="page-calc">🧮 Калькулятор</button>
@@ -963,1304 +1039,1814 @@
                 <button class="header-link devices" data-page="page-devices">🛠️ Девайсы</button>
             </div>
         </div>
-
-        <div id="page-home" class="page active">
-            <div class="quote">«На поле боя нет места надежде. Здесь есть только расчет и воля к победе».</div>
-            <h2>О команде</h2>
-            <p>Наша команда названа в честь культового отряда из вселенной Metal Gear, чей подход к операциям стал нашей главной философией. FOXHOUND — это элита, решающая задачи за счет превосходства в тактике и технологиях.</p>
-            <p>Мы проецируем эти принципы на реальный страйкбол. Нашими приоритетами являются строгая дисциплина, инженерный расчет и техническое превосходство. Каждая игра для нас — это комплексная интеграция современных технологий в тактический игровой процесс.</p>
-            <h2>Наши задачи</h2>
-            <div class="tasks-grid">
-                <div class="task-card"><strong>🛠 Разработка</strong> Проектируем уникальные игровые устройства и софт. Паяльник и код — полноценное оружие наравне с приводом.</div>
-                <div class="task-card"><strong>⚙️ Технический апгрейд</strong> Доводим снаряжение до идеала. Глубокий тюнинг, интеграция умной электроники и прецизионная настройка систем.</div>
-                <div class="task-card"><strong>📡 Навигация и связь</strong> Внедряем современные протоколы связи и цифровые карты. Полный контроль радиоэфира и знание полигона.</div>
-                <div class="task-card"><strong>⚡ Тактическая гибкость</strong> Ставим на маневренность, дисциплину и слаженность. Четкие действия группы гарантируют победу над превосходящим противником.</div>
-                <div class="task-card"><strong>🤝 Атмосфера</strong> FOXHOUND — это братство. Ценим адекватность, надежность, качественный отдых и выезды в кругу своих.</div>
-                <div class="task-card"><strong>🌲 Снаряжение</strong> Единый командный стиль в расцветках Woodland и Ranger Green.</div>
-            </div>
-            <h2>Полевое Радио</h2>
-            <!-- НОВЫЙ БЛОК РАДИО С ПРОГРЕССОМ -->
-            <div class="radio-station">
-                <div class="radio-display">
-                    <div id="radio-freq" class="freq-tag">FREQ: ---.--- MHz</div>
-                    <div id="radio-purpose" style="font-weight: bold; color: var(--accent-color);">СЕТЬ ОТКЛЮЧЕНА</div>
-                    <div id="track-title" style="color: #fff; margin-top: 5px;">ШУМ ЭФИРА...</div>
-                    <div id="radio-desc" class="desc-tag">Для активации аудио-модуля нажмите ВКЛ РАДИО</div>
-                    <div class="progress-container">
-                        <div class="progress-bar" id="progress-bar">
-                            <div class="progress-fill" id="progress-fill"></div>
-                        </div>
-                        <div class="time-labels">
-                            <span id="current-time">00:00</span>
-                            <span id="duration-time">00:00</span>
-                        </div>
+    </div>
+    <div id="page-home" class="page active">
+        <div class="quote">«На поле боя нет места надежде. Здесь есть только расчет и воля к победе».</div>
+        <h2>О команде</h2>
+        <p>Наша команда названа в честь культового отряда из вселенной Metal Gear, чей подход к операциям стал нашей главной философией. FOXHOUND — это элита, решающая задачи за счет превосходства в тактике и технологиях.</p>
+        <p>Мы проецируем эти принципы на реальный страйкбол. Нашими приоритетами являются строгая дисциплина, инженерный расчет и техническое превосходство. Каждая игра для нас — это комплексная интеграция современных технологий в тактический игровой процесс.</p>
+        <h2>Наши задачи</h2>
+        <div class="tasks-grid">
+            <div class="task-card"><strong>🛠 Разработка</strong> Проектируем уникальные игровые устройства и софт. Паяльник и код — полноценное оружие наравне с приводом.</div>
+            <div class="task-card"><strong>⚙️ Технический апгрейд</strong> Доводим снаряжение до идеала. Глубокий тюнинг, интеграция умной электроники и прецизионная настройка систем.</div>
+            <div class="task-card"><strong>📡 Навигация и связь</strong> Внедряем современные протоколы связи и цифровые карты. Полный контроль радиоэфира и знание полигона.</div>
+            <div class="task-card"><strong>⚡ Тактическая гибкость</strong> Ставим на маневренность, дисциплину и слаженность. Четкие действия группы гарантируют победу над превосходящим противником.</div>
+            <div class="task-card"><strong>🤝 Атмосфера</strong> FOXHOUND — это братство. Ценим адекватность, надежность, качественный отдых и выезды в кругу своих.</div>
+            <div class="task-card"><strong>🌲 Снаряжение</strong> Единый командный стиль в расцветках Woodland и Ranger Green.</div>
+        </div>
+        <h2>Полевое Радио</h2>
+        <div class="radio-station">
+            <div class="radio-display">
+                <div id="radio-freq" class="freq-tag">FREQ: ---.--- MHz</div>
+                <div id="radio-purpose" style="font-weight: bold; color: var(--accent-color);">СЕТЬ ОТКЛЮЧЕНА</div>
+                <div id="track-title" style="color: #fff; margin-top: 5px;">ШУМ ЭФИРА...</div>
+                <div id="radio-desc" class="desc-tag">Для активации аудио-модуля нажмите ВКЛ РАДИО</div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
                     </div>
-                </div>
-                <div class="radio-controls">
-                    <select id="playlist-select" class="playlist-select"></select>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
-                        <button id="prev-btn" class="radio-btn">◀◀</button>
-                        <button id="play-btn" class="radio-btn">▶</button>
-                        <button id="next-btn" class="radio-btn">▶▶</button>
+                    <div class="time-labels">
+                        <span id="current-time">00:00</span>
+                        <span id="duration-time">00:00</span>
                     </div>
                 </div>
             </div>
-            <h2>Бортовой журнал</h2>
-            <div id="log-container" class="log-container">
-                <div class="log-row" style="color: var(--text-muted);">Загрузка записей...</div>
-            </div>
-            <h2>Порядок</h2>
-            <ul class="rules-list">
-                <li>Работаем строго по правилам Уральской Ассоциации Страйкбола (УАС).</li>
-                <li>Адекватность, честность и отсутствие овертюна — база нашей команды.</li>
-            </ul>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdCmb8iLGiwe5nbRQl4SpGQPjZiFfVIw1meTqHWFHm5yhAPzg/viewform?usp=dialog" target="_blank" class="join-btn">Подать заявку в команду</a>
-            <a href="https://vk.ru/club239972469" target="_blank" class="vk-btn">Мы ВКонтакте</a>
-        </div>
-
-        <div id="page-calc" class="page">
-            <h2>Калькулятор страйкбола</h2>
-            <div class="param-group">
-                <div class="slider-row">
-                    <label for="weightSlider">Вес шара</label>
-                    <input type="range" id="weightSlider" min="0.12" max="0.43" step="0.01" value="0.25" />
-                    <span class="value-display" id="weightValue">0.25 г</span>
-                </div>
-                <div class="slider-row">
-                    <label for="speedSlider">Скорость</label>
-                    <input type="range" id="speedSlider" min="60" max="160" step="1" value="120" />
-                    <span class="value-display" id="speedValue">120 м/с</span>
+            <div class="radio-controls">
+                <select id="playlist-select" class="playlist-select"></select>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                    <button id="prev-btn" class="radio-btn">◀◀</button>
+                    <button id="play-btn" class="radio-btn">▶</button>
+                    <button id="next-btn" class="radio-btn">▶▶</button>
                 </div>
             </div>
-            <div class="result-grid">
-                <div class="result-item">
-                    <div class="label">Дульная энергия</div>
-                    <div class="value highlight" id="energyDisplay">1.80 Дж</div>
-                </div>
-                <div class="result-item">
-                    <div class="label">Скорость на 0.20 г</div>
-                    <div class="value highlight" id="speedOn20Display">134 м/с</div>
-                </div>
-            </div>
-            <h3>Регламент полигона (Уральская ассоциация страйкбола)</h3>
-            <table class="rules-table" id="rulesTable">
-                <thead><tr><th>Категория</th><th>Ограничение по энергии</th><th>Дистанция</th><th>Статус</th></tr></thead>
-                <tbody>
-                    <tr data-weapon="secondary"><td>Вторичка (пистолеты, автоматы в здании)</td><td>до 1.5 Дж</td><td>0 м</td><td id="statusSecondary">✔</td></tr>
-                    <tr data-weapon="primary"><td>Основное (автомат на открытой местности)</td><td>до 2.4 Дж</td><td>10 м</td><td id="statusPrimary">✔</td></tr>
-                    <tr data-weapon="sniper"><td>Снайперка (болтовка, полуавтомат, только одиночный)</td><td>до 2.9 Дж</td><td>25 м</td><td id="statusSniper">✔</td></tr>
-                </tbody>
-            </table>
-            <div id="statusMessage" class="status-msg ok">✅ Допуск: разрешено, дистанция 10 м</div>
         </div>
-
-        <div id="page-photo" class="page">
-            <h2>Фотогалерея</h2>
-            <div id="galleryContainer" class="gallery-grid">
-                <div class="no-data">Загрузка фотографий...</div>
-            </div>
+        <h2>Бортовой журнал</h2>
+        <div id="log-container" class="log-container">
+            <div class="log-row" style="color: var(--text-muted);">Загрузка записей...</div>
         </div>
-
-        <div id="page-operators" class="page">
-            <h2>Оперативный состав</h2>
-            <div id="operatorsContainer" class="operator-grid">
-                <div class="no-data">Загрузка данных...</div>
-            </div>
-        </div>
-
-        <div id="page-instructions" class="page">
-            <h2>Инструкции и руководства</h2>
-            <div id="docsContainer" class="docs-grid">
-                <div class="no-data">Загрузка документов...</div>
-            </div>
-        </div>
-
-        <div id="page-atak" class="page">
-            <h2>Руководство по ATAK</h2>
-            <div id="atakContainer" class="atak-tree">
-                <div class="no-data">Загрузка руководства...</div>
-            </div>
-        </div>
-
-        <div id="page-maps" class="page">
-            <h2>Карты полигонов</h2>
-            <div style="margin-bottom: 10px;">
-                <label for="polygon-select" style="color: var(--text-color); font-weight: 700; margin-right: 10px;">Выберите полигон:</label>
-                <select id="polygon-select" style="background: #1a1a1a; color: #fff; border: 1px solid var(--accent-color); padding: 6px 12px; font-family: 'PT Sans', sans-serif; font-size: 15px; cursor: pointer;"></select>
-            </div>
-            <div id="map-container"></div>
-            <div id="map-layers" style="margin-top: 10px;"></div>
-            <div id="map-loading" class="no-data" style="display: none;">Загрузка карты...</div>
-        </div>
-
-        <div id="page-regulations" class="page">
-            <h2>Устав подразделения</h2>
-            <div id="regulationsContainer" class="atak-tree">
-                <div class="no-data">Загрузка устава...</div>
-            </div>
-        </div>
-
-        <div id="page-scenarios" class="page">
-            <h2>Сценарии для игр</h2>
-            <div id="scenariosContainer">
-                <div class="no-data">Загрузка сценариев...</div>
-            </div>
-        </div>
-
-        <div id="page-devices" class="page">
-            <h2>Девайсы собственного производства</h2>
-            <div id="devicesContainer">
-                <div class="no-data">Загрузка устройств...</div>
-            </div>
-        </div>
-
+        <h2>Порядок</h2>
+        <ul class="rules-list">
+            <li>Работаем строго по правилам Уральской Ассоциации Страйкбола (УАС).</li>
+            <li>Адекватность, честность и отсутствие овертюна — база нашей команды.</li>
+        </ul>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdCmb8iLGiwe5nbRQl4SpGQPjZiFfVIw1meTqHWFHm5yhAPzg/viewform?usp=dialog" target="_blank" class="join-btn">Подать заявку в команду</a>
+        <a href="https://vk.ru/club239972469" target="_blank" class="vk-btn">Мы ВКонтакте</a>
     </div>
-
-    <!-- ЛАЙТБОКС (без onclick) -->
-    <div id="lightbox">
-        <span class="close-btn">&times;</span>
-        <img id="lightbox-img" src="" alt="Увеличенное фото" />
+    <div id="page-calc" class="page">
+        <h2>Калькулятор страйкбола</h2>
+        <div class="param-group">
+            <div class="slider-row">
+                <label for="weightSlider">Вес шара</label>
+                <input type="range" id="weightSlider" min="0.12" max="0.43" step="0.01" value="0.25" />
+                <span class="value-display" id="weightValue">0.25 г</span>
+            </div>
+            <div class="slider-row">
+                <label for="speedSlider">Скорость</label>
+                <input type="range" id="speedSlider" min="60" max="160" step="1" value="120" />
+                <span class="value-display" id="speedValue">120 м/с</span>
+            </div>
+        </div>
+        <div class="result-grid">
+            <div class="result-item">
+                <div class="label">Дульная энергия</div>
+                <div class="value highlight" id="energyDisplay">1.80 Дж</div>
+            </div>
+            <div class="result-item">
+                <div class="label">Скорость на 0.20 г</div>
+                <div class="value highlight" id="speedOn20Display">134 м/с</div>
+            </div>
+        </div>
+        <h3>Регламент полигона (Уральская ассоциация страйкбола)</h3>
+        <table class="rules-table" id="rulesTable">
+            <thead><tr><th>Категория</th><th>Ограничение по энергии</th><th>Дистанция</th><th>Статус</th></tr></thead>
+            <tbody>
+                <tr data-weapon="secondary"><td>Вторичка (пистолеты, автоматы в здании)</td><td>до 1.5 Дж</td><td>0 м</td><td id="statusSecondary">✔</td></tr>
+                <tr data-weapon="primary"><td>Основное (автомат на открытой местности)</td><td>до 2.4 Дж</td><td>10 м</td><td id="statusPrimary">✔</td></tr>
+                <tr data-weapon="sniper"><td>Снайперка (болтовка, полуавтомат, только одиночный)</td><td>до 2.9 Дж</td><td>25 м</td><td id="statusSniper">✔</td></tr>
+            </tbody>
+        </table>
+        <div id="statusMessage" class="status-msg ok">✅ Допуск: разрешено, дистанция 10 м</div>
     </div>
+    <div id="page-photo" class="page">
+        <h2>Фотогалерея</h2>
+        <div id="galleryContainer" class="gallery-grid">
+            <div class="no-data">Загрузка фотографий...</div>
+        </div>
+    </div>
+    <div id="page-operators" class="page">
+        <h2>Оперативный состав</h2>
+        <div id="operatorsContainer" class="operator-grid">
+            <div class="no-data">Загрузка данных...</div>
+        </div>
+    </div>
+    <div id="page-instructions" class="page">
+        <h2>Инструкции и руководства</h2>
+        <div id="docsContainer" class="docs-grid">
+            <div class="no-data">Загрузка документов...</div>
+        </div>
+    </div>
+    <div id="page-atak" class="page">
+        <h2>Руководство по ATAK</h2>
+        <div id="atakContainer" class="atak-tree">
+            <div class="no-data">Загрузка руководства...</div>
+        </div>
+    </div>
+    <div id="page-maps" class="page">
+        <h2>Карты полигонов</h2>
+        <div style="margin-bottom: 10px;">
+            <label for="polygon-select" style="color: var(--text-color); font-weight: 700; margin-right: 10px;">Выберите полигон:</label>
+            <select id="polygon-select" style="background: #1a1a1a; color: #fff; border: 1px solid var(--accent-color); padding: 6px 12px; font-family: 'PT Sans', sans-serif; font-size: 15px; cursor: pointer;"></select>
+        </div>
+        <div id="map-container"></div>
+        <div id="map-layers" style="margin-top: 10px;"></div>
+        <div id="map-loading" class="no-data" style="display: none;">Загрузка карты...</div>
+    </div>
+    <div id="page-regulations" class="page">
+        <h2>Устав подразделения</h2>
+        <div id="regulationsContainer" class="atak-tree">
+            <div class="no-data">Загрузка устава...</div>
+        </div>
+    </div>
+    <div id="page-scenarios" class="page">
+        <h2>Сценарии для игр</h2>
+        <div id="scenariosContainer">
+            <div class="no-data">Загрузка сценариев...</div>
+        </div>
+    </div>
+    <div id="page-devices" class="page">
+        <h2>Девайсы собственного производства</h2>
+        <div id="devicesContainer">
+            <div class="no-data">Загрузка устройств...</div>
+        </div>
+    </div>
+    <div id="page-profile" class="page">
+        <h2>Личный кабинет</h2>
+        <div class="profile-layout">
+            <div class="profile-sidebar">
+                <div class="avatar-wrapper">
+                    <img id="profile-avatar" class="avatar" src="/uploads/avatars/default.png" alt="" />
+                    <span id="avatar-placeholder" class="avatar-placeholder">👤</span>
+                </div>
+                <div class="username" id="profile-username"></div>
+                <div class="role" id="profile-role">Пользователь</div>
+                <div class="stats" id="profile-stats">Зарегистрирован: —</div>
+                <div class="tab-menu">
+                    <button class="active-tab" data-tab="chat">💬 Чат</button>
+                    <button data-tab="polls">🗳️ Голосования</button>
+                    <button data-tab="events">📅 Календарь</button>
+                    <button data-tab="settings">⚙️ Настройки</button>
+                    <button data-tab="admin" id="admin-tab-btn" style="display: none;">🛠️ Администрирование</button>
+                    <button class="logout-btn" id="logout-btn">🚪 Выйти</button>
+                </div>
+            </div>
+            <div class="profile-content">
+                <div id="tab-chat" class="tab-pane active-pane">
+                    <div class="chat-messages" id="chat-messages">
+                        <div style="color: var(--text-muted); text-align: center;">Авторизуйтесь, чтобы видеть сообщения.</div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="chat-input" placeholder="Напишите сообщение..." disabled />
+                        <button id="chat-send-btn" disabled>Отправить</button>
+                    </div>
+                </div>
+                <div id="tab-polls" class="tab-pane">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h3 style="margin:0;">Голосования</h3>
+                        <div>
+                            <button class="radio-btn" id="polls-toggle-archived" style="font-size:13px; padding:4px 12px;">Показать архив</button>
+                        </div>
+                    </div>
+                    <div id="polls-list"></div>
+                    <div id="poll-create-form" style="display: none; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                        <h3>Создать опрос</h3>
+                        <form id="poll-form">
+                            <label style="display:block; margin-top:10px;">Вопрос</label>
+                            <input type="text" id="poll-title" required style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
+                            <label style="display:block; margin-top:10px;">Варианты (через запятую)</label>
+                            <input type="text" id="poll-options" required placeholder="Вариант1, Вариант2, Вариант3" style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
+                            <label style="display:block; margin-top:10px;">Действительно до (дата и время)</label>
+                            <input type="datetime-local" id="poll-expires" required style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
+                            <button type="submit" class="btn-submit" style="margin-top:12px; width:auto;">Создать</button>
+                        </form>
+                    </div>
+                </div>
+                <div id="tab-events" class="tab-pane">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h3 style="margin:0;">События</h3>
+                        <div>
+                            <button class="radio-btn" id="events-toggle-archived" style="font-size:13px; padding:4px 12px;">Показать архив</button>
+                        </div>
+                    </div>
+                    <div id="events-list"></div>
+                    <div id="event-create-form" style="display: none; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                        <h3>Создать событие</h3>
+                        <form id="event-form">
+                            <label style="display:block; margin-top:10px;">Название</label>
+                            <input type="text" id="event-title" required style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
+                            <label style="display:block; margin-top:10px;">Описание</label>
+                            <textarea id="event-desc" style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;"></textarea>
+                            <label style="display:block; margin-top:10px;">Дата и время</label>
+                            <input type="datetime-local" id="event-date" required style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
+                            <label style="display:block; margin-top:10px;">Место</label>
+                            <input type="text" id="event-location" style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
+                            <button type="submit" class="btn-submit" style="margin-top:12px; width:auto;">Добавить</button>
+                        </form>
+                    </div>
+                </div>
+                <div id="tab-settings" class="tab-pane">
+                    <div class="settings-card">
+                        <h3>🔐 Сменить пароль</h3>
+                        <form id="change-password-form">
+                            <label>Текущий пароль</label>
+                            <input type="password" id="old-password" required />
+                            <label>Новый пароль</label>
+                            <input type="password" id="new-password" required />
+                            <button type="submit" class="btn-submit" style="width:auto;">Изменить</button>
+                        </form>
+                    </div>
+                    <div class="settings-card">
+                        <h3>🖼️ Сменить аватар</h3>
+                        <form id="avatar-form" enctype="multipart/form-data">
+                            <div class="file-input-wrapper">
+                                <input type="file" id="avatar-file" name="avatar" accept="image/*" required />
+                                <button type="submit" class="btn-submit" style="width:auto;">Загрузить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div id="tab-admin" class="tab-pane">
+                    <h3>Управление контентом</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Полный доступ к управлению фото, оперативниками, инструкциями и другими разделами сайта.</p>
+                    <a href="/admin/" class="btn-submit" style="display: inline-block; padding: 12px 40px; text-decoration: none; background: var(--accent-color); color: #0a0a0a; border: none; border-radius: 4px; font-weight: 700; font-family: 'PT Sans Narrow', sans-serif; letter-spacing: 1px; transition: 0.2s;">Открыть панель администрирования</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="lightbox">
+    <span class="close-btn">&times;</span>
+    <img id="lightbox-img" src="" alt="Увеличенное фото" />
+</div>
+<div id="auth-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" id="close-modal">&times;</span>
+        <h2 id="auth-modal-title">Вход</h2>
+        <form id="auth-form">
+            <label>Имя пользователя</label>
+            <input type="text" id="auth-username" required />
+            <label>Пароль</label>
+            <input type="password" id="auth-password" required />
+            <button type="submit" class="btn-submit" id="auth-submit-btn">Войти</button>
+        </form>
+        <div class="switch-form" id="auth-switch">
+            Нет аккаунта? <span id="auth-switch-link">Зарегистрироваться</span>
+        </div>
+    </div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+<script>
+(function() {
+    'use strict';
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+    // ================================================================
+    // 1. ЛАЙТБОКС
+    // ================================================================
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn = document.querySelector('#lightbox .close-btn');
+    window.openLightbox = function(imgSrc) {
+        lightboxImg.src = imgSrc;
+        lightbox.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    };
+    function closeLightbox() {
+        lightbox.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+    if (closeBtn) closeBtn.addEventListener('click', function(e) { e.stopPropagation(); closeLightbox(); });
+    lightbox.addEventListener('click', function(e) { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && lightbox.style.display === 'flex') closeLightbox(); });
 
-    <script defer>
-        (function() {
-            'use strict';
-
-            // ============================================================
-            // 1. ЛАЙТБОКС (работает 100%)
-            // ============================================================
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImg = document.getElementById('lightbox-img');
-            const closeBtn = document.querySelector('#lightbox .close-btn');
-
-            window.openLightbox = function(imgSrc) {
-                lightboxImg.src = imgSrc;
-                lightbox.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-            };
-
-            function closeLightbox() {
-                lightbox.style.display = 'none';
-                document.body.style.overflow = '';
+    // ================================================================
+    // 2. НАВИГАЦИЯ
+    // ================================================================
+    const navLinks = document.querySelectorAll('.header-link[data-page]');
+    const pages = {};
+    document.querySelectorAll('.page').forEach(p => pages[p.id] = p);
+    function showPage(pageId) {
+        Object.values(pages).forEach(p => p.classList.remove('active'));
+        if (pages[pageId]) pages[pageId].classList.add('active');
+        navLinks.forEach(link => link.classList.toggle('active', link.dataset.page === pageId));
+    }
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const pageId = this.dataset.page;
+            if (pageId) showPage(pageId);
+            // Если это карты – загружаем их
+            if (pageId === 'page-maps') {
+                loadMaps();
             }
+        });
+    });
 
-            if (closeBtn) {
-                closeBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    closeLightbox();
+    // ================================================================
+    // 3. РАДИО (без изменений)
+    // ================================================================
+    let radioStations = [];
+    let currentStationIndex = 0;
+    let currentTrackIndex = 0;
+    let isPlaying = false;
+    const audio = new Audio();
+
+    const radioFreq = document.getElementById('radio-freq');
+    const radioPurpose = document.getElementById('radio-purpose');
+    const trackTitle = document.getElementById('track-title');
+    const radioDesc = document.getElementById('radio-desc');
+    const playlistSelect = document.getElementById('playlist-select');
+    const playBtn = document.getElementById('play-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const progressFill = document.getElementById('progress-fill');
+    const progressBar = document.getElementById('progress-bar');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationTimeEl = document.getElementById('duration-time');
+    let isSeeking = false;
+
+    async function loadRadioData() {
+        try {
+            const response = await fetch('radio_data.json');
+            if (!response.ok) throw new Error('Не удалось загрузить плейлист');
+            const data = await response.json();
+            radioStations = data.stations;
+            initRadio();
+        } catch (error) {
+            console.error('Ошибка загрузки радио:', error);
+            radioPurpose.innerText = 'ОШИБКА ЗАГРУЗКИ';
+            radioDesc.innerText = 'Проверьте наличие файла radio_data.json';
+        }
+    }
+    function initRadio() {
+        playlistSelect.innerHTML = '';
+        radioStations.forEach((station, index) => {
+            const opt = document.createElement('option');
+            opt.value = index;
+            opt.innerText = station.name;
+            playlistSelect.appendChild(opt);
+        });
+        updateDisplay();
+    }
+    function updateDisplay() {
+        const station = radioStations[currentStationIndex];
+        if (!station) return;
+        const track = station.tracks[currentTrackIndex];
+        if (isPlaying) {
+            radioFreq.innerText = `FREQ: ${station.frequency} MHz`;
+            radioPurpose.innerText = station.purpose.toUpperCase();
+            trackTitle.innerText = `▶ ${track.title.toUpperCase()}`;
+            radioDesc.innerText = station.desc;
+            playBtn.textContent = '⏸';
+            if (navigator.mediaSession) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: track.title,
+                    artist: 'FOXHOUND TAC-COM',
+                    album: station.name,
+                    artwork: [{ src: '/logo-foxhound.webp', sizes: '512x512', type: 'image/webp' }]
                 });
+                navigator.mediaSession.setActionHandler('play', () => { if (!isPlaying) toggleRadio(); });
+                navigator.mediaSession.setActionHandler('pause', () => { if (isPlaying) toggleRadio(); });
+                navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
+                navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
             }
+        } else {
+            radioFreq.innerText = 'FREQ: ---.--- MHz';
+            radioPurpose.innerText = 'СЕТЬ ОТКЛЮЧЕНА';
+            trackTitle.innerText = track ? track.title.toUpperCase() : 'ШУМ ЭФИРА...';
+            radioDesc.innerText = station.desc || 'Для активации нажмите ВКЛ';
+            playBtn.textContent = '▶';
+            if (navigator.mediaSession) navigator.mediaSession.metadata = null;
+        }
+        if (audio.src) updateProgress();
+    }
+    function toggleRadio() {
+        if (!isPlaying) {
+            if (!audio.src || audio.ended) playTrack();
+            else { audio.play().catch(console.warn); isPlaying = true; updateDisplay(); }
+        } else {
+            audio.pause(); isPlaying = false; updateDisplay();
+        }
+    }
+    function playTrack() {
+        const station = radioStations[currentStationIndex];
+        if (!station) return;
+        const track = station.tracks[currentTrackIndex];
+        if (!track) { currentTrackIndex = 0; playTrack(); return; }
+        audio.src = track.src;
+        audio.play().catch(console.warn);
+        isPlaying = true;
+        updateDisplay();
+        progressFill.style.width = '0%';
+        currentTimeEl.textContent = '00:00';
+    }
+    function changeChannel() {
+        currentStationIndex = parseInt(playlistSelect.value);
+        currentTrackIndex = 0;
+        if (isPlaying) playTrack();
+        else { updateDisplay(); progressFill.style.width = '0%'; currentTimeEl.textContent = '00:00'; durationTimeEl.textContent = '00:00'; audio.src = ''; }
+    }
+    function nextTrack() {
+        const station = radioStations[currentStationIndex];
+        if (!station) return;
+        currentTrackIndex++;
+        if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
+        if (isPlaying) playTrack(); else updateDisplay();
+    }
+    function prevTrack() {
+        const station = radioStations[currentStationIndex];
+        if (!station) return;
+        currentTrackIndex--;
+        if (currentTrackIndex < 0) currentTrackIndex = station.tracks.length - 1;
+        if (isPlaying) playTrack(); else updateDisplay();
+    }
+    audio.addEventListener('loadedmetadata', function() {
+        const dur = audio.duration;
+        if (isFinite(dur)) durationTimeEl.textContent = formatTime(dur);
+    });
+    audio.addEventListener('timeupdate', function() {
+        if (!isSeeking && isPlaying) updateProgress();
+    });
+    audio.addEventListener('ended', nextTrack);
+    function updateProgress() {
+        if (!audio.src || !isFinite(audio.duration)) return;
+        const percent = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = percent + '%';
+        currentTimeEl.textContent = formatTime(audio.currentTime);
+        const dur = audio.duration;
+        if (isFinite(dur) && durationTimeEl.textContent === '00:00') durationTimeEl.textContent = formatTime(dur);
+    }
+    function formatTime(seconds) {
+        if (!isFinite(seconds)) return '00:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+    progressBar.addEventListener('click', function(e) {
+        if (!audio.src) return;
+        const rect = this.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;
+        const seekTime = x * audio.duration;
+        if (isFinite(seekTime)) {
+            isSeeking = true;
+            audio.currentTime = seekTime;
+            progressFill.style.width = (x * 100) + '%';
+            currentTimeEl.textContent = formatTime(seekTime);
+            setTimeout(() => { isSeeking = false; }, 100);
+        }
+    });
+    playBtn.addEventListener('click', toggleRadio);
+    prevBtn.addEventListener('click', prevTrack);
+    nextBtn.addEventListener('click', nextTrack);
+    playlistSelect.addEventListener('change', changeChannel);
 
-            lightbox.addEventListener('click', function(e) {
-                if (e.target === lightbox) {
-                    closeLightbox();
-                }
-            });
+    // ================================================================
+    // 4. АВТОРИЗАЦИЯ (реальные API)
+    // ================================================================
+    let currentUser = null;
+    let lastMessageId = 0;
+    let pollInterval = null;
 
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && lightbox.style.display === 'flex') {
-                    closeLightbox();
-                }
-            });
+    const loginBtn = document.getElementById('login-btn');
+    const profileLink = document.getElementById('profile-link');
+    const logoutBtn = document.getElementById('logout-btn');
+    const authModal = document.getElementById('auth-modal');
+    const closeModal = document.getElementById('close-modal');
+    const authForm = document.getElementById('auth-form');
+    const authSubmitBtn = document.getElementById('auth-submit-btn');
+    const authSwitch = document.getElementById('auth-switch-link');
+    const authModalTitle = document.getElementById('auth-modal-title');
+    let isLoginMode = true;
 
-            // ============================================================
-            // 2. НАВИГАЦИЯ
-            // ============================================================
-            const navLinks = document.querySelectorAll('.header-link');
-            const pageIds = [
-                'page-home', 'page-calc', 'page-photo', 'page-operators',
-                'page-instructions', 'page-atak', 'page-maps',
-                'page-regulations', 'page-scenarios', 'page-devices'
-            ];
-            const pages = {};
-            pageIds.forEach(id => {
-                pages[id] = document.getElementById(id);
-            });
+    const profileAvatar = document.getElementById('profile-avatar');
+    const avatarPlaceholder = document.getElementById('avatar-placeholder');
+    const profileUsername = document.getElementById('profile-username');
+    const profileRole = document.getElementById('profile-role');
+    const profileStats = document.getElementById('profile-stats');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const chatSendBtn = document.getElementById('chat-send-btn');
 
-            let mapsLoaded = false;
-            let regulationsLoaded = false;
-            let scenariosLoaded = false;
-            let devicesLoaded = false;
-            let mapInitialized = false;
-            let mapInstance = null;
-            let currentPolygonId = null;
-            let layerGroups = {};
+    function playNotificationSound() {
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            gainNode.gain.value = 0.3;
+            oscillator.start();
+            setTimeout(() => {
+                oscillator.stop();
+            }, 150);
+        } catch (e) {}
+    }
 
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    const pageId = this.dataset.page;
-                    if (!pageId) return;
+    function apiRequest(url, method, body) {
+        return fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: body ? JSON.stringify(body) : undefined
+        }).then(res => res.json());
+    }
 
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-
-                    Object.values(pages).forEach(p => p.classList.remove('active'));
-
-                    const target = document.getElementById(pageId);
-                    if (target) target.classList.add('active');
-
-                    if (pageId === 'page-photo' && !window._photoLoaded) loadPhotos();
-                    if (pageId === 'page-operators' && !window._operatorsLoaded) loadOperators();
-                    if (pageId === 'page-instructions' && !window._instructionsLoaded) loadInstructions();
-                    if (pageId === 'page-atak' && !window._atakLoaded) loadAtak();
-
-                    if (pageId === 'page-maps' && !mapsLoaded) {
-                        loadMaps();
-                        mapsLoaded = true;
-                    }
-                    if (pageId === 'page-regulations' && !regulationsLoaded) {
-                        loadRegulations();
-                        regulationsLoaded = true;
-                    }
-                    if (pageId === 'page-scenarios' && !scenariosLoaded) {
-                        loadScenarios();
-                        scenariosLoaded = true;
-                    }
-                    if (pageId === 'page-devices' && !devicesLoaded) {
-                        loadDevices();
-                        devicesLoaded = true;
-                    }
-                });
-            });
-
-            // ============================================================
-            // 3. РАДИО (НОВАЯ ВЕРСИЯ С ПРОГРЕССОМ И MEDIASESSION)
-            // ============================================================
-            let radioStations = [];
-            let currentStationIndex = 0;
-            let currentTrackIndex = 0;
-            let isPlaying = false;
-            const audio = new Audio();
-
-            const radioFreq = document.getElementById('radio-freq');
-            const radioPurpose = document.getElementById('radio-purpose');
-            const trackTitle = document.getElementById('track-title');
-            const radioDesc = document.getElementById('radio-desc');
-            const playlistSelect = document.getElementById('playlist-select');
-            const playBtn = document.getElementById('play-btn');
-            const prevBtn = document.getElementById('prev-btn');
-            const nextBtn = document.getElementById('next-btn');
-
-            const progressFill = document.getElementById('progress-fill');
-            const progressBar = document.getElementById('progress-bar');
-            const currentTimeEl = document.getElementById('current-time');
-            const durationTimeEl = document.getElementById('duration-time');
-
-            let isSeeking = false;
-
-            async function loadRadioData() {
-                try {
-                    const response = await fetch('radio_data.json');
-                    if (!response.ok) throw new Error('Не удалось загрузить плейлист');
-                    const data = await response.json();
-                    radioStations = data.stations;
-                    initRadio();
-                } catch (error) {
-                    console.error('Ошибка загрузки радио:', error);
-                    radioPurpose.innerText = 'ОШИБКА ЗАГРУЗКИ';
-                    radioDesc.innerText = 'Проверьте наличие файла radio_data.json';
-                }
-            }
-
-            function initRadio() {
-                playlistSelect.innerHTML = '';
-                radioStations.forEach((station, index) => {
-                    const opt = document.createElement('option');
-                    opt.value = index;
-                    opt.innerText = station.name;
-                    playlistSelect.appendChild(opt);
-                });
-                updateDisplay();
-            }
-
-            function updateDisplay() {
-                const station = radioStations[currentStationIndex];
-                if (!station) return;
-                const track = station.tracks[currentTrackIndex];
-                if (isPlaying) {
-                    radioFreq.innerText = `FREQ: ${station.frequency} MHz`;
-                    radioPurpose.innerText = station.purpose.toUpperCase();
-                    trackTitle.innerText = `▶ ${track.title.toUpperCase()}`;
-                    radioDesc.innerText = station.desc;
-                    playBtn.innerText = '⏸';
-                    updateMediaSession(track.title, station.name);
+    function checkAuth() {
+        return apiRequest('/api/auth.php?action=check', 'GET')
+            .then(data => {
+                if (data.loggedin) {
+                    currentUser = data.user;
+                    updateAuthUI();
+                    loadProfile();
+                    startChatPolling();
                 } else {
-                    radioFreq.innerText = 'FREQ: ---.--- MHz';
-                    radioPurpose.innerText = 'СЕТЬ ОТКЛЮЧЕНА';
-                    trackTitle.innerText = track ? track.title.toUpperCase() : 'ШУМ ЭФИРА...';
-                    radioDesc.innerText = station.desc || 'Для активации нажмите ВКЛ';
-                    playBtn.innerText = '▶';
-                    if (!track) {
-                        if (navigator.mediaSession) navigator.mediaSession.metadata = null;
-                    }
+                    currentUser = null;
+                    updateAuthUI();
+                    stopChatPolling();
                 }
-                if (audio.src) {
-                    updateProgress();
-                }
-            }
+                return data;
+            });
+    }
 
-            function updateMediaSession(title, channelName) {
-                if ('mediaSession' in navigator) {
-                    navigator.mediaSession.metadata = new MediaMetadata({
-                        title: title,
-                        artist: 'FOXHOUND TAC-COM',
-                        album: channelName || 'Радио',
-                        artwork: [{ src: '/logo-foxhound.webp', sizes: '512x512', type: 'image/webp' }]
+    function login(username, password) {
+        return apiRequest('/api/auth.php?action=login', 'POST', { username, password })
+            .then(data => {
+                if (data.success) {
+                    return checkAuth();
+                } else {
+                    alert(data.error || 'Ошибка входа');
+                    return null;
+                }
+            });
+    }
+
+    function register(username, password) {
+        return apiRequest('/api/auth.php?action=register', 'POST', { username, password })
+            .then(data => {
+                if (data.success) {
+                    alert('Регистрация успешна! Вы автоматически вошли.');
+                    return checkAuth();
+                } else {
+                    alert(data.error || 'Ошибка регистрации');
+                    return null;
+                }
+            });
+    }
+
+    function logout() {
+        return apiRequest('/api/auth.php?action=logout', 'GET')
+            .then(() => {
+                currentUser = null;
+                updateAuthUI();
+                stopChatPolling();
+                showPage('page-home');
+                chatMessages.innerHTML = '<div style="color: var(--text-muted); text-align: center;">Авторизуйтесь, чтобы видеть сообщения.</div>';
+            });
+    }
+
+    function loadProfile() {
+        if (!currentUser) return;
+        profileUsername.textContent = currentUser.username || 'Боец';
+        const roleMap = {
+            'admin': 'АДМИН',
+            'user': 'ПОЛЬЗОВАТЕЛЬ'
+        };
+        profileRole.textContent = roleMap[currentUser.role] || 'Пользователь';
+        const regDate = currentUser.registered_at ? new Date(currentUser.registered_at * 1000).toLocaleDateString() : '—';
+        profileStats.textContent = `Зарегистрирован: ${regDate}`;
+        const avatarUrl = (currentUser.avatar && currentUser.avatar !== 'default.png') ? '/uploads/avatars/' + currentUser.avatar : null;
+        if (avatarUrl) {
+            profileAvatar.src = avatarUrl;
+            profileAvatar.style.display = 'block';
+            avatarPlaceholder.style.display = 'none';
+        } else {
+            profileAvatar.style.display = 'none';
+            avatarPlaceholder.style.display = 'flex';
+        }
+        updateAdminUI();
+        if (document.getElementById('tab-polls').classList.contains('active-pane')) {
+            loadPolls();
+        }
+        if (document.getElementById('tab-events').classList.contains('active-pane')) {
+            loadEvents();
+        }
+    }
+
+    function updateAdminUI() {
+        const isAdmin = currentUser && currentUser.role === 'admin';
+        const adminBtn = document.getElementById('admin-tab-btn');
+        if (adminBtn) adminBtn.style.display = isAdmin ? 'block' : 'none';
+        const eventForm = document.getElementById('event-create-form');
+        const pollForm = document.getElementById('poll-create-form');
+        if (eventForm) eventForm.style.display = isAdmin ? 'block' : 'none';
+        if (pollForm) pollForm.style.display = isAdmin ? 'block' : 'none';
+    }
+
+    function updateAuthUI() {
+        if (currentUser) {
+            loginBtn.style.display = 'none';
+            profileLink.style.display = 'inline-block';
+            chatInput.disabled = false;
+            chatSendBtn.disabled = false;
+            if (document.getElementById('page-profile').classList.contains('active')) loadProfile();
+        } else {
+            loginBtn.style.display = 'inline-block';
+            profileLink.style.display = 'none';
+            chatInput.disabled = true;
+            chatSendBtn.disabled = true;
+            if (document.getElementById('page-profile').classList.contains('active')) showPage('page-home');
+        }
+    }
+
+    function pollMessages() {
+        if (!currentUser) return;
+        fetch('/api/chat.php?since=' + lastMessageId)
+            .then(res => res.json())
+            .then(messages => {
+                if (messages.length) {
+                    messages.forEach(msg => {
+                        if (msg.user_id !== currentUser.id) {
+                            playNotificationSound();
+                        }
+                        appendMessage(msg);
+                        if (msg.id > lastMessageId) lastMessageId = msg.id;
                     });
-                    navigator.mediaSession.setActionHandler('play', () => { if (!isPlaying) toggleRadio(); });
-                    navigator.mediaSession.setActionHandler('pause', () => { if (isPlaying) toggleRadio(); });
-                    navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
-                    navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
                 }
-            }
+            })
+            .catch(console.warn);
+    }
 
-            function toggleRadio() {
-                if (!isPlaying) {
-                    if (!audio.src || audio.ended) {
-                        playTrack();
-                    } else {
-                        audio.play().catch(e => console.warn(e));
-                        isPlaying = true;
-                        updateDisplay();
-                    }
-                } else {
-                    audio.pause();
-                    isPlaying = false;
-                    updateDisplay();
+    function appendMessage(msg) {
+        const div = document.createElement('div');
+        div.className = 'chat-message';
+        const avatarUrl = (msg.avatar && msg.avatar !== 'default.png') ? '/uploads/avatars/' + msg.avatar : null;
+        const avatarHtml = avatarUrl ? `<img class="avatar" src="${avatarUrl}" alt="" />` : `<div class="avatar" style="display:flex;align-items:center;justify-content:center;font-size:18px;color:#666;">👤</div>`;
+        div.innerHTML = `
+            ${avatarHtml}
+            <div class="msg-content">
+                <span class="user">${msg.username}</span>
+                <span class="time">${new Date(msg.timestamp * 1000).toLocaleTimeString()}</span>
+                <div class="text">${msg.message}</div>
+            </div>
+        `;
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function startChatPolling() {
+        if (pollInterval) clearInterval(pollInterval);
+        fetch('/api/chat.php?since=0')
+            .then(res => res.json())
+            .then(messages => {
+                chatMessages.innerHTML = '';
+                messages.forEach(msg => {
+                    appendMessage(msg);
+                    if (msg.id > lastMessageId) lastMessageId = msg.id;
+                });
+            })
+            .catch(console.warn);
+        pollInterval = setInterval(pollMessages, 3000);
+    }
+
+    function stopChatPolling() {
+        if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+    }
+
+    function sendMessage(text) {
+        if (!currentUser) return;
+        fetch('/api/chat.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text })
+        })
+        .then(res => res.json())
+        .then(msg => {
+            if (msg.id) {
+                appendMessage(msg);
+                if (msg.id > lastMessageId) lastMessageId = msg.id;
+                chatInput.value = '';
+            } else {
+                alert('Ошибка отправки');
+            }
+        })
+        .catch(console.warn);
+    }
+
+    loginBtn.addEventListener('click', () => authModal.classList.add('active-modal'));
+    closeModal.addEventListener('click', () => authModal.classList.remove('active-modal'));
+    authModal.addEventListener('click', (e) => { if (e.target === authModal) authModal.classList.remove('active-modal'); });
+    authSwitch.addEventListener('click', function() {
+        isLoginMode = !isLoginMode;
+        authModalTitle.textContent = isLoginMode ? 'Вход' : 'Регистрация';
+        authSubmitBtn.textContent = isLoginMode ? 'Войти' : 'Зарегистрироваться';
+        authSwitch.textContent = isLoginMode ? 'Зарегистрироваться' : 'Войти';
+    });
+    authForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = document.getElementById('auth-username').value.trim();
+        const password = document.getElementById('auth-password').value.trim();
+        if (isLoginMode) {
+            login(username, password).then(() => authModal.classList.remove('active-modal'));
+        } else {
+            register(username, password).then(() => authModal.classList.remove('active-modal'));
+        }
+    });
+    logoutBtn.addEventListener('click', function() { if (confirm('Выйти из аккаунта?')) logout(); });
+    chatSendBtn.addEventListener('click', function() {
+        const text = chatInput.value.trim();
+        if (text) sendMessage(text);
+    });
+    chatInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const text = chatInput.value.trim();
+            if (text) sendMessage(text);
+        }
+    });
+
+    const avatarForm = document.getElementById('avatar-form');
+    const avatarFileInput = document.getElementById('avatar-file');
+    avatarForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!currentUser) {
+            alert('Сначала войдите в аккаунт.');
+            return;
+        }
+        const file = avatarFileInput.files[0];
+        if (!file) {
+            alert('Выберите файл для загрузки.');
+            return;
+        }
+        const formData = new FormData();
+        formData.append('avatar', file);
+        fetch('/api/profile.php?action=avatar', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert('Аватар обновлён!');
+                if (data.avatar) {
+                    profileAvatar.src = '/uploads/avatars/' + data.avatar;
+                    profileAvatar.style.display = 'block';
+                    avatarPlaceholder.style.display = 'none';
+                    if (currentUser) currentUser.avatar = data.avatar;
                 }
+                loadProfile();
+            } else {
+                alert('Ошибка: ' + (data.error || 'Неизвестная ошибка'));
             }
+        })
+        .catch(err => {
+            alert('Ошибка сети: ' + err.message);
+        });
+    });
 
-            function playTrack() {
-                const station = radioStations[currentStationIndex];
-                if (!station) return;
-                const track = station.tracks[currentTrackIndex];
-                if (!track) {
-                    currentTrackIndex = 0;
-                    playTrack();
+    // ================================================================
+    // 5. ВКЛАДКИ ПРОФИЛЯ
+    // ================================================================
+    const tabButtons = document.querySelectorAll('.profile-sidebar .tab-menu button[data-tab]');
+    const tabPanes = {
+        chat: document.getElementById('tab-chat'),
+        polls: document.getElementById('tab-polls'),
+        events: document.getElementById('tab-events'),
+        settings: document.getElementById('tab-settings'),
+        admin: document.getElementById('tab-admin')
+    };
+    tabButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            tabButtons.forEach(b => b.classList.remove('active-tab'));
+            this.classList.add('active-tab');
+            Object.keys(tabPanes).forEach(key => {
+                tabPanes[key].classList.remove('active-pane');
+            });
+            const tabId = this.dataset.tab;
+            if (tabPanes[tabId]) {
+                tabPanes[tabId].classList.add('active-pane');
+            }
+            if (tabId === 'polls') loadPolls();
+            if (tabId === 'events') loadEvents();
+        });
+    });
+
+    // ================================================================
+    // 6. КАРТЫ (УПРОЩЁННАЯ ВЕРСИЯ)
+    // ================================================================
+    let mapInitialized = false;
+    let mapInstance = null;
+    let currentPolygonId = null;
+    let layerGroups = {};
+
+    function loadMaps() {
+        const container = document.getElementById('map-container');
+        const select = document.getElementById('polygon-select');
+        const layersContainer = document.getElementById('map-layers');
+        const loading = document.getElementById('map-loading');
+
+        if (!container) {
+            console.error('Контейнер карты не найден');
+            return;
+        }
+
+        loading.style.display = 'block';
+        loading.innerHTML = 'Загрузка карт...';
+
+        fetch('/maps_data.json')
+            .then(res => {
+                if (!res.ok) throw new Error('Файл maps_data.json не найден');
+                return res.json();
+            })
+            .then(data => {
+                if (!data.polygons || data.polygons.length === 0) {
+                    loading.innerHTML = 'Нет доступных полигонов';
                     return;
                 }
-                audio.src = track.src;
-                audio.play().catch(e => console.warn('Не удалось воспроизвести:', e));
-                isPlaying = true;
-                updateDisplay();
-                progressFill.style.width = '0%';
-                currentTimeEl.textContent = '00:00';
-            }
 
-            function changeChannel() {
-                currentStationIndex = parseInt(playlistSelect.value);
-                currentTrackIndex = 0;
-                if (isPlaying) {
-                    playTrack();
-                } else {
-                    updateDisplay();
-                    progressFill.style.width = '0%';
-                    currentTimeEl.textContent = '00:00';
-                    durationTimeEl.textContent = '00:00';
-                    audio.src = '';
-                }
-            }
-
-            function nextTrack() {
-                const station = radioStations[currentStationIndex];
-                if (!station) return;
-                currentTrackIndex++;
-                if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
-                if (isPlaying) playTrack(); else updateDisplay();
-            }
-
-            function prevTrack() {
-                const station = radioStations[currentStationIndex];
-                if (!station) return;
-                currentTrackIndex--;
-                if (currentTrackIndex < 0) currentTrackIndex = station.tracks.length - 1;
-                if (isPlaying) playTrack(); else updateDisplay();
-            }
-
-            audio.addEventListener('loadedmetadata', function() {
-                const dur = audio.duration;
-                if (isFinite(dur)) {
-                    durationTimeEl.textContent = formatTime(dur);
-                }
-            });
-
-            audio.addEventListener('timeupdate', function() {
-                if (!isSeeking && isPlaying) {
-                    updateProgress();
-                }
-            });
-
-            audio.addEventListener('ended', function() {
-                nextTrack();
-            });
-
-            function updateProgress() {
-                if (!audio.src || !isFinite(audio.duration)) return;
-                const percent = (audio.currentTime / audio.duration) * 100;
-                progressFill.style.width = percent + '%';
-                currentTimeEl.textContent = formatTime(audio.currentTime);
-                const dur = audio.duration;
-                if (isFinite(dur) && durationTimeEl.textContent === '00:00') {
-                    durationTimeEl.textContent = formatTime(dur);
-                }
-            }
-
-            function formatTime(seconds) {
-                if (!isFinite(seconds)) return '00:00';
-                const mins = Math.floor(seconds / 60);
-                const secs = Math.floor(seconds % 60);
-                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            }
-
-            progressBar.addEventListener('click', function(e) {
-                if (!audio.src) return;
-                const rect = this.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / rect.width;
-                const seekTime = x * audio.duration;
-                if (isFinite(seekTime)) {
-                    isSeeking = true;
-                    audio.currentTime = seekTime;
-                    progressFill.style.width = (x * 100) + '%';
-                    currentTimeEl.textContent = formatTime(seekTime);
-                    setTimeout(() => { isSeeking = false; }, 100);
-                }
-            });
-
-            playBtn.addEventListener('click', toggleRadio);
-            prevBtn.addEventListener('click', prevTrack);
-            nextBtn.addEventListener('click', nextTrack);
-            playlistSelect.addEventListener('change', changeChannel);
-
-            // ============================================================
-            // 4. ЛОГИ
-            // ============================================================
-            async function loadLogs() {
-                try {
-                    const response = await fetch('log_data.json');
-                    if (!response.ok) throw new Error('Не удалось загрузить журнал');
-                    const data = await response.json();
-                    const container = document.getElementById('log-container');
-                    container.innerHTML = '';
-                    data.logs.forEach(entry => {
-                        const row = document.createElement('div');
-                        row.className = 'log-row';
-                        if (entry.style) row.style.cssText = entry.style;
-                        const dateSpan = document.createElement('span');
-                        dateSpan.className = 'log-date';
-                        dateSpan.textContent = entry.date;
-                        const textSpan = document.createElement('span');
-                        textSpan.textContent = entry.text;
-                        row.appendChild(dateSpan);
-                        row.appendChild(textSpan);
-                        container.appendChild(row);
-                    });
-                } catch (error) {
-                    console.error('Ошибка загрузки журнала:', error);
-                    document.getElementById('log-container').innerHTML =
-                        `<div class="log-row" style="color: var(--text-muted);">Ошибка загрузки записей. Проверьте файл log_data.json</div>`;
-                }
-            }
-
-            // ============================================================
-            // 5. КАЛЬКУЛЯТОР
-            // ============================================================
-            function initCalculator() {
-                const weightSlider = document.getElementById('weightSlider');
-                const speedSlider = document.getElementById('speedSlider');
-                const weightValue = document.getElementById('weightValue');
-                const speedValue = document.getElementById('speedValue');
-                const energyDisplay = document.getElementById('energyDisplay');
-                const speedOn20Display = document.getElementById('speedOn20Display');
-                const rows = document.querySelectorAll('#rulesTable tbody tr');
-                const statusSecondary = document.getElementById('statusSecondary');
-                const statusPrimary = document.getElementById('statusPrimary');
-                const statusSniper = document.getElementById('statusSniper');
-                const statusMsg = document.getElementById('statusMessage');
-
-                const LIMITS = {
-                    secondary: { maxEnergy: 1.5, distance: 0, label: 'Вторичка' },
-                    primary: { maxEnergy: 2.4, distance: 10, label: 'Основное' },
-                    sniper: { maxEnergy: 2.9, distance: 25, label: 'Снайперка' }
-                };
-
-                function getCategoryByEnergy(E) {
-                    if (E <= 1.5) return 'secondary';
-                    if (E <= 2.4) return 'primary';
-                    if (E <= 2.9) return 'sniper';
-                    return 'over';
-                }
-
-                function updateAll() {
-                    const m = parseFloat(weightSlider.value);
-                    const v = parseFloat(speedSlider.value);
-                    const E = (m * v * v) / 2000;
-                    const v20 = Math.sqrt(E * 2000 / 0.20);
-
-                    weightValue.textContent = m.toFixed(2) + ' г';
-                    speedValue.textContent = v.toFixed(0) + ' м/с';
-                    energyDisplay.textContent = E.toFixed(2) + ' Дж';
-                    speedOn20Display.textContent = v20.toFixed(0) + ' м/с';
-
-                    const category = getCategoryByEnergy(E);
-
-                    rows.forEach(row => row.classList.remove('active', 'warning'));
-
-                    let activeRow = null;
-                    rows.forEach(row => {
-                        if (row.dataset.weapon === category) {
-                            activeRow = row;
-                        }
-                    });
-
-                    let isAllowed = false;
-                    let limit = null;
-                    if (category !== 'over') {
-                        limit = LIMITS[category];
-                        isAllowed = E <= limit.maxEnergy;
-                    }
-
-                    if (activeRow) {
-                        if (isAllowed) {
-                            activeRow.classList.add('active');
-                        } else {
-                            activeRow.classList.add('warning');
-                        }
-                    }
-
-                    const statusMap = {
-                        secondary: statusSecondary,
-                        primary: statusPrimary,
-                        sniper: statusSniper
-                    };
-                    for (let w in statusMap) {
-                        const lim = LIMITS[w];
-                        const ok = E <= lim.maxEnergy;
-                        statusMap[w].textContent = ok ? '✔' : '✘';
-                        statusMap[w].style.color = ok ? 'var(--green)' : 'var(--red)';
-                    }
-
-                    if (category === 'over') {
-                        statusMsg.className = 'status-msg fail';
-                        statusMsg.innerHTML = '❌ Не допуск: превышен максимальный лимит (2.9 Дж)';
-                    } else if (isAllowed) {
-                        statusMsg.className = 'status-msg ok';
-                        statusMsg.innerHTML =
-                            `✅ Допуск: разрешено, дистанция ${limit.distance} м (категория «${limit.label}»)`;
-                    } else {
-                        statusMsg.className = 'status-msg fail';
-                        statusMsg.innerHTML =
-                            `❌ Не допуск: превышен лимит для «${limit.label}» (макс. ${limit.maxEnergy} Дж)`;
-                    }
-                }
-
-                weightSlider.addEventListener('input', updateAll);
-                speedSlider.addEventListener('input', updateAll);
-                updateAll();
-            }
-
-            // ============================================================
-            // 6. ЗАГРУЗКА ДАННЫХ (ФОТО, ОПЕРАТИВНИКИ, ИНСТРУКЦИИ, ATAK, КАРТЫ, УСТАВ, СЦЕНАРИИ, ДЕВАЙСЫ)
-            // ============================================================
-            async function loadPhotos() {
-                if (window._photoLoaded) return;
-                const container = document.getElementById('galleryContainer');
-                try {
-                    const response = await fetch('photo_data.json');
-                    if (!response.ok) throw new Error('Не удалось загрузить данные');
-                    const data = await response.json();
-                    if (!data.photos || data.photos.length === 0) {
-                        container.innerHTML = `<div class="no-data">Фотографий пока нет</div>`;
-                        window._photoLoaded = true;
-                        return;
-                    }
-                    container.innerHTML = '';
-                    data.photos.forEach(photo => {
-                        const card = document.createElement('div');
-                        card.className = 'photo-card';
-
-                        const img = document.createElement('img');
-                        img.src = photo.image || 'placeholder.webp';
-                        img.alt = photo.title || 'Фото';
-                        img.loading = 'lazy';
-                        img.onerror = function() {
-                            this.src =
-                                'data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'200\' viewBox=\'0 0 400 200\'%3E%3Crect fill=\'%23333\' width=\'400\' height=\'200\'/%3E%3Ctext fill=\'%23666\' x=\'50\' y=\'115\' font-family=\'sans-serif\' font-size=\'24\'%3EФото отсутствует%3C/text%3E%3C/svg%3E';
-                        };
-                        img.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            window.openLightbox(this.src);
-                        });
-
-                        const body = document.createElement('div');
-                        body.className = 'card-body';
-
-                        const title = document.createElement('div');
-                        title.className = 'card-title';
-                        title.textContent = photo.title || 'Без названия';
-
-                        const date = document.createElement('div');
-                        date.className = 'card-date';
-                        date.textContent = photo.date ? `📅 ${photo.date}` : '';
-
-                        const desc = document.createElement('div');
-                        desc.className = 'card-desc';
-                        desc.textContent = photo.description || '';
-
-                        body.appendChild(title);
-                        if (photo.date) body.appendChild(date);
-                        if (photo.description) body.appendChild(desc);
-
-                        card.appendChild(img);
-                        card.appendChild(body);
-                        container.appendChild(card);
-                    });
-                    window._photoLoaded = true;
-                } catch (error) {
-                    console.error('Ошибка загрузки галереи:', error);
-                    container.innerHTML =
-                        `<div class="error-msg">❌ Ошибка загрузки фотографий. Проверьте файл photo_data.json</div>`;
-                    window._photoLoaded = true;
-                }
-            }
-
-            async function loadOperators() {
-                if (window._operatorsLoaded) return;
-                const container = document.getElementById('operatorsContainer');
-                try {
-                    const response = await fetch('operators_data.json');
-                    if (!response.ok) throw new Error('Не удалось загрузить данные');
-                    const data = await response.json();
-                    if (!data.operators || data.operators.length === 0) {
-                        container.innerHTML = `<div class="no-data">Оперативников пока нет</div>`;
-                        window._operatorsLoaded = true;
-                        return;
-                    }
-                    container.innerHTML = '';
-                    data.operators.forEach(op => {
-                        const card = document.createElement('div');
-                        card.className = 'operator-card';
-
-                        const avatar = document.createElement('div');
-                        avatar.className = 'operator-avatar';
-
-                        if (op.photo) {
-                            const img = document.createElement('img');
-                            img.src = op.photo;
-                            img.alt = op.name || 'Оператор';
-                            img.loading = 'lazy';
-                            img.onerror = function() {
-                                this.style.display = 'none';
-                                avatar.textContent = op.avatar || '👤';
-                                avatar.style.fontSize = '56px';
-                            };
-                            avatar.appendChild(img);
-                        } else {
-                            avatar.textContent = op.avatar || '👤';
-                            avatar.style.fontSize = '56px';
-                        }
-
-                        const name = document.createElement('div');
-                        name.className = 'operator-name';
-                        name.textContent = op.name || 'Без имени';
-
-                        const role = document.createElement('div');
-                        role.className = 'operator-role';
-                        role.textContent = op.role || '';
-
-                        const desc = document.createElement('div');
-                        desc.className = 'operator-desc';
-                        desc.textContent = op.description || '';
-
-                        card.appendChild(avatar);
-                        card.appendChild(name);
-                        if (op.role) card.appendChild(role);
-                        if (op.description) card.appendChild(desc);
-
-                        if (op.specialization) {
-                            const spec = document.createElement('div');
-                            spec.className = 'operator-spec';
-                            spec.textContent = op.specialization;
-                            card.appendChild(spec);
-                        }
-
-                        container.appendChild(card);
-                    });
-                    window._operatorsLoaded = true;
-                } catch (error) {
-                    console.error('Ошибка загрузки оперативников:', error);
-                    container.innerHTML =
-                        `<div class="error-msg">❌ Ошибка загрузки данных. Проверьте файл operators_data.json</div>`;
-                    window._operatorsLoaded = true;
-                }
-            }
-
-            async function loadInstructions() {
-                if (window._instructionsLoaded) return;
-                const container = document.getElementById('docsContainer');
-                try {
-                    const response = await fetch('instructions_data.json');
-                    if (!response.ok) throw new Error('Не удалось загрузить инструкции');
-                    const data = await response.json();
-                    if (!data.documents || data.documents.length === 0) {
-                        container.innerHTML = `<div class="no-data">Документов пока нет</div>`;
-                        window._instructionsLoaded = true;
-                        return;
-                    }
-                    container.innerHTML = '';
-                    data.documents.forEach(doc => {
-                        const card = document.createElement('div');
-                        card.className = 'doc-card';
-
-                        const title = document.createElement('div');
-                        title.className = 'doc-title';
-                        title.textContent = doc.title || 'Без названия';
-
-                        const desc = document.createElement('div');
-                        desc.className = 'doc-desc';
-                        desc.textContent = doc.description || '';
-
-                        const link = document.createElement('a');
-                        link.className = 'doc-link';
-                        link.href = doc.link || '#';
-                        link.target = '_blank';
-                        link.textContent = '📄 Открыть PDF';
-                        link.rel = 'noopener noreferrer';
-
-                        card.appendChild(title);
-                        if (doc.description) card.appendChild(desc);
-                        card.appendChild(link);
-                        container.appendChild(card);
-                    });
-                    window._instructionsLoaded = true;
-                } catch (error) {
-                    console.error('Ошибка загрузки инструкций:', error);
-                    container.innerHTML =
-                        `<div class="error-msg">❌ Ошибка загрузки инструкций. Проверьте файл instructions_data.json</div>`;
-                    window._instructionsLoaded = true;
-                }
-            }
-
-            async function loadAtak() {
-                if (window._atakLoaded) return;
-                const container = document.getElementById('atakContainer');
-                try {
-                    const response = await fetch('atak_data.json');
-                    if (!response.ok) throw new Error('Не удалось загрузить руководство ATAK');
-                    const data = await response.json();
-                    if (!data.sections || data.sections.length === 0) {
-                        container.innerHTML = `<div class="no-data">Разделы отсутствуют</div>`;
-                        window._atakLoaded = true;
-                        return;
-                    }
-                    container.innerHTML = '';
-                    const tree = document.createElement('div');
-                    tree.className = 'atak-tree';
-                    data.sections.forEach(section => {
-                        const node = createAtakNode(section, 0);
-                        tree.appendChild(node);
-                    });
-                    container.appendChild(tree);
-                    window._atakLoaded = true;
-                } catch (error) {
-                    console.error('Ошибка загрузки ATAK:', error);
-                    container.innerHTML =
-                        `<div class="error-msg">❌ Ошибка загрузки руководства ATAK. Проверьте файл atak_data.json</div>`;
-                    window._atakLoaded = true;
-                }
-            }
-
-            function createAtakNode(item, depth) {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'atak-node';
-
-                const header = document.createElement('div');
-                header.className = 'node-header';
-                const titleSpan = document.createElement('span');
-                titleSpan.textContent = item.title || 'Без названия';
-                header.appendChild(titleSpan);
-
-                const hasChildren = item.children && item.children.length > 0;
-                const hasContent = item.content && item.content.trim().length > 0;
-
-                if (hasChildren || hasContent) {
-                    const arrow = document.createElement('span');
-                    arrow.className = 'arrow';
-                    arrow.textContent = '▶';
-                    header.appendChild(arrow);
-
-                    const childContainer = document.createElement('div');
-                    childContainer.className = 'node-children';
-
-                    if (hasContent) {
-                        const contentDiv = document.createElement('div');
-                        contentDiv.className = 'node-content';
-                        contentDiv.innerHTML = item.content;
-                        childContainer.appendChild(contentDiv);
-                    }
-
-                    if (hasChildren) {
-                        item.children.forEach(child => {
-                            const childNode = createAtakNode(child, depth + 1);
-                            childContainer.appendChild(childNode);
-                        });
-                    }
-
-                    wrapper.appendChild(header);
-                    wrapper.appendChild(childContainer);
-
-                    header.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        const arrowEl = this.querySelector('.arrow');
-                        const childrenEl = this.parentElement.querySelector('.node-children');
-                        if (childrenEl) {
-                            const isOpen = childrenEl.classList.contains('open');
-                            if (isOpen) {
-                                childrenEl.classList.remove('open');
-                                if (arrowEl) arrowEl.classList.remove('open');
-                            } else {
-                                childrenEl.classList.add('open');
-                                if (arrowEl) arrowEl.classList.add('open');
-                            }
-                        }
-                    });
-                } else {
-                    wrapper.classList.add('node-leaf');
-                    wrapper.appendChild(header);
-                }
-
-                return wrapper;
-            }
-
-            async function loadMaps() {
-                const container = document.getElementById('map-container');
-                const select = document.getElementById('polygon-select');
-                const layersContainer = document.getElementById('map-layers');
-                const loading = document.getElementById('map-loading');
-
-                try {
-                    const response = await fetch('maps_data.json');
-                    if (!response.ok) throw new Error('Не удалось загрузить данные карт');
-                    const data = await response.json();
-                    if (!data.polygons || data.polygons.length === 0) {
-                        loading.style.display = 'block';
-                        loading.innerHTML = 'Нет доступных полигонов';
-                        return;
-                    }
-
-                    select.innerHTML = '';
-                    data.polygons.forEach(p => {
-                        const opt = document.createElement('option');
-                        opt.value = p.id;
-                        opt.textContent = p.name;
-                        select.appendChild(opt);
-                    });
-
-                    if (!mapInitialized) {
-                        mapInstance = L.map('map-container', {
-                            center: data.polygons[0].center,
-                            zoom: data.polygons[0].zoom,
-                            zoomControl: true,
-                            attributionControl: true
-                        });
-                        L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-                            maxZoom: 20,
-                            subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-                        }).addTo(mapInstance);
-                        mapInitialized = true;
-                    }
-
-                    currentPolygonId = data.polygons[0].id;
-                    switchPolygon(currentPolygonId, data);
-
-                    select.addEventListener('change', function() {
-                        const id = this.value;
-                        currentPolygonId = id;
-                        switchPolygon(id, data);
-                    });
-
-                    setTimeout(() => mapInstance.invalidateSize(), 500);
-
-                } catch (error) {
-                    console.error('Ошибка загрузки карт:', error);
-                    loading.style.display = 'block';
-                    loading.innerHTML = '❌ Ошибка загрузки карт. Проверьте файл maps_data.json';
-                    loading.style.color = 'var(--red)';
-                }
-            }
-
-            function switchPolygon(polygonId, data) {
-                const polygon = data.polygons.find(p => p.id === polygonId);
-                if (!polygon) return;
-
-                mapInstance.setView(polygon.center, polygon.zoom);
-
-                for (let key in layerGroups) {
-                    if (mapInstance.hasLayer(layerGroups[key])) {
-                        mapInstance.removeLayer(layerGroups[key]);
-                    }
-                }
-                layerGroups = {};
-
-                const layersContainer = document.getElementById('map-layers');
-                layersContainer.innerHTML = '';
-
-                polygon.layers.forEach(layerData => {
-                    const group = L.layerGroup();
-                    layerGroups[layerData.id] = group;
-
-                    if (layerData.url) {
-                        fetch(layerData.url)
-                            .then(res => res.json())
-                            .then(geojson => {
-                                L.geoJSON(geojson, {
-                                    style: layerData.style || { color: '#ff6600', weight: 2 },
-                                    onEachFeature: function(feature, layer) {
-                                        if (feature.properties && feature.properties.name) {
-                                            layer.bindPopup(feature.properties.name);
-                                        }
-                                    }
-                                }).addTo(group);
-                            })
-                            .catch(err => console.warn('Ошибка загрузки GeoJSON:', err));
-                    } else if (layerData.geojson) {
-                        L.geoJSON(layerData.geojson, {
-                            style: layerData.style || { color: '#ff6600', weight: 2 }
-                        }).addTo(group);
-                    }
-
-                    if (layerData.visible !== false) {
-                        mapInstance.addLayer(group);
-                    }
-
-                    const cbWrapper = document.createElement('div');
-                    cbWrapper.className = 'map-layer-item';
-                    const cb = document.createElement('input');
-                    cb.type = 'checkbox';
-                    cb.id = `layer-${layerData.id}`;
-                    cb.checked = layerData.visible !== false;
-                    const label = document.createElement('label');
-                    label.htmlFor = `layer-${layerData.id}`;
-                    label.textContent = layerData.name || layerData.id;
-
-                    cb.addEventListener('change', function() {
-                        if (this.checked) {
-                            mapInstance.addLayer(layerGroups[layerData.id]);
-                        } else {
-                            mapInstance.removeLayer(layerGroups[layerData.id]);
-                        }
-                    });
-
-                    cbWrapper.appendChild(cb);
-                    cbWrapper.appendChild(label);
-                    layersContainer.appendChild(cbWrapper);
+                // Заполняем select
+                select.innerHTML = '';
+                data.polygons.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p.id;
+                    opt.textContent = p.name;
+                    select.appendChild(opt);
                 });
 
-                if (polygon.layers.length > 0) {
-                    const header = document.createElement('div');
-                    header.style.cssText = 'margin-top:8px; font-weight:700; color: var(--text-muted);';
-                    header.textContent = 'Слои:';
-                    layersContainer.prepend(header);
-                }
-
-                setTimeout(() => mapInstance.invalidateSize(), 100);
-            }
-
-            async function loadRegulations() {
-                const container = document.getElementById('regulationsContainer');
-                try {
-                    const response = await fetch('regulations_data.json');
-                    if (!response.ok) throw new Error('Не удалось загрузить устав');
-                    const data = await response.json();
-                    if (!data.sections || data.sections.length === 0) {
-                        container.innerHTML = `<div class="no-data">Разделы устава отсутствуют</div>`;
-                        return;
-                    }
-                    container.innerHTML = '';
-                    const tree = document.createElement('div');
-                    tree.className = 'atak-tree';
-                    data.sections.forEach(section => {
-                        const node = createAtakNode(section, 0);
-                        tree.appendChild(node);
+                if (!mapInitialized) {
+                    mapInstance = L.map('map-container', {
+                        center: data.polygons[0].center,
+                        zoom: data.polygons[0].zoom,
+                        zoomControl: true,
+                        attributionControl: true
                     });
-                    container.appendChild(tree);
-                } catch (error) {
-                    console.error('Ошибка загрузки устава:', error);
-                    container.innerHTML =
-                        `<div class="error-msg">❌ Ошибка загрузки устава. Проверьте файл regulations_data.json</div>`;
+                    L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+                        maxZoom: 19,
+                        attribution: 'Google Satellite'
+                    }).addTo(mapInstance);
+                    mapInitialized = true;
                 }
+
+                currentPolygonId = data.polygons[0].id;
+                switchPolygon(currentPolygonId, data);
+
+                select.addEventListener('change', function() {
+                    currentPolygonId = this.value;
+                    switchPolygon(currentPolygonId, data);
+                });
+
+                loading.style.display = 'none';
+                setTimeout(() => mapInstance.invalidateSize(), 300);
+            })
+            .catch(err => {
+                console.error('Ошибка загрузки карт:', err);
+                loading.innerHTML = '❌ Ошибка загрузки карт. Проверьте файл maps_data.json';
+                loading.style.color = 'var(--red)';
+            });
+    }
+
+    function switchPolygon(polygonId, data) {
+        const polygon = data.polygons.find(p => p.id === polygonId);
+        if (!polygon) return;
+
+        mapInstance.setView(polygon.center, polygon.zoom);
+
+        // Удаляем старые слои
+        for (let key in layerGroups) {
+            if (mapInstance.hasLayer(layerGroups[key])) {
+                mapInstance.removeLayer(layerGroups[key]);
             }
+        }
+        layerGroups = {};
 
-            async function loadScenarios() {
-                const container = document.getElementById('scenariosContainer');
-                try {
-                    const response = await fetch('scenarios_data.json');
-                    if (!response.ok) throw new Error('Не удалось загрузить сценарии');
-                    const data = await response.json();
-                    if (!data.scenarios || data.scenarios.length === 0) {
-                        container.innerHTML = `<div class="no-data">Сценариев пока нет</div>`;
-                        return;
-                    }
-                    container.innerHTML = '';
-                    data.scenarios.forEach((scenario, index) => {
-                        const card = document.createElement('div');
-                        card.className = 'item-card';
+        const layersContainer = document.getElementById('map-layers');
+        layersContainer.innerHTML = '';
 
-                        const titleDiv = document.createElement('div');
-                        titleDiv.className = 'item-title';
-                        titleDiv.innerHTML = `
-                            <span>${scenario.title || 'Без названия'}</span>
-                            <span class="arrow">▶</span>
-                        `;
-                        card.appendChild(titleDiv);
+        if (!polygon.layers || polygon.layers.length === 0) {
+            const msg = document.createElement('div');
+            msg.style.cssText = 'color: var(--text-muted); font-style: italic;';
+            msg.textContent = 'Слои для этого полигона отсутствуют.';
+            layersContainer.appendChild(msg);
+            return;
+        }
 
-                        const details = document.createElement('div');
-                        details.className = 'item-details';
+        polygon.layers.forEach(layerData => {
+            const group = L.layerGroup();
+            layerGroups[layerData.id] = group;
 
-                        if (scenario.description) {
-                            const descDiv = document.createElement('div');
-                            descDiv.style.cssText = 'margin-bottom:10px; color: var(--text-color); font-size:16px; line-height:1.5;';
-                            descDiv.textContent = scenario.description;
-                            details.appendChild(descDiv);
-                        }
-
-                        if (scenario.video_link) {
-                            const videoDiv = document.createElement('div');
-                            videoDiv.className = 'item-video';
-                            const iframe = document.createElement('iframe');
-                            iframe.width = '100%';
-                            iframe.height = '315';
-                            iframe.src = scenario.video_link;
-                            iframe.style.border = 'none';
-                            iframe.allowFullscreen = true;
-                            iframe.loading = 'lazy';
-                            videoDiv.appendChild(iframe);
-                            details.appendChild(videoDiv);
-                        }
-
-                        if (scenario.phases && scenario.phases.length > 0) {
-                            const phasesDiv = document.createElement('div');
-                            phasesDiv.style.marginTop = '10px';
-                            const phasesTitle = document.createElement('div');
-                            phasesTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
-                            phasesTitle.textContent = '🔹 Фазы';
-                            phasesDiv.appendChild(phasesTitle);
-
-                            scenario.phases.forEach(phase => {
-                                const phaseBlock = document.createElement('div');
-                                phaseBlock.style.cssText = 'margin-bottom:12px; padding-left:10px; border-left:2px solid var(--accent-color);';
-                                const phaseName = document.createElement('div');
-                                phaseName.style.cssText = 'font-weight:700; color:#fff; font-size:16px;';
-                                phaseName.textContent = `${phase.name} (${phase.time})`;
-                                phaseBlock.appendChild(phaseName);
-                                if (phase.description) {
-                                    const desc = document.createElement('div');
-                                    desc.style.cssText = 'color: var(--text-color); font-size:15px; margin:4px 0;';
-                                    desc.textContent = phase.description;
-                                    phaseBlock.appendChild(desc);
+            if (layerData.url) {
+                fetch(layerData.url)
+                    .then(res => {
+                        if (!res.ok) throw new Error('404');
+                        return res.json();
+                    })
+                    .then(geojson => {
+                        L.geoJSON(geojson, {
+                            style: layerData.style || { color: '#ff6600', weight: 2 },
+                            onEachFeature: function(feature, layer) {
+                                if (feature.properties && feature.properties.name) {
+                                    layer.bindPopup(feature.properties.name);
                                 }
-                                if (phase.map_image) {
-                                    const img = document.createElement('img');
-                                    img.src = phase.map_image;
-                                    img.loading = 'lazy';
-                                    img.style.cssText = 'max-width:100%; height:auto; border:1px solid var(--border-color); margin-top:6px;';
-                                    img.alt = phase.name;
-                                    phaseBlock.appendChild(img);
-                                }
-                                phasesDiv.appendChild(phaseBlock);
-                            });
-                            details.appendChild(phasesDiv);
-                        }
-
-                        if (scenario.inventory && scenario.inventory.length > 0) {
-                            const invDiv = document.createElement('div');
-                            invDiv.style.marginTop = '10px';
-                            const invTitle = document.createElement('div');
-                            invTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
-                            invTitle.textContent = '📦 Инвентарь';
-                            invDiv.appendChild(invTitle);
-
-                            const list = document.createElement('ul');
-                            list.style.cssText = 'margin-left:20px; color: var(--text-color);';
-                            scenario.inventory.forEach(item => {
-                                const li = document.createElement('li');
-                                li.textContent = item;
-                                list.appendChild(li);
-                            });
-                            invDiv.appendChild(list);
-                            details.appendChild(invDiv);
-                        }
-
-                        if (scenario.files && scenario.files.length > 0) {
-                            const filesDiv = document.createElement('div');
-                            filesDiv.className = 'item-files';
-                            const filesTitle = document.createElement('div');
-                            filesTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
-                            filesTitle.textContent = '📁 Файлы';
-                            filesDiv.appendChild(filesTitle);
-
-                            const list = document.createElement('ul');
-                            scenario.files.forEach(file => {
-                                const li = document.createElement('li');
-                                const link = document.createElement('a');
-                                link.href = file.link;
-                                link.target = '_blank';
-                                link.textContent = file.name;
-                                link.style.cssText = 'color: var(--blue); text-decoration: none; font-weight:700; border:1px solid var(--blue); padding:4px 14px; transition:0.2s; display:inline-block;';
-                                li.appendChild(link);
-                                list.appendChild(li);
-                            });
-                            filesDiv.appendChild(list);
-                            details.appendChild(filesDiv);
-                        }
-
-                        card.appendChild(details);
-
-                        titleDiv.addEventListener('click', function() {
-                            const isOpen = details.classList.contains('open');
-                            if (isOpen) {
-                                details.classList.remove('open');
-                                this.querySelector('.arrow').classList.remove('open');
-                            } else {
-                                details.classList.add('open');
-                                this.querySelector('.arrow').classList.add('open');
                             }
-                        });
-
-                        container.appendChild(card);
-                    });
-                } catch (error) {
-                    console.error('Ошибка загрузки сценариев:', error);
-                    container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки сценариев. Проверьте файл scenarios_data.json</div>`;
-                }
+                        }).addTo(group);
+                    })
+                    .catch(err => console.warn('Не удалось загрузить слой:', layerData.url, err));
+            } else if (layerData.geojson) {
+                L.geoJSON(layerData.geojson, {
+                    style: layerData.style || { color: '#ff6600', weight: 2 }
+                }).addTo(group);
             }
 
-            async function loadDevices() {
-                const container = document.getElementById('devicesContainer');
-                try {
-                    const response = await fetch('devices_data.json');
-                    if (!response.ok) throw new Error('Не удалось загрузить устройства');
-                    const data = await response.json();
-                    if (!data.devices || data.devices.length === 0) {
-                        container.innerHTML = `<div class="no-data">Устройств пока нет</div>`;
-                        return;
-                    }
-                    container.innerHTML = '';
-                    data.devices.forEach((device, index) => {
-                        const card = document.createElement('div');
-                        card.className = 'item-card';
-
-                        const titleDiv = document.createElement('div');
-                        titleDiv.className = 'item-title';
-                        titleDiv.innerHTML = `
-                            <span>${device.name || 'Без названия'}</span>
-                            <span class="arrow">▶</span>
-                        `;
-                        card.appendChild(titleDiv);
-
-                        const details = document.createElement('div');
-                        details.className = 'item-details';
-
-                        if (device.photo) {
-                            const photo = document.createElement('img');
-                            photo.src = device.photo;
-                            photo.className = 'item-photo';
-                            photo.loading = 'lazy';
-                            photo.style.maxWidth = '100%';
-                            photo.style.border = '1px solid var(--border-color)';
-                            details.appendChild(photo);
-                        }
-
-                        if (device.description) {
-                            const desc = document.createElement('div');
-                            desc.className = 'item-description';
-                            desc.textContent = device.description;
-                            details.appendChild(desc);
-                        }
-
-                        if (device.video_link) {
-                            const videoDiv = document.createElement('div');
-                            videoDiv.className = 'item-video';
-                            const iframe = document.createElement('iframe');
-                            iframe.width = '100%';
-                            iframe.height = '315';
-                            iframe.src = device.video_link;
-                            iframe.style.border = 'none';
-                            iframe.allowFullscreen = true;
-                            iframe.loading = 'lazy';
-                            videoDiv.appendChild(iframe);
-                            details.appendChild(videoDiv);
-                        }
-
-                        const linksDiv = document.createElement('div');
-                        linksDiv.className = 'item-links';
-                        if (device.schematic_link) {
-                            const a = document.createElement('a');
-                            a.href = device.schematic_link;
-                            a.target = '_blank';
-                            a.textContent = '📐 Схема';
-                            linksDiv.appendChild(a);
-                        }
-                        if (device.docs_link) {
-                            const a = document.createElement('a');
-                            a.href = device.docs_link;
-                            a.target = '_blank';
-                            a.textContent = '📄 Документация';
-                            linksDiv.appendChild(a);
-                        }
-                        if (device.files && device.files.length > 0) {
-                            device.files.forEach(file => {
-                                const a = document.createElement('a');
-                                a.href = file.link;
-                                a.target = '_blank';
-                                a.textContent = file.name;
-                                linksDiv.appendChild(a);
-                            });
-                        }
-                        if (linksDiv.children.length > 0) {
-                            details.appendChild(linksDiv);
-                        }
-
-                        card.appendChild(details);
-
-                        titleDiv.addEventListener('click', function() {
-                            const isOpen = details.classList.contains('open');
-                            if (isOpen) {
-                                details.classList.remove('open');
-                                this.querySelector('.arrow').classList.remove('open');
-                            } else {
-                                details.classList.add('open');
-                                this.querySelector('.arrow').classList.add('open');
-                            }
-                        });
-
-                        container.appendChild(card);
-                    });
-                } catch (error) {
-                    console.error('Ошибка загрузки устройств:', error);
-                    container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки устройств. Проверьте файл devices_data.json</div>`;
-                }
+            if (layerData.visible !== false) {
+                mapInstance.addLayer(group);
             }
 
-            // ============================================================
-            // 7. ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
-            // ============================================================
-            document.addEventListener('DOMContentLoaded', function() {
-                loadRadioData();
-                loadLogs();
-                initCalculator();
+            const cbWrapper = document.createElement('div');
+            cbWrapper.className = 'map-layer-item';
+            const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.id = `layer-${layerData.id}`;
+            cb.checked = layerData.visible !== false;
+            const label = document.createElement('label');
+            label.htmlFor = `layer-${layerData.id}`;
+            label.textContent = layerData.name || layerData.id;
+
+            cb.addEventListener('change', function() {
+                if (this.checked) {
+                    mapInstance.addLayer(layerGroups[layerData.id]);
+                } else {
+                    mapInstance.removeLayer(layerGroups[layerData.id]);
+                }
             });
 
-        })();
-    </script>
+            cbWrapper.appendChild(cb);
+            cbWrapper.appendChild(label);
+            layersContainer.appendChild(cbWrapper);
+        });
 
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then(reg => console.log('SW registered:', reg))
-                .catch(err => console.error('SW registration failed:', err));
+        if (polygon.layers.length > 0) {
+            const header = document.createElement('div');
+            header.style.cssText = 'margin-top:8px; font-weight:700; color: var(--text-muted);';
+            header.textContent = 'Слои:';
+            layersContainer.prepend(header);
         }
-    </script>
+
+        setTimeout(() => mapInstance.invalidateSize(), 100);
+    }
+
+    // ================================================================
+    // 7. ЛОГИ
+    // ================================================================
+    async function loadLogs() {
+        try {
+            const response = await fetch('log_data.json');
+            if (!response.ok) throw new Error('Не удалось загрузить журнал');
+            const data = await response.json();
+            const container = document.getElementById('log-container');
+            container.innerHTML = '';
+            data.logs.forEach(entry => {
+                const row = document.createElement('div');
+                row.className = 'log-row';
+                if (entry.style) row.style.cssText = entry.style;
+                const dateSpan = document.createElement('span');
+                dateSpan.className = 'log-date';
+                dateSpan.textContent = entry.date;
+                const textSpan = document.createElement('span');
+                textSpan.textContent = entry.text;
+                row.appendChild(dateSpan);
+                row.appendChild(textSpan);
+                container.appendChild(row);
+            });
+        } catch (error) {
+            console.error('Ошибка загрузки журнала:', error);
+            document.getElementById('log-container').innerHTML = '<div class="log-row" style="color: var(--text-muted);">Ошибка загрузки записей.</div>';
+        }
+    }
+
+    // ================================================================
+    // 8. КАЛЬКУЛЯТОР
+    // ================================================================
+    function initCalculator() {
+        const weightSlider = document.getElementById('weightSlider');
+        const speedSlider = document.getElementById('speedSlider');
+        const weightValue = document.getElementById('weightValue');
+        const speedValue = document.getElementById('speedValue');
+        const energyDisplay = document.getElementById('energyDisplay');
+        const speedOn20Display = document.getElementById('speedOn20Display');
+        const rows = document.querySelectorAll('#rulesTable tbody tr');
+        const statusSecondary = document.getElementById('statusSecondary');
+        const statusPrimary = document.getElementById('statusPrimary');
+        const statusSniper = document.getElementById('statusSniper');
+        const statusMsg = document.getElementById('statusMessage');
+        const LIMITS = {
+            secondary: { maxEnergy: 1.5, distance: 0, label: 'Вторичка' },
+            primary: { maxEnergy: 2.4, distance: 10, label: 'Основное' },
+            sniper: { maxEnergy: 2.9, distance: 25, label: 'Снайперка' }
+        };
+        function getCategoryByEnergy(E) {
+            if (E <= 1.5) return 'secondary';
+            if (E <= 2.4) return 'primary';
+            if (E <= 2.9) return 'sniper';
+            return 'over';
+        }
+        function updateAll() {
+            const m = parseFloat(weightSlider.value);
+            const v = parseFloat(speedSlider.value);
+            const E = (m * v * v) / 2000;
+            const v20 = Math.sqrt(E * 2000 / 0.20);
+            weightValue.textContent = m.toFixed(2) + ' г';
+            speedValue.textContent = v.toFixed(0) + ' м/с';
+            energyDisplay.textContent = E.toFixed(2) + ' Дж';
+            speedOn20Display.textContent = v20.toFixed(0) + ' м/с';
+            const category = getCategoryByEnergy(E);
+            rows.forEach(row => row.classList.remove('active', 'warning'));
+            let activeRow = null;
+            rows.forEach(row => { if (row.dataset.weapon === category) activeRow = row; });
+            let isAllowed = false;
+            let limit = null;
+            if (category !== 'over') {
+                limit = LIMITS[category];
+                isAllowed = E <= limit.maxEnergy;
+            }
+            if (activeRow) {
+                if (isAllowed) activeRow.classList.add('active');
+                else activeRow.classList.add('warning');
+            }
+            const statusMap = { secondary: statusSecondary, primary: statusPrimary, sniper: statusSniper };
+            for (let w in statusMap) {
+                const lim = LIMITS[w];
+                const ok = E <= lim.maxEnergy;
+                statusMap[w].textContent = ok ? '✔' : '✘';
+                statusMap[w].style.color = ok ? 'var(--green)' : 'var(--red)';
+            }
+            if (category === 'over') {
+                statusMsg.className = 'status-msg fail';
+                statusMsg.innerHTML = '❌ Не допуск: превышен максимальный лимит (2.9 Дж)';
+            } else if (isAllowed) {
+                statusMsg.className = 'status-msg ok';
+                statusMsg.innerHTML = `✅ Допуск: разрешено, дистанция ${limit.distance} м (категория «${limit.label}»)`;
+            } else {
+                statusMsg.className = 'status-msg fail';
+                statusMsg.innerHTML = `❌ Не допуск: превышен лимит для «${limit.label}» (макс. ${limit.maxEnergy} Дж)`;
+            }
+        }
+        weightSlider.addEventListener('input', updateAll);
+        speedSlider.addEventListener('input', updateAll);
+        updateAll();
+    }
+
+    // ================================================================
+    // 9. ГОЛОСОВАНИЯ
+    // ================================================================
+    let pollsArchived = false;
+    function loadPolls() {
+        const container = document.getElementById('polls-list');
+        container.innerHTML = '<p>Загрузка...</p>';
+        const url = '/api/polls.php' + (pollsArchived ? '?archived=1' : '');
+        fetch(url)
+            .then(res => res.json())
+            .then(polls => {
+                if (!polls.length) {
+                    container.innerHTML = '<p style="color: var(--text-muted);">' + (pollsArchived ? 'Нет завершённых опросов.' : 'Нет активных голосований.') + '</p>';
+                    return;
+                }
+                let html = '';
+                polls.forEach(poll => {
+                    const options = poll.options || [];
+                    const votes = poll.vote_counts || [];
+                    const total = poll.total_votes || 0;
+                    const myVote = poll.my_vote !== null ? poll.my_vote : -1;
+                    let optionsHtml = options.map((label, idx) => {
+                        const count = votes[idx] || 0;
+                        const percent = total > 0 ? Math.round((count / total) * 100) : 0;
+                        const isMine = (myVote === idx) ? '✅ ' : '';
+                        return `<div style="margin: 4px 0;">
+                                    <span>${isMine}${label}</span>
+                                    <span style="float:right;">${count} (${percent}%)</span>
+                                    <div style="width:100%; height:4px; background:#2a2a2a; border-radius:2px; margin-top:2px;">
+                                        <div style="width:${percent}%; height:100%; background:var(--accent-color); border-radius:2px;"></div>
+                                    </div>
+                                    ${myVote === -1 && !pollsArchived ? `<button class="radio-btn" style="font-size:12px; padding:2px 8px;" onclick="window.votePoll(${poll.id}, ${idx})">Голосовать</button>` : ''}
+                                </div>`;
+                    }).join('');
+                    html += `
+                        <div style="background: #0a0a0a; border: 1px solid var(--border-color); padding: 12px; margin-bottom: 10px;">
+                            <strong style="color: #fff;">${poll.title}</strong>
+                            <div style="font-size: 13px; color: #666;">До: ${new Date(poll.expires_at * 1000).toLocaleString()}</div>
+                            <div style="margin-top: 8px;">${optionsHtml}</div>
+                            ${currentUser && currentUser.role === 'admin' ? `<button class="radio-btn" style="font-size:13px; padding:4px 12px; border-color: var(--red); color: var(--red);" onclick="window.deletePoll(${poll.id})">🗑️ Удалить опрос</button>` : ''}
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            })
+            .catch(err => {
+                container.innerHTML = '<p style="color: var(--red);">Ошибка загрузки опросов</p>';
+                console.error(err);
+            });
+    }
+    window.votePoll = function(pollId, optionIndex) {
+        if (!currentUser) return alert('Войдите в аккаунт');
+        fetch('/api/polls.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'vote', poll_id: pollId, option_index: optionIndex })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) loadPolls();
+            else alert('Ошибка: ' + (data.error || 'Неизвестно'));
+        })
+        .catch(err => alert('Ошибка сети'));
+    };
+    window.deletePoll = function(pollId) {
+        if (!confirm('Удалить опрос?')) return;
+        fetch('/api/polls.php', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ poll_id: pollId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) loadPolls();
+            else alert('Ошибка: ' + (data.error || 'Неизвестно'));
+        })
+        .catch(err => alert('Ошибка сети'));
+    };
+    document.getElementById('polls-toggle-archived')?.addEventListener('click', function() {
+        pollsArchived = !pollsArchived;
+        this.textContent = pollsArchived ? 'Показать активные' : 'Показать архив';
+        loadPolls();
+    });
+    const pollForm = document.getElementById('poll-form');
+    if (pollForm) {
+        pollForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const title = document.getElementById('poll-title').value.trim();
+            const optionsRaw = document.getElementById('poll-options').value.trim();
+            const expiresInput = document.getElementById('poll-expires');
+            const expiresValue = expiresInput.value;
+            if (!title || !optionsRaw || !expiresValue) {
+                alert('Заполните все поля');
+                return;
+            }
+            const options = optionsRaw.split(',').map(s => s.trim()).filter(s => s);
+            if (options.length < 2) {
+                alert('Минимум 2 варианта');
+                return;
+            }
+            const dateObj = new Date(expiresValue);
+            const expires_at = Math.floor(dateObj.getTime() / 1000);
+            if (isNaN(expires_at) || expires_at <= Math.floor(Date.now() / 1000)) {
+                alert('Дата должна быть в будущем');
+                return;
+            }
+            fetch('/api/polls.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'create', title, options, expires_at })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    loadPolls();
+                    pollForm.reset();
+                } else alert('Ошибка: ' + (data.error || 'Неизвестно'));
+            })
+            .catch(err => alert('Ошибка сети'));
+        });
+    }
+
+    // ================================================================
+    // 10. КАЛЕНДАРЬ
+    // ================================================================
+    let eventsArchived = false;
+    function loadEvents() {
+        const container = document.getElementById('events-list');
+        container.innerHTML = '<p>Загрузка...</p>';
+        const url = '/api/events.php' + (eventsArchived ? '?archived=1' : '');
+        fetch(url)
+            .then(res => res.json())
+            .then(events => {
+                if (!events.length) {
+                    container.innerHTML = '<p style="color: var(--text-muted);">' + (eventsArchived ? 'Нет завершённых событий.' : 'Нет предстоящих событий.') + '</p>';
+                    return;
+                }
+                let html = '';
+                events.forEach(ev => {
+                    const date = new Date(ev.event_date * 1000).toLocaleString();
+                    const going = ev.going_count || 0;
+                    const rsvpStatus = ev.rsvp_status !== null ? (ev.rsvp_status == 1 ? '✅ Вы идёте' : '❌ Вы не идёте') : 'Не определились';
+                    html += `
+                        <div style="background: #0a0a0a; border: 1px solid var(--border-color); padding: 12px; margin-bottom: 10px;">
+                            <strong style="color: #fff;">${ev.title}</strong>
+                            <div style="color: var(--text-muted); font-size: 14px;">${ev.description || ''}</div>
+                            <div style="font-size: 13px; color: #666;">📍 ${ev.location || 'Не указано'} | 🕒 ${date}</div>
+                            <div style="font-size: 13px; color: #666;">👥 Идут: ${going}</div>
+                            <div style="font-size: 13px; color: var(--accent-color);">${rsvpStatus}</div>
+                            <div style="margin-top: 6px;">
+                                <button class="radio-btn" style="font-size:13px; padding:4px 12px;" onclick="window.setRSVP(${ev.id}, 1)">👍 Пойду</button>
+                                <button class="radio-btn" style="font-size:13px; padding:4px 12px;" onclick="window.setRSVP(${ev.id}, 0)">👎 Не пойду</button>
+                                ${currentUser && currentUser.role === 'admin' ? `<button class="radio-btn" style="font-size:13px; padding:4px 12px; border-color: var(--red); color: var(--red);" onclick="window.deleteEvent(${ev.id})">🗑️ Удалить</button>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            })
+            .catch(err => {
+                container.innerHTML = '<p style="color: var(--red);">Ошибка загрузки событий</p>';
+                console.error(err);
+            });
+    }
+    window.setRSVP = function(eventId, status) {
+        if (!currentUser) return alert('Войдите в аккаунт');
+        fetch('/api/events.php', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ event_id: eventId, status: status })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) loadEvents();
+            else alert('Ошибка: ' + (data.error || 'Неизвестно'));
+        })
+        .catch(err => alert('Ошибка сети'));
+    };
+    window.deleteEvent = function(eventId) {
+        if (!confirm('Удалить событие?')) return;
+        fetch('/api/events.php', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ event_id: eventId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) loadEvents();
+            else alert('Ошибка: ' + (data.error || 'Неизвестно'));
+        })
+        .catch(err => alert('Ошибка сети'));
+    };
+    document.getElementById('events-toggle-archived')?.addEventListener('click', function() {
+        eventsArchived = !eventsArchived;
+        this.textContent = eventsArchived ? 'Показать предстоящие' : 'Показать архив';
+        loadEvents();
+    });
+    const eventForm = document.getElementById('event-form');
+    if (eventForm) {
+        eventForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const title = document.getElementById('event-title').value.trim();
+            const description = document.getElementById('event-desc').value.trim();
+            const location = document.getElementById('event-location').value.trim();
+            const dateInput = document.getElementById('event-date');
+            const dateValue = dateInput.value;
+            if (!title || !dateValue) {
+                alert('Название и дата обязательны');
+                return;
+            }
+            const dateObj = new Date(dateValue);
+            const event_date = Math.floor(dateObj.getTime() / 1000);
+            if (isNaN(event_date) || event_date <= Math.floor(Date.now() / 1000)) {
+                alert('Дата должна быть в будущем');
+                return;
+            }
+            fetch('/api/events.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'create', title, description, event_date, location })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    loadEvents();
+                    eventForm.reset();
+                } else alert('Ошибка: ' + (data.error || 'Неизвестно'));
+            })
+            .catch(err => alert('Ошибка сети'));
+        });
+    }
+
+    // ================================================================
+    // 11. ЗАГРУЗКА ДАННЫХ (ФОТО, ОПЕРАТИВНИКИ, ИНСТРУКЦИИ, ATAK, УСТАВ, СЦЕНАРИИ, ДЕВАЙСЫ)
+    // ================================================================
+    async function loadPhotos() {
+        if (window._photoLoaded) return;
+        const container = document.getElementById('galleryContainer');
+        try {
+            const response = await fetch('photo_data.json');
+            if (!response.ok) throw new Error('Не удалось загрузить данные');
+            const data = await response.json();
+            if (!data.photos || data.photos.length === 0) {
+                container.innerHTML = `<div class="no-data">Фотографий пока нет</div>`;
+                window._photoLoaded = true;
+                return;
+            }
+            container.innerHTML = '';
+            data.photos.forEach(photo => {
+                const card = document.createElement('div');
+                card.className = 'photo-card';
+                const img = document.createElement('img');
+                img.src = photo.image || 'placeholder.webp';
+                img.alt = photo.title || 'Фото';
+                img.loading = 'lazy';
+                img.onerror = function() {
+                    this.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'200\' viewBox=\'0 0 400 200\'%3E%3Crect fill=\'%23333\' width=\'400\' height=\'200\'/%3E%3Ctext fill=\'%23666\' x=\'50\' y=\'115\' font-family=\'sans-serif\' font-size=\'24\'%3EФото отсутствует%3C/text%3E%3C/svg%3E';
+                };
+                img.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    window.openLightbox(this.src);
+                });
+                const body = document.createElement('div');
+                body.className = 'card-body';
+                const title = document.createElement('div');
+                title.className = 'card-title';
+                title.textContent = photo.title || 'Без названия';
+                const date = document.createElement('div');
+                date.className = 'card-date';
+                date.textContent = photo.date ? `📅 ${photo.date}` : '';
+                const desc = document.createElement('div');
+                desc.className = 'card-desc';
+                desc.textContent = photo.description || '';
+                body.appendChild(title);
+                if (photo.date) body.appendChild(date);
+                if (photo.description) body.appendChild(desc);
+                card.appendChild(img);
+                card.appendChild(body);
+                container.appendChild(card);
+            });
+            window._photoLoaded = true;
+        } catch (error) {
+            console.error('Ошибка загрузки галереи:', error);
+            container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки фотографий. Проверьте файл photo_data.json</div>`;
+            window._photoLoaded = true;
+        }
+    }
+
+    async function loadOperators() {
+        if (window._operatorsLoaded) return;
+        const container = document.getElementById('operatorsContainer');
+        try {
+            const response = await fetch('operators_data.json');
+            if (!response.ok) throw new Error('Не удалось загрузить данные');
+            const data = await response.json();
+            if (!data.operators || data.operators.length === 0) {
+                container.innerHTML = `<div class="no-data">Оперативников пока нет</div>`;
+                window._operatorsLoaded = true;
+                return;
+            }
+            container.innerHTML = '';
+            data.operators.forEach(op => {
+                const card = document.createElement('div');
+                card.className = 'operator-card';
+                const avatar = document.createElement('div');
+                avatar.className = 'operator-avatar';
+                if (op.photo) {
+                    const img = document.createElement('img');
+                    img.src = op.photo;
+                    img.alt = op.name || 'Оператор';
+                    img.loading = 'lazy';
+                    img.onerror = function() {
+                        this.style.display = 'none';
+                        avatar.textContent = op.avatar || '👤';
+                        avatar.style.fontSize = '56px';
+                    };
+                    avatar.appendChild(img);
+                } else {
+                    avatar.textContent = op.avatar || '👤';
+                    avatar.style.fontSize = '56px';
+                }
+                const name = document.createElement('div');
+                name.className = 'operator-name';
+                name.textContent = op.name || 'Без имени';
+                const role = document.createElement('div');
+                role.className = 'operator-role';
+                role.textContent = op.role || '';
+                const desc = document.createElement('div');
+                desc.className = 'operator-desc';
+                desc.textContent = op.description || '';
+                card.appendChild(avatar);
+                card.appendChild(name);
+                if (op.role) card.appendChild(role);
+                if (op.description) card.appendChild(desc);
+                if (op.specialization) {
+                    const spec = document.createElement('div');
+                    spec.className = 'operator-spec';
+                    spec.textContent = op.specialization;
+                    card.appendChild(spec);
+                }
+                container.appendChild(card);
+            });
+            window._operatorsLoaded = true;
+        } catch (error) {
+            console.error('Ошибка загрузки оперативников:', error);
+            container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки данных. Проверьте файл operators_data.json</div>`;
+            window._operatorsLoaded = true;
+        }
+    }
+
+    async function loadInstructions() {
+        if (window._instructionsLoaded) return;
+        const container = document.getElementById('docsContainer');
+        try {
+            const response = await fetch('instructions_data.json');
+            if (!response.ok) throw new Error('Не удалось загрузить инструкции');
+            const data = await response.json();
+            if (!data.documents || data.documents.length === 0) {
+                container.innerHTML = `<div class="no-data">Документов пока нет</div>`;
+                window._instructionsLoaded = true;
+                return;
+            }
+            container.innerHTML = '';
+            data.documents.forEach(doc => {
+                const card = document.createElement('div');
+                card.className = 'doc-card';
+                const title = document.createElement('div');
+                title.className = 'doc-title';
+                title.textContent = doc.title || 'Без названия';
+                const desc = document.createElement('div');
+                desc.className = 'doc-desc';
+                desc.textContent = doc.description || '';
+                const link = document.createElement('a');
+                link.className = 'doc-link';
+                link.href = doc.link || '#';
+                link.target = '_blank';
+                link.textContent = '📄 Открыть PDF';
+                link.rel = 'noopener noreferrer';
+                card.appendChild(title);
+                if (doc.description) card.appendChild(desc);
+                card.appendChild(link);
+                container.appendChild(card);
+            });
+            window._instructionsLoaded = true;
+        } catch (error) {
+            console.error('Ошибка загрузки инструкций:', error);
+            container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки инструкций. Проверьте файл instructions_data.json</div>`;
+            window._instructionsLoaded = true;
+        }
+    }
+
+    async function loadAtak() {
+        if (window._atakLoaded) return;
+        const container = document.getElementById('atakContainer');
+        try {
+            const response = await fetch('atak_data.json');
+            if (!response.ok) throw new Error('Не удалось загрузить руководство ATAK');
+            const data = await response.json();
+            if (!data.sections || data.sections.length === 0) {
+                container.innerHTML = `<div class="no-data">Разделы отсутствуют</div>`;
+                window._atakLoaded = true;
+                return;
+            }
+            container.innerHTML = '';
+            const tree = document.createElement('div');
+            tree.className = 'atak-tree';
+            data.sections.forEach(section => {
+                const node = createAtakNode(section, 0);
+                tree.appendChild(node);
+            });
+            container.appendChild(tree);
+            window._atakLoaded = true;
+        } catch (error) {
+            console.error('Ошибка загрузки ATAK:', error);
+            container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки руководства ATAK. Проверьте файл atak_data.json</div>`;
+            window._atakLoaded = true;
+        }
+    }
+
+    function createAtakNode(item, depth) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'atak-node';
+        const header = document.createElement('div');
+        header.className = 'node-header';
+        const titleSpan = document.createElement('span');
+        titleSpan.textContent = item.title || 'Без названия';
+        header.appendChild(titleSpan);
+        const hasChildren = item.children && item.children.length > 0;
+        const hasContent = item.content && item.content.trim().length > 0;
+        if (hasChildren || hasContent) {
+            const arrow = document.createElement('span');
+            arrow.className = 'arrow';
+            arrow.textContent = '▶';
+            header.appendChild(arrow);
+            const childContainer = document.createElement('div');
+            childContainer.className = 'node-children';
+            if (hasContent) {
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'node-content';
+                contentDiv.innerHTML = item.content;
+                childContainer.appendChild(contentDiv);
+            }
+            if (hasChildren) {
+                item.children.forEach(child => {
+                    const childNode = createAtakNode(child, depth + 1);
+                    childContainer.appendChild(childNode);
+                });
+            }
+            wrapper.appendChild(header);
+            wrapper.appendChild(childContainer);
+            header.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const arrowEl = this.querySelector('.arrow');
+                const childrenEl = this.parentElement.querySelector('.node-children');
+                if (childrenEl) {
+                    const isOpen = childrenEl.classList.contains('open');
+                    if (isOpen) {
+                        childrenEl.classList.remove('open');
+                        if (arrowEl) arrowEl.classList.remove('open');
+                    } else {
+                        childrenEl.classList.add('open');
+                        if (arrowEl) arrowEl.classList.add('open');
+                    }
+                }
+            });
+        } else {
+            wrapper.classList.add('node-leaf');
+            wrapper.appendChild(header);
+        }
+        return wrapper;
+    }
+
+    async function loadRegulations() {
+        const container = document.getElementById('regulationsContainer');
+        try {
+            const response = await fetch('regulations_data.json');
+            if (!response.ok) throw new Error('Не удалось загрузить устав');
+            const data = await response.json();
+            if (!data.sections || data.sections.length === 0) {
+                container.innerHTML = `<div class="no-data">Разделы устава отсутствуют</div>`;
+                return;
+            }
+            container.innerHTML = '';
+            const tree = document.createElement('div');
+            tree.className = 'atak-tree';
+            data.sections.forEach(section => {
+                const node = createAtakNode(section, 0);
+                tree.appendChild(node);
+            });
+            container.appendChild(tree);
+        } catch (error) {
+            console.error('Ошибка загрузки устава:', error);
+            container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки устава. Проверьте файл regulations_data.json</div>`;
+        }
+    }
+
+    async function loadScenarios() {
+        const container = document.getElementById('scenariosContainer');
+        try {
+            const response = await fetch('scenarios_data.json');
+            if (!response.ok) throw new Error('Не удалось загрузить сценарии');
+            const data = await response.json();
+            if (!data.scenarios || data.scenarios.length === 0) {
+                container.innerHTML = `<div class="no-data">Сценариев пока нет</div>`;
+                return;
+            }
+            container.innerHTML = '';
+            data.scenarios.forEach((scenario) => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'item-title';
+                titleDiv.innerHTML = `
+                    <span>${scenario.title || 'Без названия'}</span>
+                    <span class="arrow">▶</span>
+                `;
+                card.appendChild(titleDiv);
+                const details = document.createElement('div');
+                details.className = 'item-details';
+                if (scenario.description) {
+                    const descDiv = document.createElement('div');
+                    descDiv.style.cssText = 'margin-bottom:10px; color: var(--text-color); font-size:16px; line-height:1.5;';
+                    descDiv.textContent = scenario.description;
+                    details.appendChild(descDiv);
+                }
+                if (scenario.video_link) {
+                    const videoDiv = document.createElement('div');
+                    videoDiv.className = 'item-video';
+                    const iframe = document.createElement('iframe');
+                    iframe.width = '100%';
+                    iframe.height = '315';
+                    iframe.src = scenario.video_link;
+                    iframe.style.border = 'none';
+                    iframe.allowFullscreen = true;
+                    iframe.loading = 'lazy';
+                    videoDiv.appendChild(iframe);
+                    details.appendChild(videoDiv);
+                }
+                if (scenario.phases && scenario.phases.length > 0) {
+                    const phasesDiv = document.createElement('div');
+                    phasesDiv.style.marginTop = '10px';
+                    const phasesTitle = document.createElement('div');
+                    phasesTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
+                    phasesTitle.textContent = '🔹 Фазы';
+                    phasesDiv.appendChild(phasesTitle);
+                    scenario.phases.forEach(phase => {
+                        const phaseBlock = document.createElement('div');
+                        phaseBlock.style.cssText = 'margin-bottom:12px; padding-left:10px; border-left:2px solid var(--accent-color);';
+                        const phaseName = document.createElement('div');
+                        phaseName.style.cssText = 'font-weight:700; color:#fff; font-size:16px;';
+                        phaseName.textContent = `${phase.name} (${phase.time})`;
+                        phaseBlock.appendChild(phaseName);
+                        if (phase.description) {
+                            const desc = document.createElement('div');
+                            desc.style.cssText = 'color: var(--text-color); font-size:15px; margin:4px 0;';
+                            desc.textContent = phase.description;
+                            phaseBlock.appendChild(desc);
+                        }
+                        if (phase.map_image) {
+                            const img = document.createElement('img');
+                            img.src = phase.map_image;
+                            img.loading = 'lazy';
+                            img.style.cssText = 'max-width:100%; height:auto; border:1px solid var(--border-color); margin-top:6px;';
+                            img.alt = phase.name;
+                            phaseBlock.appendChild(img);
+                        }
+                        phasesDiv.appendChild(phaseBlock);
+                    });
+                    details.appendChild(phasesDiv);
+                }
+                if (scenario.inventory && scenario.inventory.length > 0) {
+                    const invDiv = document.createElement('div');
+                    invDiv.style.marginTop = '10px';
+                    const invTitle = document.createElement('div');
+                    invTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
+                    invTitle.textContent = '📦 Инвентарь';
+                    invDiv.appendChild(invTitle);
+                    const list = document.createElement('ul');
+                    list.style.cssText = 'margin-left:20px; color: var(--text-color);';
+                    scenario.inventory.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        list.appendChild(li);
+                    });
+                    invDiv.appendChild(list);
+                    details.appendChild(invDiv);
+                }
+                if (scenario.files && scenario.files.length > 0) {
+                    const filesDiv = document.createElement('div');
+                    filesDiv.className = 'item-files';
+                    const filesTitle = document.createElement('div');
+                    filesTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
+                    filesTitle.textContent = '📁 Файлы';
+                    filesDiv.appendChild(filesTitle);
+                    const list = document.createElement('ul');
+                    scenario.files.forEach(file => {
+                        const li = document.createElement('li');
+                        const link = document.createElement('a');
+                        link.href = file.link;
+                        link.target = '_blank';
+                        link.textContent = file.name;
+                        link.style.cssText = 'color: var(--blue); text-decoration: none; font-weight:700; border:1px solid var(--blue); padding:4px 14px; transition:0.2s; display:inline-block;';
+                        li.appendChild(link);
+                        list.appendChild(li);
+                    });
+                    filesDiv.appendChild(list);
+                    details.appendChild(filesDiv);
+                }
+                card.appendChild(details);
+                titleDiv.addEventListener('click', function() {
+                    const isOpen = details.classList.contains('open');
+                    if (isOpen) {
+                        details.classList.remove('open');
+                        this.querySelector('.arrow').classList.remove('open');
+                    } else {
+                        details.classList.add('open');
+                        this.querySelector('.arrow').classList.add('open');
+                    }
+                });
+                container.appendChild(card);
+            });
+        } catch (error) {
+            console.error('Ошибка загрузки сценариев:', error);
+            container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки сценариев. Проверьте файл scenarios_data.json</div>`;
+        }
+    }
+
+    async function loadDevices() {
+        const container = document.getElementById('devicesContainer');
+        try {
+            const response = await fetch('devices_data.json');
+            if (!response.ok) throw new Error('Не удалось загрузить устройства');
+            const data = await response.json();
+            if (!data.devices || data.devices.length === 0) {
+                container.innerHTML = `<div class="no-data">Устройств пока нет</div>`;
+                return;
+            }
+            container.innerHTML = '';
+            data.devices.forEach((device) => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'item-title';
+                titleDiv.innerHTML = `
+                    <span>${device.name || 'Без названия'}</span>
+                    <span class="arrow">▶</span>
+                `;
+                card.appendChild(titleDiv);
+                const details = document.createElement('div');
+                details.className = 'item-details';
+                if (device.photo) {
+                    const photo = document.createElement('img');
+                    photo.src = device.photo;
+                    photo.className = 'item-photo';
+                    photo.loading = 'lazy';
+                    photo.style.maxWidth = '100%';
+                    photo.style.border = '1px solid var(--border-color)';
+                    details.appendChild(photo);
+                }
+                if (device.description) {
+                    const desc = document.createElement('div');
+                    desc.className = 'item-description';
+                    desc.textContent = device.description;
+                    details.appendChild(desc);
+                }
+                if (device.video_link) {
+                    const videoDiv = document.createElement('div');
+                    videoDiv.className = 'item-video';
+                    const iframe = document.createElement('iframe');
+                    iframe.width = '100%';
+                    iframe.height = '315';
+                    iframe.src = device.video_link;
+                    iframe.style.border = 'none';
+                    iframe.allowFullscreen = true;
+                    iframe.loading = 'lazy';
+                    videoDiv.appendChild(iframe);
+                    details.appendChild(videoDiv);
+                }
+                const linksDiv = document.createElement('div');
+                linksDiv.className = 'item-links';
+                if (device.schematic_link) {
+                    const a = document.createElement('a');
+                    a.href = device.schematic_link;
+                    a.target = '_blank';
+                    a.textContent = '📐 Схема';
+                    linksDiv.appendChild(a);
+                }
+                if (device.docs_link) {
+                    const a = document.createElement('a');
+                    a.href = device.docs_link;
+                    a.target = '_blank';
+                    a.textContent = '📄 Документация';
+                    linksDiv.appendChild(a);
+                }
+                if (device.files && device.files.length > 0) {
+                    device.files.forEach(file => {
+                        const a = document.createElement('a');
+                        a.href = file.link;
+                        a.target = '_blank';
+                        a.textContent = file.name;
+                        linksDiv.appendChild(a);
+                    });
+                }
+                if (linksDiv.children.length > 0) {
+                    details.appendChild(linksDiv);
+                }
+                card.appendChild(details);
+                titleDiv.addEventListener('click', function() {
+                    const isOpen = details.classList.contains('open');
+                    if (isOpen) {
+                        details.classList.remove('open');
+                        this.querySelector('.arrow').classList.remove('open');
+                    } else {
+                        details.classList.add('open');
+                        this.querySelector('.arrow').classList.add('open');
+                    }
+                });
+                container.appendChild(card);
+            });
+        } catch (error) {
+            console.error('Ошибка загрузки устройств:', error);
+            container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки устройств. Проверьте файл devices_data.json</div>`;
+        }
+    }
+
+    // ================================================================
+    // 12. ИНИЦИАЛИЗАЦИЯ
+    // ================================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        checkAuth().then(() => {
+            loadRadioData();
+            loadLogs();
+            initCalculator();
+            loadPhotos();
+            loadOperators();
+            loadInstructions();
+            loadAtak();
+            loadRegulations();
+            loadScenarios();
+            loadDevices();
+            showPage('page-home');
+        });
+    });
+})();
+</script>
 </body>
 </html>

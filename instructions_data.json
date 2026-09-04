@@ -1,24 +1,29 @@
 {
-  "documents": [
-    {
-      "title": "Инструкция по эксплуатации Baofeng UV-5R для подразделения FOXHOUND",
-      "description": "Подробное руководство по программированию частот, настройке шумоподавления и работе с рацией.",
-      "link": "https://drive.google.com/file/d/1lqhdzkjiZO5rINonas9uNr1Ic5Z-ysun/view?usp=drive_link"
-    },
-    {
-      "title": "Гирбоксы AEG: Устройство, версии и совместимость",
-      "description": "Экспресс-курс по внутреннему устройству страйкбольного оружия",
-      "link": "https://drive.google.com/file/d/1eb9yoIiE1l06ZQBDJUmWL-1WQ1SUfOfq/view?usp=drive_link"
-    },
-    {
-      "title": "Экспресс-курс по медицине",
-      "description": "Медицинское сопровождение в страйболе для подразделения FOXHOUND",
-      "link": "https://drive.google.com/file/d/1Ims0YoqZX4VOx1a2c9_7fI3kb66dw6_E/view?usp=drive_link"
-    },
-	{
-      "title": "Практическое руководство по ATAK-CIV 5.7.0",
-      "description": "Справочное пособие по основам навигации, целеуказания и обмена данными в геоинформационной системе ATAK-CIV версии 5.7.0",
-      "link": "https://drive.google.com/file/d/1-Z4KqSWaH679kor9GjKnWna398S4OnIa/view?usp=drive_link"
-    }
-  ]
+    "documents": [
+        {
+            "title": "Инструкция по эксплуатации Baofeng UV-5R для подразделения FOXHOUND",
+            "description": "Подробное руководство по программированию частот, настройке шумоподавления и работе с рацией.",
+            "link": "https:\/\/drive.google.com\/file\/d\/1lqhdzkjiZO5rINonas9uNr1Ic5Z-ysun\/view?usp=drive_link"
+        },
+        {
+            "title": "Гирбоксы AEG: Устройство, версии и совместимость",
+            "description": "Экспресс-курс по внутреннему устройству страйкбольного оружия",
+            "link": "https:\/\/drive.google.com\/file\/d\/1eb9yoIiE1l06ZQBDJUmWL-1WQ1SUfOfq\/view?usp=drive_link"
+        },
+        {
+            "title": "Экспресс-курс по медицине",
+            "description": "Медицинское сопровождение в страйболе для подразделения FOXHOUND",
+            "link": "https:\/\/drive.google.com\/file\/d\/1Ims0YoqZX4VOx1a2c9_7fI3kb66dw6_E\/view?usp=drive_link"
+        },
+        {
+            "title": "Практическое руководство по ATAK-CIV 5.7.0",
+            "description": "Справочное пособие по основам навигации, целеуказания и обмена данными в геоинформационной системе ATAK-CIV версии 5.7.0",
+            "link": "https:\/\/drive.google.com\/file\/d\/1-Z4KqSWaH679kor9GjKnWna398S4OnIa\/view?usp=drive_link"
+        },
+        {
+            "title": "Набор инструментов для подразделения FOXHOUND",
+            "description": "Комплектация рюкзака для быстрого устранения неисправностей привода и экипировки в полевых условиях.",
+            "link": "https:\/\/drive.google.com\/file\/d\/1sOuHQts5pvEayIZoOs_RngRIOpoLBdFB\/view?usp=drive_link"
+        }
+    ]
 }
