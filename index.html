@@ -7,13 +7,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"></noscript>
     <link rel="preload" href="logo-foxhound.webp" as="image">
     <link rel="preload" href="background.mp4" as="video" type="video/mp4">
     <link rel="manifest" href="/manifest.json">
     <style>
-        /* ===== ВСЕ СТИЛИ (без изменений) ===== */
         :root {
             --bg-color: #0a0a0a;
             --panel-bg: #111111;
@@ -137,6 +137,14 @@
             color: var(--text-muted);
             white-space: nowrap;
         }
+        #auth-block .profile-btn {
+            padding: 8px 18px;
+            font-size: 16px;
+        }
+        #auth-block #login-btn {
+            padding: 8px 18px;
+            font-size: 16px;
+        }
         #auth-block .header-link:hover {
             color: #fff;
             background: rgba(255,102,0,0.08);
@@ -146,8 +154,13 @@
             color: var(--accent-color);
             background: rgba(255,102,0,0.05);
         }
-        #auth-block .profile-btn:hover {
+        #auth-block .profile-btn.active-profile {
             background: var(--accent-color);
+            color: #0a0a0a;
+            border-color: var(--accent-color);
+        }
+        #auth-block .profile-btn.active-profile:hover {
+            background: #ff8833;
             color: #0a0a0a;
         }
         .nav-wrapper {
@@ -169,7 +182,9 @@
             margin: 0;
         }
         .header-link {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             background: transparent;
             border: none;
             color: var(--text-muted);
@@ -183,6 +198,9 @@
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
             border-radius: 4px;
             white-space: nowrap;
+        }
+        .header-link .material-icons {
+            font-size: 18px;
         }
         .header-link:hover {
             color: #fff;
@@ -256,12 +274,18 @@
             transform: translateY(-2px);
         }
         .task-card strong {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             color: var(--accent-color);
-            display: block;
             margin-bottom: 6px;
             font-size: 16px;
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
             letter-spacing: 1px;
+        }
+        .task-card strong .material-icons {
+            font-size: 24px;
+            flex-shrink: 0;
         }
         .radio-station {
             background: #0a0a0a;
@@ -345,10 +369,14 @@
             gap: 10px;
         }
         .radio-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
             background: rgba(255,102,0,0.08);
             border: 1px solid var(--accent-color);
             color: var(--accent-color);
-            padding: 10px;
+            padding: 10px 16px;
             font-weight: 700;
             cursor: pointer;
             font-size: 20px;
@@ -356,14 +384,23 @@
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
             letter-spacing: 1px;
             border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             line-height: 1;
+            text-decoration: none;
+        }
+        .radio-btn .material-icons {
+            font-size: 20px;
         }
         .radio-btn:hover {
             background: var(--accent-color);
             color: #0a0a0a;
+        }
+        .radio-btn.primary {
+            background: var(--accent-color);
+            color: #0a0a0a;
+            border-color: var(--accent-color);
+        }
+        .radio-btn.primary:hover {
+            background: #ff8833;
         }
         .playlist-select {
             background: #111;
@@ -407,7 +444,10 @@
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
         }
         .join-btn, .vk-btn {
-            display: block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             width: 100%;
             text-align: center;
             padding: 16px;
@@ -422,6 +462,10 @@
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
             background: transparent;
             margin-top: 16px;
+        }
+        .join-btn .material-icons,
+        .vk-btn .material-icons {
+            font-size: 20px;
         }
         .join-btn {
             color: var(--accent-color);
@@ -704,6 +748,9 @@
             margin-top: 20px;
         }
         .profile-sidebar .tab-menu button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             background: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-color);
@@ -716,6 +763,9 @@
             border-radius: 4px;
             text-align: left;
             padding-left: 16px;
+        }
+        .profile-sidebar .tab-menu button .material-icons {
+            font-size: 20px;
         }
         .profile-sidebar .tab-menu button:hover {
             border-color: var(--accent-color);
@@ -800,6 +850,9 @@
             outline: none;
         }
         .chat-input button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             padding: 10px 20px;
             background: var(--accent-color);
             color: #0a0a0a;
@@ -810,6 +863,9 @@
             font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+        .chat-input button .material-icons {
+            font-size: 18px;
         }
         .modal {
             display: none;
@@ -830,9 +886,11 @@
             background: var(--panel-bg);
             border: 2px solid var(--accent-color);
             padding: 30px;
-            max-width: 400px;
+            max-width: 500px;
             width: 90%;
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         .modal-content .close-modal {
             position: absolute;
@@ -855,19 +913,27 @@
             font-weight: 700;
             color: #fff;
         }
-        .modal-content input {
+        .modal-content input,
+        .modal-content textarea,
+        .modal-content select {
             width: 100%;
             padding: 8px 12px;
             background: #0a0a0a;
             border: 1px solid var(--border-color);
             color: #fff;
             border-radius: 4px;
+            font-family: 'PT Sans', sans-serif;
         }
-        .modal-content input:focus {
+        .modal-content input:focus,
+        .modal-content textarea:focus,
+        .modal-content select:focus {
             border-color: var(--accent-color);
             outline: none;
         }
         .modal-content .btn-submit {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             width: 100%;
             margin-top: 16px;
             padding: 12px;
@@ -880,6 +946,10 @@
             font-size: 16px;
             letter-spacing: 1px;
             border-radius: 4px;
+            justify-content: center;
+        }
+        .modal-content .btn-submit .material-icons {
+            font-size: 20px;
         }
         .modal-content .btn-submit:hover {
             background: #ff8833;
@@ -891,6 +961,9 @@
             cursor: pointer;
         }
         .modal-content .switch-form span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
             color: var(--accent-color);
             font-weight: 700;
         }
@@ -908,6 +981,9 @@
             margin-bottom: 20px;
         }
         #tab-settings .settings-card h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             margin-top: 0;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 8px;
@@ -917,6 +993,9 @@
             font-size: 18px;
             letter-spacing: 1px;
             text-transform: uppercase;
+        }
+        #tab-settings .settings-card h3 .material-icons {
+            font-size: 22px;
         }
         #tab-settings .settings-card label {
             display: block;
@@ -940,21 +1019,12 @@
             outline: none;
         }
         #tab-settings .settings-card .btn-submit {
+            width: auto;
             margin-top: 12px;
             padding: 10px 24px;
-            background: var(--accent-color);
-            color: #0a0a0a;
-            border: none;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            font-size: 14px;
-            letter-spacing: 1px;
-            border-radius: 4px;
-            transition: 0.2s;
         }
-        #tab-settings .settings-card .btn-submit:hover {
-            background: #ff8833;
+        #change-password-form button[type="submit"] {
+            margin-top: 25px;
         }
         #tab-settings .settings-card .file-input-wrapper {
             display: flex;
@@ -973,8 +1043,62 @@
         #tab-settings .settings-card .file-input-wrapper button {
             flex-shrink: 0;
         }
-
-        /* ===== АДАПТИВ ===== */
+        #calendar-container {
+            background: #0a0a0a;
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        #calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        #calendar-grid {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        #calendar-grid th {
+            color: var(--text-muted);
+            font-weight: 700;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        #calendar-grid td {
+            padding: 10px 0;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: 0.2s;
+            color: var(--text-color);
+        }
+        #calendar-grid td:hover {
+            background: rgba(255,102,0,0.15);
+        }
+        #calendar-grid td.calendar-day.today {
+            background: rgba(255,102,0,0.25);
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+        #calendar-grid td.calendar-day.selected {
+            background: var(--accent-color);
+            color: #0a0a0a;
+            font-weight: 700;
+        }
+        #calendar-grid td.calendar-day.has-event::after {
+            content: '•';
+            display: block;
+            color: var(--accent-color);
+            font-size: 14px;
+            margin-top: -4px;
+        }
+        #calendar-grid td:empty {
+            cursor: default;
+        }
+        #calendar-grid td:empty:hover {
+            background: transparent;
+        }
         @media (max-width: 768px) {
             body { padding: 20px 10px; }
             .container { padding: 15px; }
@@ -988,11 +1112,12 @@
                 font-size: 12px;
                 padding: 4px 8px;
             }
-            .header-link { font-size: 16px; padding: 10px 16px; }
+            .header-link { font-size: 14px; padding: 6px 10px; }
+            .header-link .material-icons { font-size: 16px; }
             .nav-wrapper { flex-direction: column; align-items: center; }
             .profile-layout { flex-direction: column; }
             .profile-sidebar { text-align: center; }
-            .profile-sidebar .tab-menu button { text-align: center; }
+            .profile-sidebar .tab-menu button { text-align: center; justify-content: center; }
             .radio-station { grid-template-columns: 1fr; }
             #map-container { height: 300px; }
             #lightbox .close-btn { font-size: 36px; top: 20px; right: 20px; }
@@ -1000,15 +1125,18 @@
                 flex-direction: column;
                 align-items: stretch;
             }
+            .modal-content { padding: 20px; max-width: 95%; }
         }
         @media (max-width: 480px) {
             body { padding: 10px 5px; }
             .container { padding: 10px; }
             h1 { font-size: 24px; letter-spacing: 1px; }
             #auth-block .header-link { font-size: 11px; padding: 3px 6px; }
-            .header-link { font-size: 15px; padding: 8px 14px; }
-            .modal-content { padding: 20px; }
+            .header-link { font-size: 13px; padding: 4px 8px; }
+            .header-link .material-icons { font-size: 14px; }
+            .modal-content { padding: 15px; }
             .chat-messages { max-height: 250px; }
+            .task-card strong .material-icons { font-size: 20px; }
         }
     </style>
 </head>
@@ -1022,21 +1150,21 @@
         <h1>FOXHOUND</h1>
         <div class="subtitle">Страйкбольная команда</div>
         <div id="auth-block">
-            <a href="#profile" id="profile-link" class="header-link profile-btn" data-page="page-profile" style="display: none;">Профиль</a>
-            <button id="login-btn" class="header-link">🔑 Войти</button>
+            <a href="#profile" id="profile-link" class="header-link profile-btn" data-page="page-profile" style="display: none;"><span class="material-icons">person</span> Профиль</a>
+            <button id="login-btn" class="header-link"><span class="material-icons">login</span> Войти</button>
         </div>
         <div class="nav-wrapper">
             <div class="header-links">
-                <button class="header-link main active" data-page="page-home">🏠 Главная</button>
-                <button class="header-link calc" data-page="page-calc">🧮 Калькулятор</button>
-                <button class="header-link photo" data-page="page-photo">📸 Фото</button>
-                <button class="header-link ops" data-page="page-operators">👥 Оперативники</button>
-                <button class="header-link instructions" data-page="page-instructions">📄 Инструкции</button>
-                <button class="header-link atak" data-page="page-atak">📡 ATAK</button>
-                <button class="header-link maps" data-page="page-maps">🗺️ Карты</button>
-                <button class="header-link regulations" data-page="page-regulations">📜 Устав</button>
-                <button class="header-link scenarios" data-page="page-scenarios">🎯 Сценарии</button>
-                <button class="header-link devices" data-page="page-devices">🛠️ Девайсы</button>
+                <button class="header-link main active" data-page="page-home"><span class="material-icons">home</span> Главная</button>
+                <button class="header-link calc" data-page="page-calc"><span class="material-icons">calculate</span> Калькулятор</button>
+                <button class="header-link photo" data-page="page-photo"><span class="material-icons">photo_camera</span> Фото</button>
+                <button class="header-link ops" data-page="page-operators"><span class="material-icons">people</span> Оперативники</button>
+                <button class="header-link instructions" data-page="page-instructions"><span class="material-icons">description</span> Инструкции</button>
+                <button class="header-link atak" data-page="page-atak"><span class="material-icons">satellite</span> ATAK</button>
+                <button class="header-link maps" data-page="page-maps"><span class="material-icons">map</span> Карты</button>
+                <button class="header-link regulations" data-page="page-regulations"><span class="material-icons">book</span> Устав</button>
+                <button class="header-link scenarios" data-page="page-scenarios"><span class="material-icons">flag</span> Сценарии</button>
+                <button class="header-link devices" data-page="page-devices"><span class="material-icons">build</span> Девайсы</button>
             </div>
         </div>
     </div>
@@ -1047,12 +1175,12 @@
         <p>Мы проецируем эти принципы на реальный страйкбол. Нашими приоритетами являются строгая дисциплина, инженерный расчет и техническое превосходство. Каждая игра для нас — это комплексная интеграция современных технологий в тактический игровой процесс.</p>
         <h2>Наши задачи</h2>
         <div class="tasks-grid">
-            <div class="task-card"><strong>🛠 Разработка</strong> Проектируем уникальные игровые устройства и софт. Паяльник и код — полноценное оружие наравне с приводом.</div>
-            <div class="task-card"><strong>⚙️ Технический апгрейд</strong> Доводим снаряжение до идеала. Глубокий тюнинг, интеграция умной электроники и прецизионная настройка систем.</div>
-            <div class="task-card"><strong>📡 Навигация и связь</strong> Внедряем современные протоколы связи и цифровые карты. Полный контроль радиоэфира и знание полигона.</div>
-            <div class="task-card"><strong>⚡ Тактическая гибкость</strong> Ставим на маневренность, дисциплину и слаженность. Четкие действия группы гарантируют победу над превосходящим противником.</div>
-            <div class="task-card"><strong>🤝 Атмосфера</strong> FOXHOUND — это братство. Ценим адекватность, надежность, качественный отдых и выезды в кругу своих.</div>
-            <div class="task-card"><strong>🌲 Снаряжение</strong> Единый командный стиль в расцветках Woodland и Ranger Green.</div>
+            <div class="task-card"><strong><span class="material-icons">build</span> Разработка</strong> Проектируем уникальные игровые устройства и софт. Паяльник и код — полноценное оружие наравне с приводом.</div>
+            <div class="task-card"><strong><span class="material-icons">settings</span> Технический апгрейд</strong> Доводим снаряжение до идеала. Глубокий тюнинг, интеграция умной электроники и прецизионная настройка систем.</div>
+            <div class="task-card"><strong><span class="material-icons">satellite_alt</span> Навигация и связь</strong> Внедряем современные протоколы связи и цифровые карты. Полный контроль радиоэфира и знание полигона.</div>
+            <div class="task-card"><strong><span class="material-icons">flash_on</span> Тактическая гибкость</strong> Ставим на маневренность, дисциплину и слаженность. Четкие действия группы гарантируют победу над превосходящим противником.</div>
+            <div class="task-card"><strong><span class="material-icons">handshake</span> Атмосфера</strong> FOXHOUND — это братство. Ценим адекватность, надежность, качественный отдых и выезды в кругу своих.</div>
+            <div class="task-card"><strong><span class="material-icons">park</span> Снаряжение</strong> Единый командный стиль в расцветках Woodland и Ranger Green.</div>
         </div>
         <h2>Полевое Радио</h2>
         <div class="radio-station">
@@ -1074,9 +1202,9 @@
             <div class="radio-controls">
                 <select id="playlist-select" class="playlist-select"></select>
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
-                    <button id="prev-btn" class="radio-btn">◀◀</button>
-                    <button id="play-btn" class="radio-btn">▶</button>
-                    <button id="next-btn" class="radio-btn">▶▶</button>
+                    <button id="prev-btn" class="radio-btn"><span class="material-icons">skip_previous</span></button>
+                    <button id="play-btn" class="radio-btn"><span class="material-icons">play_arrow</span></button>
+                    <button id="next-btn" class="radio-btn"><span class="material-icons">skip_next</span></button>
                 </div>
             </div>
         </div>
@@ -1089,8 +1217,8 @@
             <li>Работаем строго по правилам Уральской Ассоциации Страйкбола (УАС).</li>
             <li>Адекватность, честность и отсутствие овертюна — база нашей команды.</li>
         </ul>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdCmb8iLGiwe5nbRQl4SpGQPjZiFfVIw1meTqHWFHm5yhAPzg/viewform?usp=dialog" target="_blank" class="join-btn">Подать заявку в команду</a>
-        <a href="https://vk.ru/club239972469" target="_blank" class="vk-btn">Мы ВКонтакте</a>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdCmb8iLGiwe5nbRQl4SpGQPjZiFfVIw1meTqHWFHm5yhAPzg/viewform?usp=dialog" target="_blank" class="join-btn"><span class="material-icons">how_to_reg</span> Подать заявку в команду</a>
+        <a href="https://vk.ru/club239972469" target="_blank" class="vk-btn"><span class="material-icons">open_in_new</span> Мы ВКонтакте</a>
     </div>
     <div id="page-calc" class="page">
         <h2>Калькулятор страйкбола</h2>
@@ -1125,7 +1253,7 @@
                 <tr data-weapon="sniper"><td>Снайперка (болтовка, полуавтомат, только одиночный)</td><td>до 2.9 Дж</td><td>25 м</td><td id="statusSniper">✔</td></tr>
             </tbody>
         </table>
-        <div id="statusMessage" class="status-msg ok">✅ Допуск: разрешено, дистанция 10 м</div>
+        <div id="statusMessage" class="status-msg ok">✅ Допуск: разрешено, дистанция 10 м (категория «Основное»)</div>
     </div>
     <div id="page-photo" class="page">
         <h2>Фотогалерея</h2>
@@ -1191,12 +1319,12 @@
                 <div class="role" id="profile-role">Пользователь</div>
                 <div class="stats" id="profile-stats">Зарегистрирован: —</div>
                 <div class="tab-menu">
-                    <button class="active-tab" data-tab="chat">💬 Чат</button>
-                    <button data-tab="polls">🗳️ Голосования</button>
-                    <button data-tab="events">📅 Календарь</button>
-                    <button data-tab="settings">⚙️ Настройки</button>
-                    <button data-tab="admin" id="admin-tab-btn" style="display: none;">🛠️ Администрирование</button>
-                    <button class="logout-btn" id="logout-btn">🚪 Выйти</button>
+                    <button class="active-tab" data-tab="chat"><span class="material-icons">chat</span> Чат</button>
+                    <button data-tab="polls"><span class="material-icons">how_to_vote</span> Голосования</button>
+                    <button data-tab="events"><span class="material-icons">calendar_today</span> Календарь</button>
+                    <button data-tab="settings"><span class="material-icons">settings</span> Настройки</button>
+                    <button data-tab="admin" id="admin-tab-btn" style="display: none;"><span class="material-icons">admin_panel_settings</span> Администрирование</button>
+                    <button class="logout-btn" id="logout-btn"><span class="material-icons">logout</span> Выйти</button>
                 </div>
             </div>
             <div class="profile-content">
@@ -1206,78 +1334,88 @@
                     </div>
                     <div class="chat-input">
                         <input type="text" id="chat-input" placeholder="Напишите сообщение..." disabled />
-                        <button id="chat-send-btn" disabled>Отправить</button>
+                        <button id="chat-send-btn" disabled><span class="material-icons">send</span> Отправить</button>
                     </div>
                 </div>
                 <div id="tab-polls" class="tab-pane">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                         <h3 style="margin:0;">Голосования</h3>
                         <div>
-                            <button class="radio-btn" id="polls-toggle-archived" style="font-size:13px; padding:4px 12px;">Показать архив</button>
+                            <button class="radio-btn" id="polls-toggle-archived" style="font-size:13px; padding:4px 12px;"><span class="material-icons">archive</span> Показать архив</button>
                         </div>
                     </div>
                     <div id="polls-list"></div>
                     <div id="poll-create-form" style="display: none; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
                         <h3>Создать опрос</h3>
                         <form id="poll-form">
-                            <label style="display:block; margin-top:10px;">Вопрос</label>
+                            <label style="display:block; margin-top:10px;">Заголовок</label>
                             <input type="text" id="poll-title" required style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
-                            <label style="display:block; margin-top:10px;">Варианты (через запятую)</label>
-                            <input type="text" id="poll-options" required placeholder="Вариант1, Вариант2, Вариант3" style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
+                            <label style="display:block; margin-top:10px;">Тип вопроса</label>
+                            <select id="poll-type" style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;">
+                                <option value="single">Одиночный выбор</option>
+                                <option value="multiple">Множественный выбор</option>
+                            </select>
+                            <div id="poll-options-group">
+                                <label style="display:block; margin-top:10px;">Варианты (через запятую)</label>
+                                <input type="text" id="poll-options" placeholder="Вариант1, Вариант2, Вариант3" style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
+                            </div>
                             <label style="display:block; margin-top:10px;">Действительно до (дата и время)</label>
                             <input type="datetime-local" id="poll-expires" required style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
-                            <button type="submit" class="btn-submit" style="margin-top:12px; width:auto;">Создать</button>
+                            <button type="submit" class="radio-btn primary" style="margin-top:12px; width:auto; font-size:16px; padding:10px 24px;"><span class="material-icons">add</span> Создать</button>
                         </form>
                     </div>
                 </div>
                 <div id="tab-events" class="tab-pane">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h3 style="margin:0;">События</h3>
-                        <div>
-                            <button class="radio-btn" id="events-toggle-archived" style="font-size:13px; padding:4px 12px;">Показать архив</button>
+                        <h3 style="margin:0; display: flex; align-items: center; gap: 6px;"><span class="material-icons">event_note</span> Расписание</h3>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                            <button class="radio-btn" id="events-toggle-archived" style="font-size:13px; padding:4px 12px;"><span class="material-icons">archive</span> Показать архив</button>
+                            <!-- Кнопка "Создать" теперь видна -->
+                            <button id="event-create-btn" class="radio-btn primary" style="font-size:13px; padding:4px 12px;"><span class="material-icons">add_circle</span> Создать</button>
                         </div>
                     </div>
-                    <div id="events-list"></div>
-                    <div id="event-create-form" style="display: none; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-                        <h3>Создать событие</h3>
-                        <form id="event-form">
-                            <label style="display:block; margin-top:10px;">Название</label>
-                            <input type="text" id="event-title" required style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
-                            <label style="display:block; margin-top:10px;">Описание</label>
-                            <textarea id="event-desc" style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;"></textarea>
-                            <label style="display:block; margin-top:10px;">Дата и время</label>
-                            <input type="datetime-local" id="event-date" required style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
-                            <label style="display:block; margin-top:10px;">Место</label>
-                            <input type="text" id="event-location" style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
-                            <button type="submit" class="btn-submit" style="margin-top:12px; width:auto;">Добавить</button>
-                        </form>
+                    <div id="calendar-container" style="background: #0a0a0a; border: 1px solid var(--border-color); padding: 15px; margin-bottom: 10px;">
+                        <div id="calendar-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <button id="calendar-prev" class="radio-btn" style="font-size:16px; padding:6px 12px;"><span class="material-icons">chevron_left</span></button>
+                            <span id="calendar-month-year" style="font-size:20px; font-weight:700; color:#fff; min-width:180px; text-align:center;"></span>
+                            <button id="calendar-next" class="radio-btn" style="font-size:16px; padding:6px 12px;"><span class="material-icons">chevron_right</span></button>
+                        </div>
+                        <table id="calendar-grid" style="width:100%; border-collapse:collapse; text-align:center;">
+                            <thead>
+                                <tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>
+                            </thead>
+                            <tbody id="calendar-body"></tbody>
+                        </table>
+                    </div>
+                    <div id="calendar-events-list" style="margin-top:20px; border-top:1px solid var(--border-color); padding-top:15px;">
+                        <div style="color: var(--text-muted); text-align:center;">Загрузка...</div>
                     </div>
                 </div>
                 <div id="tab-settings" class="tab-pane">
                     <div class="settings-card">
-                        <h3>🔐 Сменить пароль</h3>
+                        <h3><span class="material-icons">lock</span> Сменить пароль</h3>
                         <form id="change-password-form">
                             <label>Текущий пароль</label>
                             <input type="password" id="old-password" required />
                             <label>Новый пароль</label>
                             <input type="password" id="new-password" required />
-                            <button type="submit" class="btn-submit" style="width:auto;">Изменить</button>
+                            <button type="submit" class="radio-btn primary" style="width:auto; font-size:16px; padding:10px 24px;"><span class="material-icons">save</span> Изменить</button>
                         </form>
                     </div>
                     <div class="settings-card">
-                        <h3>🖼️ Сменить аватар</h3>
+                        <h3><span class="material-icons">photo</span> Сменить аватар</h3>
                         <form id="avatar-form" enctype="multipart/form-data">
                             <div class="file-input-wrapper">
                                 <input type="file" id="avatar-file" name="avatar" accept="image/*" required />
-                                <button type="submit" class="btn-submit" style="width:auto;">Загрузить</button>
+                                <button type="submit" class="radio-btn primary" style="width:auto; font-size:16px; padding:10px 24px;"><span class="material-icons">upload</span> Загрузить</button>
                             </div>
                         </form>
                     </div>
                 </div>
                 <div id="tab-admin" class="tab-pane">
-                    <h3>Управление контентом</h3>
+                    <h3><span class="material-icons">admin_panel_settings</span> Управление контентом</h3>
                     <p style="color: var(--text-muted); margin-bottom: 20px;">Полный доступ к управлению фото, оперативниками, инструкциями и другими разделами сайта.</p>
-                    <a href="/admin/" class="btn-submit" style="display: inline-block; padding: 12px 40px; text-decoration: none; background: var(--accent-color); color: #0a0a0a; border: none; border-radius: 4px; font-weight: 700; font-family: 'PT Sans Narrow', sans-serif; letter-spacing: 1px; transition: 0.2s;">Открыть панель администрирования</a>
+                    <a href="/admin/" class="radio-btn primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 40px; text-decoration: none; background: var(--accent-color); color: #0a0a0a; border: none; border-radius: 4px; font-weight: 700; font-family: 'PT Sans Narrow', sans-serif; letter-spacing: 1px; transition: 0.2s;"><span class="material-icons">dashboard</span> Открыть панель администрирования</a>
                 </div>
             </div>
         </div>
@@ -1296,1557 +1434,57 @@
             <input type="text" id="auth-username" required />
             <label>Пароль</label>
             <input type="password" id="auth-password" required />
-            <button type="submit" class="btn-submit" id="auth-submit-btn">Войти</button>
+            <button type="submit" class="btn-submit" id="auth-submit-btn"><span class="material-icons">login</span> Войти</button>
         </form>
         <div class="switch-form" id="auth-switch">
-            Нет аккаунта? <span id="auth-switch-link">Зарегистрироваться</span>
+            Нет аккаунта? <span id="auth-switch-link"><span class="material-icons">person_add</span> Зарегистрироваться</span>
         </div>
     </div>
 </div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
-<script>
-(function() {
-    'use strict';
-
-    // ================================================================
-    // 1. ЛАЙТБОКС
-    // ================================================================
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const closeBtn = document.querySelector('#lightbox .close-btn');
-    window.openLightbox = function(imgSrc) {
-        lightboxImg.src = imgSrc;
-        lightbox.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    };
-    function closeLightbox() {
-        lightbox.style.display = 'none';
-        document.body.style.overflow = '';
-    }
-    if (closeBtn) closeBtn.addEventListener('click', function(e) { e.stopPropagation(); closeLightbox(); });
-    lightbox.addEventListener('click', function(e) { if (e.target === lightbox) closeLightbox(); });
-    document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && lightbox.style.display === 'flex') closeLightbox(); });
-
-    // ================================================================
-    // 2. НАВИГАЦИЯ
-    // ================================================================
-    const navLinks = document.querySelectorAll('.header-link[data-page]');
-    const pages = {};
-    document.querySelectorAll('.page').forEach(p => pages[p.id] = p);
-    function showPage(pageId) {
-        Object.values(pages).forEach(p => p.classList.remove('active'));
-        if (pages[pageId]) pages[pageId].classList.add('active');
-        navLinks.forEach(link => link.classList.toggle('active', link.dataset.page === pageId));
-    }
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const pageId = this.dataset.page;
-            if (pageId) showPage(pageId);
-            // Если это карты – загружаем их
-            if (pageId === 'page-maps') {
-                loadMaps();
-            }
-        });
-    });
-
-    // ================================================================
-    // 3. РАДИО (без изменений)
-    // ================================================================
-    let radioStations = [];
-    let currentStationIndex = 0;
-    let currentTrackIndex = 0;
-    let isPlaying = false;
-    const audio = new Audio();
-
-    const radioFreq = document.getElementById('radio-freq');
-    const radioPurpose = document.getElementById('radio-purpose');
-    const trackTitle = document.getElementById('track-title');
-    const radioDesc = document.getElementById('radio-desc');
-    const playlistSelect = document.getElementById('playlist-select');
-    const playBtn = document.getElementById('play-btn');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const progressFill = document.getElementById('progress-fill');
-    const progressBar = document.getElementById('progress-bar');
-    const currentTimeEl = document.getElementById('current-time');
-    const durationTimeEl = document.getElementById('duration-time');
-    let isSeeking = false;
-
-    async function loadRadioData() {
-        try {
-            const response = await fetch('radio_data.json');
-            if (!response.ok) throw new Error('Не удалось загрузить плейлист');
-            const data = await response.json();
-            radioStations = data.stations;
-            initRadio();
-        } catch (error) {
-            console.error('Ошибка загрузки радио:', error);
-            radioPurpose.innerText = 'ОШИБКА ЗАГРУЗКИ';
-            radioDesc.innerText = 'Проверьте наличие файла radio_data.json';
-        }
-    }
-    function initRadio() {
-        playlistSelect.innerHTML = '';
-        radioStations.forEach((station, index) => {
-            const opt = document.createElement('option');
-            opt.value = index;
-            opt.innerText = station.name;
-            playlistSelect.appendChild(opt);
-        });
-        updateDisplay();
-    }
-    function updateDisplay() {
-        const station = radioStations[currentStationIndex];
-        if (!station) return;
-        const track = station.tracks[currentTrackIndex];
-        if (isPlaying) {
-            radioFreq.innerText = `FREQ: ${station.frequency} MHz`;
-            radioPurpose.innerText = station.purpose.toUpperCase();
-            trackTitle.innerText = `▶ ${track.title.toUpperCase()}`;
-            radioDesc.innerText = station.desc;
-            playBtn.textContent = '⏸';
-            if (navigator.mediaSession) {
-                navigator.mediaSession.metadata = new MediaMetadata({
-                    title: track.title,
-                    artist: 'FOXHOUND TAC-COM',
-                    album: station.name,
-                    artwork: [{ src: '/logo-foxhound.webp', sizes: '512x512', type: 'image/webp' }]
-                });
-                navigator.mediaSession.setActionHandler('play', () => { if (!isPlaying) toggleRadio(); });
-                navigator.mediaSession.setActionHandler('pause', () => { if (isPlaying) toggleRadio(); });
-                navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
-                navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
-            }
-        } else {
-            radioFreq.innerText = 'FREQ: ---.--- MHz';
-            radioPurpose.innerText = 'СЕТЬ ОТКЛЮЧЕНА';
-            trackTitle.innerText = track ? track.title.toUpperCase() : 'ШУМ ЭФИРА...';
-            radioDesc.innerText = station.desc || 'Для активации нажмите ВКЛ';
-            playBtn.textContent = '▶';
-            if (navigator.mediaSession) navigator.mediaSession.metadata = null;
-        }
-        if (audio.src) updateProgress();
-    }
-    function toggleRadio() {
-        if (!isPlaying) {
-            if (!audio.src || audio.ended) playTrack();
-            else { audio.play().catch(console.warn); isPlaying = true; updateDisplay(); }
-        } else {
-            audio.pause(); isPlaying = false; updateDisplay();
-        }
-    }
-    function playTrack() {
-        const station = radioStations[currentStationIndex];
-        if (!station) return;
-        const track = station.tracks[currentTrackIndex];
-        if (!track) { currentTrackIndex = 0; playTrack(); return; }
-        audio.src = track.src;
-        audio.play().catch(console.warn);
-        isPlaying = true;
-        updateDisplay();
-        progressFill.style.width = '0%';
-        currentTimeEl.textContent = '00:00';
-    }
-    function changeChannel() {
-        currentStationIndex = parseInt(playlistSelect.value);
-        currentTrackIndex = 0;
-        if (isPlaying) playTrack();
-        else { updateDisplay(); progressFill.style.width = '0%'; currentTimeEl.textContent = '00:00'; durationTimeEl.textContent = '00:00'; audio.src = ''; }
-    }
-    function nextTrack() {
-        const station = radioStations[currentStationIndex];
-        if (!station) return;
-        currentTrackIndex++;
-        if (currentTrackIndex >= station.tracks.length) currentTrackIndex = 0;
-        if (isPlaying) playTrack(); else updateDisplay();
-    }
-    function prevTrack() {
-        const station = radioStations[currentStationIndex];
-        if (!station) return;
-        currentTrackIndex--;
-        if (currentTrackIndex < 0) currentTrackIndex = station.tracks.length - 1;
-        if (isPlaying) playTrack(); else updateDisplay();
-    }
-    audio.addEventListener('loadedmetadata', function() {
-        const dur = audio.duration;
-        if (isFinite(dur)) durationTimeEl.textContent = formatTime(dur);
-    });
-    audio.addEventListener('timeupdate', function() {
-        if (!isSeeking && isPlaying) updateProgress();
-    });
-    audio.addEventListener('ended', nextTrack);
-    function updateProgress() {
-        if (!audio.src || !isFinite(audio.duration)) return;
-        const percent = (audio.currentTime / audio.duration) * 100;
-        progressFill.style.width = percent + '%';
-        currentTimeEl.textContent = formatTime(audio.currentTime);
-        const dur = audio.duration;
-        if (isFinite(dur) && durationTimeEl.textContent === '00:00') durationTimeEl.textContent = formatTime(dur);
-    }
-    function formatTime(seconds) {
-        if (!isFinite(seconds)) return '00:00';
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    }
-    progressBar.addEventListener('click', function(e) {
-        if (!audio.src) return;
-        const rect = this.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width;
-        const seekTime = x * audio.duration;
-        if (isFinite(seekTime)) {
-            isSeeking = true;
-            audio.currentTime = seekTime;
-            progressFill.style.width = (x * 100) + '%';
-            currentTimeEl.textContent = formatTime(seekTime);
-            setTimeout(() => { isSeeking = false; }, 100);
-        }
-    });
-    playBtn.addEventListener('click', toggleRadio);
-    prevBtn.addEventListener('click', prevTrack);
-    nextBtn.addEventListener('click', nextTrack);
-    playlistSelect.addEventListener('change', changeChannel);
-
-    // ================================================================
-    // 4. АВТОРИЗАЦИЯ (реальные API)
-    // ================================================================
-    let currentUser = null;
-    let lastMessageId = 0;
-    let pollInterval = null;
-
-    const loginBtn = document.getElementById('login-btn');
-    const profileLink = document.getElementById('profile-link');
-    const logoutBtn = document.getElementById('logout-btn');
-    const authModal = document.getElementById('auth-modal');
-    const closeModal = document.getElementById('close-modal');
-    const authForm = document.getElementById('auth-form');
-    const authSubmitBtn = document.getElementById('auth-submit-btn');
-    const authSwitch = document.getElementById('auth-switch-link');
-    const authModalTitle = document.getElementById('auth-modal-title');
-    let isLoginMode = true;
-
-    const profileAvatar = document.getElementById('profile-avatar');
-    const avatarPlaceholder = document.getElementById('avatar-placeholder');
-    const profileUsername = document.getElementById('profile-username');
-    const profileRole = document.getElementById('profile-role');
-    const profileStats = document.getElementById('profile-stats');
-    const chatMessages = document.getElementById('chat-messages');
-    const chatInput = document.getElementById('chat-input');
-    const chatSendBtn = document.getElementById('chat-send-btn');
-
-    function playNotificationSound() {
-        try {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            oscillator.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            oscillator.frequency.value = 800;
-            oscillator.type = 'sine';
-            gainNode.gain.value = 0.3;
-            oscillator.start();
-            setTimeout(() => {
-                oscillator.stop();
-            }, 150);
-        } catch (e) {}
-    }
-
-    function apiRequest(url, method, body) {
-        return fetch(url, {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: body ? JSON.stringify(body) : undefined
-        }).then(res => res.json());
-    }
-
-    function checkAuth() {
-        return apiRequest('/api/auth.php?action=check', 'GET')
-            .then(data => {
-                if (data.loggedin) {
-                    currentUser = data.user;
-                    updateAuthUI();
-                    loadProfile();
-                    startChatPolling();
-                } else {
-                    currentUser = null;
-                    updateAuthUI();
-                    stopChatPolling();
-                }
-                return data;
-            });
-    }
-
-    function login(username, password) {
-        return apiRequest('/api/auth.php?action=login', 'POST', { username, password })
-            .then(data => {
-                if (data.success) {
-                    return checkAuth();
-                } else {
-                    alert(data.error || 'Ошибка входа');
-                    return null;
-                }
-            });
-    }
-
-    function register(username, password) {
-        return apiRequest('/api/auth.php?action=register', 'POST', { username, password })
-            .then(data => {
-                if (data.success) {
-                    alert('Регистрация успешна! Вы автоматически вошли.');
-                    return checkAuth();
-                } else {
-                    alert(data.error || 'Ошибка регистрации');
-                    return null;
-                }
-            });
-    }
-
-    function logout() {
-        return apiRequest('/api/auth.php?action=logout', 'GET')
-            .then(() => {
-                currentUser = null;
-                updateAuthUI();
-                stopChatPolling();
-                showPage('page-home');
-                chatMessages.innerHTML = '<div style="color: var(--text-muted); text-align: center;">Авторизуйтесь, чтобы видеть сообщения.</div>';
-            });
-    }
-
-    function loadProfile() {
-        if (!currentUser) return;
-        profileUsername.textContent = currentUser.username || 'Боец';
-        const roleMap = {
-            'admin': 'АДМИН',
-            'user': 'ПОЛЬЗОВАТЕЛЬ'
-        };
-        profileRole.textContent = roleMap[currentUser.role] || 'Пользователь';
-        const regDate = currentUser.registered_at ? new Date(currentUser.registered_at * 1000).toLocaleDateString() : '—';
-        profileStats.textContent = `Зарегистрирован: ${regDate}`;
-        const avatarUrl = (currentUser.avatar && currentUser.avatar !== 'default.png') ? '/uploads/avatars/' + currentUser.avatar : null;
-        if (avatarUrl) {
-            profileAvatar.src = avatarUrl;
-            profileAvatar.style.display = 'block';
-            avatarPlaceholder.style.display = 'none';
-        } else {
-            profileAvatar.style.display = 'none';
-            avatarPlaceholder.style.display = 'flex';
-        }
-        updateAdminUI();
-        if (document.getElementById('tab-polls').classList.contains('active-pane')) {
-            loadPolls();
-        }
-        if (document.getElementById('tab-events').classList.contains('active-pane')) {
-            loadEvents();
-        }
-    }
-
-    function updateAdminUI() {
-        const isAdmin = currentUser && currentUser.role === 'admin';
-        const adminBtn = document.getElementById('admin-tab-btn');
-        if (adminBtn) adminBtn.style.display = isAdmin ? 'block' : 'none';
-        const eventForm = document.getElementById('event-create-form');
-        const pollForm = document.getElementById('poll-create-form');
-        if (eventForm) eventForm.style.display = isAdmin ? 'block' : 'none';
-        if (pollForm) pollForm.style.display = isAdmin ? 'block' : 'none';
-    }
-
-    function updateAuthUI() {
-        if (currentUser) {
-            loginBtn.style.display = 'none';
-            profileLink.style.display = 'inline-block';
-            chatInput.disabled = false;
-            chatSendBtn.disabled = false;
-            if (document.getElementById('page-profile').classList.contains('active')) loadProfile();
-        } else {
-            loginBtn.style.display = 'inline-block';
-            profileLink.style.display = 'none';
-            chatInput.disabled = true;
-            chatSendBtn.disabled = true;
-            if (document.getElementById('page-profile').classList.contains('active')) showPage('page-home');
-        }
-    }
-
-    function pollMessages() {
-        if (!currentUser) return;
-        fetch('/api/chat.php?since=' + lastMessageId)
-            .then(res => res.json())
-            .then(messages => {
-                if (messages.length) {
-                    messages.forEach(msg => {
-                        if (msg.user_id !== currentUser.id) {
-                            playNotificationSound();
-                        }
-                        appendMessage(msg);
-                        if (msg.id > lastMessageId) lastMessageId = msg.id;
-                    });
-                }
-            })
-            .catch(console.warn);
-    }
-
-    function appendMessage(msg) {
-        const div = document.createElement('div');
-        div.className = 'chat-message';
-        const avatarUrl = (msg.avatar && msg.avatar !== 'default.png') ? '/uploads/avatars/' + msg.avatar : null;
-        const avatarHtml = avatarUrl ? `<img class="avatar" src="${avatarUrl}" alt="" />` : `<div class="avatar" style="display:flex;align-items:center;justify-content:center;font-size:18px;color:#666;">👤</div>`;
-        div.innerHTML = `
-            ${avatarHtml}
-            <div class="msg-content">
-                <span class="user">${msg.username}</span>
-                <span class="time">${new Date(msg.timestamp * 1000).toLocaleTimeString()}</span>
-                <div class="text">${msg.message}</div>
+<div id="event-modal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <span class="close-modal" id="close-event-modal">&times;</span>
+        <h2 id="event-modal-title">Создание события</h2>
+        <form id="event-form-modal">
+            <input type="hidden" id="event-id" value="" />
+            <div class="form-group">
+                <label>Название *</label>
+                <input type="text" id="event-title" required />
             </div>
-        `;
-        chatMessages.appendChild(div);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function startChatPolling() {
-        if (pollInterval) clearInterval(pollInterval);
-        fetch('/api/chat.php?since=0')
-            .then(res => res.json())
-            .then(messages => {
-                chatMessages.innerHTML = '';
-                messages.forEach(msg => {
-                    appendMessage(msg);
-                    if (msg.id > lastMessageId) lastMessageId = msg.id;
-                });
-            })
-            .catch(console.warn);
-        pollInterval = setInterval(pollMessages, 3000);
-    }
-
-    function stopChatPolling() {
-        if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
-    }
-
-    function sendMessage(text) {
-        if (!currentUser) return;
-        fetch('/api/chat.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: text })
-        })
-        .then(res => res.json())
-        .then(msg => {
-            if (msg.id) {
-                appendMessage(msg);
-                if (msg.id > lastMessageId) lastMessageId = msg.id;
-                chatInput.value = '';
-            } else {
-                alert('Ошибка отправки');
-            }
-        })
-        .catch(console.warn);
-    }
-
-    loginBtn.addEventListener('click', () => authModal.classList.add('active-modal'));
-    closeModal.addEventListener('click', () => authModal.classList.remove('active-modal'));
-    authModal.addEventListener('click', (e) => { if (e.target === authModal) authModal.classList.remove('active-modal'); });
-    authSwitch.addEventListener('click', function() {
-        isLoginMode = !isLoginMode;
-        authModalTitle.textContent = isLoginMode ? 'Вход' : 'Регистрация';
-        authSubmitBtn.textContent = isLoginMode ? 'Войти' : 'Зарегистрироваться';
-        authSwitch.textContent = isLoginMode ? 'Зарегистрироваться' : 'Войти';
-    });
-    authForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const username = document.getElementById('auth-username').value.trim();
-        const password = document.getElementById('auth-password').value.trim();
-        if (isLoginMode) {
-            login(username, password).then(() => authModal.classList.remove('active-modal'));
-        } else {
-            register(username, password).then(() => authModal.classList.remove('active-modal'));
-        }
-    });
-    logoutBtn.addEventListener('click', function() { if (confirm('Выйти из аккаунта?')) logout(); });
-    chatSendBtn.addEventListener('click', function() {
-        const text = chatInput.value.trim();
-        if (text) sendMessage(text);
-    });
-    chatInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            const text = chatInput.value.trim();
-            if (text) sendMessage(text);
-        }
-    });
-
-    const avatarForm = document.getElementById('avatar-form');
-    const avatarFileInput = document.getElementById('avatar-file');
-    avatarForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        if (!currentUser) {
-            alert('Сначала войдите в аккаунт.');
-            return;
-        }
-        const file = avatarFileInput.files[0];
-        if (!file) {
-            alert('Выберите файл для загрузки.');
-            return;
-        }
-        const formData = new FormData();
-        formData.append('avatar', file);
-        fetch('/api/profile.php?action=avatar', {
-            method: 'POST',
-            body: formData
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                alert('Аватар обновлён!');
-                if (data.avatar) {
-                    profileAvatar.src = '/uploads/avatars/' + data.avatar;
-                    profileAvatar.style.display = 'block';
-                    avatarPlaceholder.style.display = 'none';
-                    if (currentUser) currentUser.avatar = data.avatar;
-                }
-                loadProfile();
-            } else {
-                alert('Ошибка: ' + (data.error || 'Неизвестная ошибка'));
-            }
-        })
-        .catch(err => {
-            alert('Ошибка сети: ' + err.message);
-        });
-    });
-
-    // ================================================================
-    // 5. ВКЛАДКИ ПРОФИЛЯ
-    // ================================================================
-    const tabButtons = document.querySelectorAll('.profile-sidebar .tab-menu button[data-tab]');
-    const tabPanes = {
-        chat: document.getElementById('tab-chat'),
-        polls: document.getElementById('tab-polls'),
-        events: document.getElementById('tab-events'),
-        settings: document.getElementById('tab-settings'),
-        admin: document.getElementById('tab-admin')
-    };
-    tabButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            tabButtons.forEach(b => b.classList.remove('active-tab'));
-            this.classList.add('active-tab');
-            Object.keys(tabPanes).forEach(key => {
-                tabPanes[key].classList.remove('active-pane');
-            });
-            const tabId = this.dataset.tab;
-            if (tabPanes[tabId]) {
-                tabPanes[tabId].classList.add('active-pane');
-            }
-            if (tabId === 'polls') loadPolls();
-            if (tabId === 'events') loadEvents();
-        });
-    });
-
-    // ================================================================
-    // 6. КАРТЫ (УПРОЩЁННАЯ ВЕРСИЯ)
-    // ================================================================
-    let mapInitialized = false;
-    let mapInstance = null;
-    let currentPolygonId = null;
-    let layerGroups = {};
-
-    function loadMaps() {
-        const container = document.getElementById('map-container');
-        const select = document.getElementById('polygon-select');
-        const layersContainer = document.getElementById('map-layers');
-        const loading = document.getElementById('map-loading');
-
-        if (!container) {
-            console.error('Контейнер карты не найден');
-            return;
-        }
-
-        loading.style.display = 'block';
-        loading.innerHTML = 'Загрузка карт...';
-
-        fetch('/maps_data.json')
-            .then(res => {
-                if (!res.ok) throw new Error('Файл maps_data.json не найден');
-                return res.json();
-            })
-            .then(data => {
-                if (!data.polygons || data.polygons.length === 0) {
-                    loading.innerHTML = 'Нет доступных полигонов';
-                    return;
-                }
-
-                // Заполняем select
-                select.innerHTML = '';
-                data.polygons.forEach(p => {
-                    const opt = document.createElement('option');
-                    opt.value = p.id;
-                    opt.textContent = p.name;
-                    select.appendChild(opt);
-                });
-
-                if (!mapInitialized) {
-                    mapInstance = L.map('map-container', {
-                        center: data.polygons[0].center,
-                        zoom: data.polygons[0].zoom,
-                        zoomControl: true,
-                        attributionControl: true
-                    });
-                    L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-                        maxZoom: 19,
-                        attribution: 'Google Satellite'
-                    }).addTo(mapInstance);
-                    mapInitialized = true;
-                }
-
-                currentPolygonId = data.polygons[0].id;
-                switchPolygon(currentPolygonId, data);
-
-                select.addEventListener('change', function() {
-                    currentPolygonId = this.value;
-                    switchPolygon(currentPolygonId, data);
-                });
-
-                loading.style.display = 'none';
-                setTimeout(() => mapInstance.invalidateSize(), 300);
-            })
-            .catch(err => {
-                console.error('Ошибка загрузки карт:', err);
-                loading.innerHTML = '❌ Ошибка загрузки карт. Проверьте файл maps_data.json';
-                loading.style.color = 'var(--red)';
-            });
-    }
-
-    function switchPolygon(polygonId, data) {
-        const polygon = data.polygons.find(p => p.id === polygonId);
-        if (!polygon) return;
-
-        mapInstance.setView(polygon.center, polygon.zoom);
-
-        // Удаляем старые слои
-        for (let key in layerGroups) {
-            if (mapInstance.hasLayer(layerGroups[key])) {
-                mapInstance.removeLayer(layerGroups[key]);
-            }
-        }
-        layerGroups = {};
-
-        const layersContainer = document.getElementById('map-layers');
-        layersContainer.innerHTML = '';
-
-        if (!polygon.layers || polygon.layers.length === 0) {
-            const msg = document.createElement('div');
-            msg.style.cssText = 'color: var(--text-muted); font-style: italic;';
-            msg.textContent = 'Слои для этого полигона отсутствуют.';
-            layersContainer.appendChild(msg);
-            return;
-        }
-
-        polygon.layers.forEach(layerData => {
-            const group = L.layerGroup();
-            layerGroups[layerData.id] = group;
-
-            if (layerData.url) {
-                fetch(layerData.url)
-                    .then(res => {
-                        if (!res.ok) throw new Error('404');
-                        return res.json();
-                    })
-                    .then(geojson => {
-                        L.geoJSON(geojson, {
-                            style: layerData.style || { color: '#ff6600', weight: 2 },
-                            onEachFeature: function(feature, layer) {
-                                if (feature.properties && feature.properties.name) {
-                                    layer.bindPopup(feature.properties.name);
-                                }
-                            }
-                        }).addTo(group);
-                    })
-                    .catch(err => console.warn('Не удалось загрузить слой:', layerData.url, err));
-            } else if (layerData.geojson) {
-                L.geoJSON(layerData.geojson, {
-                    style: layerData.style || { color: '#ff6600', weight: 2 }
-                }).addTo(group);
-            }
-
-            if (layerData.visible !== false) {
-                mapInstance.addLayer(group);
-            }
-
-            const cbWrapper = document.createElement('div');
-            cbWrapper.className = 'map-layer-item';
-            const cb = document.createElement('input');
-            cb.type = 'checkbox';
-            cb.id = `layer-${layerData.id}`;
-            cb.checked = layerData.visible !== false;
-            const label = document.createElement('label');
-            label.htmlFor = `layer-${layerData.id}`;
-            label.textContent = layerData.name || layerData.id;
-
-            cb.addEventListener('change', function() {
-                if (this.checked) {
-                    mapInstance.addLayer(layerGroups[layerData.id]);
-                } else {
-                    mapInstance.removeLayer(layerGroups[layerData.id]);
-                }
-            });
-
-            cbWrapper.appendChild(cb);
-            cbWrapper.appendChild(label);
-            layersContainer.appendChild(cbWrapper);
-        });
-
-        if (polygon.layers.length > 0) {
-            const header = document.createElement('div');
-            header.style.cssText = 'margin-top:8px; font-weight:700; color: var(--text-muted);';
-            header.textContent = 'Слои:';
-            layersContainer.prepend(header);
-        }
-
-        setTimeout(() => mapInstance.invalidateSize(), 100);
-    }
-
-    // ================================================================
-    // 7. ЛОГИ
-    // ================================================================
-    async function loadLogs() {
-        try {
-            const response = await fetch('log_data.json');
-            if (!response.ok) throw new Error('Не удалось загрузить журнал');
-            const data = await response.json();
-            const container = document.getElementById('log-container');
-            container.innerHTML = '';
-            data.logs.forEach(entry => {
-                const row = document.createElement('div');
-                row.className = 'log-row';
-                if (entry.style) row.style.cssText = entry.style;
-                const dateSpan = document.createElement('span');
-                dateSpan.className = 'log-date';
-                dateSpan.textContent = entry.date;
-                const textSpan = document.createElement('span');
-                textSpan.textContent = entry.text;
-                row.appendChild(dateSpan);
-                row.appendChild(textSpan);
-                container.appendChild(row);
-            });
-        } catch (error) {
-            console.error('Ошибка загрузки журнала:', error);
-            document.getElementById('log-container').innerHTML = '<div class="log-row" style="color: var(--text-muted);">Ошибка загрузки записей.</div>';
-        }
-    }
-
-    // ================================================================
-    // 8. КАЛЬКУЛЯТОР
-    // ================================================================
-    function initCalculator() {
-        const weightSlider = document.getElementById('weightSlider');
-        const speedSlider = document.getElementById('speedSlider');
-        const weightValue = document.getElementById('weightValue');
-        const speedValue = document.getElementById('speedValue');
-        const energyDisplay = document.getElementById('energyDisplay');
-        const speedOn20Display = document.getElementById('speedOn20Display');
-        const rows = document.querySelectorAll('#rulesTable tbody tr');
-        const statusSecondary = document.getElementById('statusSecondary');
-        const statusPrimary = document.getElementById('statusPrimary');
-        const statusSniper = document.getElementById('statusSniper');
-        const statusMsg = document.getElementById('statusMessage');
-        const LIMITS = {
-            secondary: { maxEnergy: 1.5, distance: 0, label: 'Вторичка' },
-            primary: { maxEnergy: 2.4, distance: 10, label: 'Основное' },
-            sniper: { maxEnergy: 2.9, distance: 25, label: 'Снайперка' }
-        };
-        function getCategoryByEnergy(E) {
-            if (E <= 1.5) return 'secondary';
-            if (E <= 2.4) return 'primary';
-            if (E <= 2.9) return 'sniper';
-            return 'over';
-        }
-        function updateAll() {
-            const m = parseFloat(weightSlider.value);
-            const v = parseFloat(speedSlider.value);
-            const E = (m * v * v) / 2000;
-            const v20 = Math.sqrt(E * 2000 / 0.20);
-            weightValue.textContent = m.toFixed(2) + ' г';
-            speedValue.textContent = v.toFixed(0) + ' м/с';
-            energyDisplay.textContent = E.toFixed(2) + ' Дж';
-            speedOn20Display.textContent = v20.toFixed(0) + ' м/с';
-            const category = getCategoryByEnergy(E);
-            rows.forEach(row => row.classList.remove('active', 'warning'));
-            let activeRow = null;
-            rows.forEach(row => { if (row.dataset.weapon === category) activeRow = row; });
-            let isAllowed = false;
-            let limit = null;
-            if (category !== 'over') {
-                limit = LIMITS[category];
-                isAllowed = E <= limit.maxEnergy;
-            }
-            if (activeRow) {
-                if (isAllowed) activeRow.classList.add('active');
-                else activeRow.classList.add('warning');
-            }
-            const statusMap = { secondary: statusSecondary, primary: statusPrimary, sniper: statusSniper };
-            for (let w in statusMap) {
-                const lim = LIMITS[w];
-                const ok = E <= lim.maxEnergy;
-                statusMap[w].textContent = ok ? '✔' : '✘';
-                statusMap[w].style.color = ok ? 'var(--green)' : 'var(--red)';
-            }
-            if (category === 'over') {
-                statusMsg.className = 'status-msg fail';
-                statusMsg.innerHTML = '❌ Не допуск: превышен максимальный лимит (2.9 Дж)';
-            } else if (isAllowed) {
-                statusMsg.className = 'status-msg ok';
-                statusMsg.innerHTML = `✅ Допуск: разрешено, дистанция ${limit.distance} м (категория «${limit.label}»)`;
-            } else {
-                statusMsg.className = 'status-msg fail';
-                statusMsg.innerHTML = `❌ Не допуск: превышен лимит для «${limit.label}» (макс. ${limit.maxEnergy} Дж)`;
-            }
-        }
-        weightSlider.addEventListener('input', updateAll);
-        speedSlider.addEventListener('input', updateAll);
-        updateAll();
-    }
-
-    // ================================================================
-    // 9. ГОЛОСОВАНИЯ
-    // ================================================================
-    let pollsArchived = false;
-    function loadPolls() {
-        const container = document.getElementById('polls-list');
-        container.innerHTML = '<p>Загрузка...</p>';
-        const url = '/api/polls.php' + (pollsArchived ? '?archived=1' : '');
-        fetch(url)
-            .then(res => res.json())
-            .then(polls => {
-                if (!polls.length) {
-                    container.innerHTML = '<p style="color: var(--text-muted);">' + (pollsArchived ? 'Нет завершённых опросов.' : 'Нет активных голосований.') + '</p>';
-                    return;
-                }
-                let html = '';
-                polls.forEach(poll => {
-                    const options = poll.options || [];
-                    const votes = poll.vote_counts || [];
-                    const total = poll.total_votes || 0;
-                    const myVote = poll.my_vote !== null ? poll.my_vote : -1;
-                    let optionsHtml = options.map((label, idx) => {
-                        const count = votes[idx] || 0;
-                        const percent = total > 0 ? Math.round((count / total) * 100) : 0;
-                        const isMine = (myVote === idx) ? '✅ ' : '';
-                        return `<div style="margin: 4px 0;">
-                                    <span>${isMine}${label}</span>
-                                    <span style="float:right;">${count} (${percent}%)</span>
-                                    <div style="width:100%; height:4px; background:#2a2a2a; border-radius:2px; margin-top:2px;">
-                                        <div style="width:${percent}%; height:100%; background:var(--accent-color); border-radius:2px;"></div>
-                                    </div>
-                                    ${myVote === -1 && !pollsArchived ? `<button class="radio-btn" style="font-size:12px; padding:2px 8px;" onclick="window.votePoll(${poll.id}, ${idx})">Голосовать</button>` : ''}
-                                </div>`;
-                    }).join('');
-                    html += `
-                        <div style="background: #0a0a0a; border: 1px solid var(--border-color); padding: 12px; margin-bottom: 10px;">
-                            <strong style="color: #fff;">${poll.title}</strong>
-                            <div style="font-size: 13px; color: #666;">До: ${new Date(poll.expires_at * 1000).toLocaleString()}</div>
-                            <div style="margin-top: 8px;">${optionsHtml}</div>
-                            ${currentUser && currentUser.role === 'admin' ? `<button class="radio-btn" style="font-size:13px; padding:4px 12px; border-color: var(--red); color: var(--red);" onclick="window.deletePoll(${poll.id})">🗑️ Удалить опрос</button>` : ''}
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-            })
-            .catch(err => {
-                container.innerHTML = '<p style="color: var(--red);">Ошибка загрузки опросов</p>';
-                console.error(err);
-            });
-    }
-    window.votePoll = function(pollId, optionIndex) {
-        if (!currentUser) return alert('Войдите в аккаунт');
-        fetch('/api/polls.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'vote', poll_id: pollId, option_index: optionIndex })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) loadPolls();
-            else alert('Ошибка: ' + (data.error || 'Неизвестно'));
-        })
-        .catch(err => alert('Ошибка сети'));
-    };
-    window.deletePoll = function(pollId) {
-        if (!confirm('Удалить опрос?')) return;
-        fetch('/api/polls.php', {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ poll_id: pollId })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) loadPolls();
-            else alert('Ошибка: ' + (data.error || 'Неизвестно'));
-        })
-        .catch(err => alert('Ошибка сети'));
-    };
-    document.getElementById('polls-toggle-archived')?.addEventListener('click', function() {
-        pollsArchived = !pollsArchived;
-        this.textContent = pollsArchived ? 'Показать активные' : 'Показать архив';
-        loadPolls();
-    });
-    const pollForm = document.getElementById('poll-form');
-    if (pollForm) {
-        pollForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const title = document.getElementById('poll-title').value.trim();
-            const optionsRaw = document.getElementById('poll-options').value.trim();
-            const expiresInput = document.getElementById('poll-expires');
-            const expiresValue = expiresInput.value;
-            if (!title || !optionsRaw || !expiresValue) {
-                alert('Заполните все поля');
-                return;
-            }
-            const options = optionsRaw.split(',').map(s => s.trim()).filter(s => s);
-            if (options.length < 2) {
-                alert('Минимум 2 варианта');
-                return;
-            }
-            const dateObj = new Date(expiresValue);
-            const expires_at = Math.floor(dateObj.getTime() / 1000);
-            if (isNaN(expires_at) || expires_at <= Math.floor(Date.now() / 1000)) {
-                alert('Дата должна быть в будущем');
-                return;
-            }
-            fetch('/api/polls.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'create', title, options, expires_at })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    loadPolls();
-                    pollForm.reset();
-                } else alert('Ошибка: ' + (data.error || 'Неизвестно'));
-            })
-            .catch(err => alert('Ошибка сети'));
-        });
-    }
-
-    // ================================================================
-    // 10. КАЛЕНДАРЬ
-    // ================================================================
-    let eventsArchived = false;
-    function loadEvents() {
-        const container = document.getElementById('events-list');
-        container.innerHTML = '<p>Загрузка...</p>';
-        const url = '/api/events.php' + (eventsArchived ? '?archived=1' : '');
-        fetch(url)
-            .then(res => res.json())
-            .then(events => {
-                if (!events.length) {
-                    container.innerHTML = '<p style="color: var(--text-muted);">' + (eventsArchived ? 'Нет завершённых событий.' : 'Нет предстоящих событий.') + '</p>';
-                    return;
-                }
-                let html = '';
-                events.forEach(ev => {
-                    const date = new Date(ev.event_date * 1000).toLocaleString();
-                    const going = ev.going_count || 0;
-                    const rsvpStatus = ev.rsvp_status !== null ? (ev.rsvp_status == 1 ? '✅ Вы идёте' : '❌ Вы не идёте') : 'Не определились';
-                    html += `
-                        <div style="background: #0a0a0a; border: 1px solid var(--border-color); padding: 12px; margin-bottom: 10px;">
-                            <strong style="color: #fff;">${ev.title}</strong>
-                            <div style="color: var(--text-muted); font-size: 14px;">${ev.description || ''}</div>
-                            <div style="font-size: 13px; color: #666;">📍 ${ev.location || 'Не указано'} | 🕒 ${date}</div>
-                            <div style="font-size: 13px; color: #666;">👥 Идут: ${going}</div>
-                            <div style="font-size: 13px; color: var(--accent-color);">${rsvpStatus}</div>
-                            <div style="margin-top: 6px;">
-                                <button class="radio-btn" style="font-size:13px; padding:4px 12px;" onclick="window.setRSVP(${ev.id}, 1)">👍 Пойду</button>
-                                <button class="radio-btn" style="font-size:13px; padding:4px 12px;" onclick="window.setRSVP(${ev.id}, 0)">👎 Не пойду</button>
-                                ${currentUser && currentUser.role === 'admin' ? `<button class="radio-btn" style="font-size:13px; padding:4px 12px; border-color: var(--red); color: var(--red);" onclick="window.deleteEvent(${ev.id})">🗑️ Удалить</button>` : ''}
-                            </div>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-            })
-            .catch(err => {
-                container.innerHTML = '<p style="color: var(--red);">Ошибка загрузки событий</p>';
-                console.error(err);
-            });
-    }
-    window.setRSVP = function(eventId, status) {
-        if (!currentUser) return alert('Войдите в аккаунт');
-        fetch('/api/events.php', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ event_id: eventId, status: status })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) loadEvents();
-            else alert('Ошибка: ' + (data.error || 'Неизвестно'));
-        })
-        .catch(err => alert('Ошибка сети'));
-    };
-    window.deleteEvent = function(eventId) {
-        if (!confirm('Удалить событие?')) return;
-        fetch('/api/events.php', {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ event_id: eventId })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) loadEvents();
-            else alert('Ошибка: ' + (data.error || 'Неизвестно'));
-        })
-        .catch(err => alert('Ошибка сети'));
-    };
-    document.getElementById('events-toggle-archived')?.addEventListener('click', function() {
-        eventsArchived = !eventsArchived;
-        this.textContent = eventsArchived ? 'Показать предстоящие' : 'Показать архив';
-        loadEvents();
-    });
-    const eventForm = document.getElementById('event-form');
-    if (eventForm) {
-        eventForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const title = document.getElementById('event-title').value.trim();
-            const description = document.getElementById('event-desc').value.trim();
-            const location = document.getElementById('event-location').value.trim();
-            const dateInput = document.getElementById('event-date');
-            const dateValue = dateInput.value;
-            if (!title || !dateValue) {
-                alert('Название и дата обязательны');
-                return;
-            }
-            const dateObj = new Date(dateValue);
-            const event_date = Math.floor(dateObj.getTime() / 1000);
-            if (isNaN(event_date) || event_date <= Math.floor(Date.now() / 1000)) {
-                alert('Дата должна быть в будущем');
-                return;
-            }
-            fetch('/api/events.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'create', title, description, event_date, location })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    loadEvents();
-                    eventForm.reset();
-                } else alert('Ошибка: ' + (data.error || 'Неизвестно'));
-            })
-            .catch(err => alert('Ошибка сети'));
-        });
-    }
-
-    // ================================================================
-    // 11. ЗАГРУЗКА ДАННЫХ (ФОТО, ОПЕРАТИВНИКИ, ИНСТРУКЦИИ, ATAK, УСТАВ, СЦЕНАРИИ, ДЕВАЙСЫ)
-    // ================================================================
-    async function loadPhotos() {
-        if (window._photoLoaded) return;
-        const container = document.getElementById('galleryContainer');
-        try {
-            const response = await fetch('photo_data.json');
-            if (!response.ok) throw new Error('Не удалось загрузить данные');
-            const data = await response.json();
-            if (!data.photos || data.photos.length === 0) {
-                container.innerHTML = `<div class="no-data">Фотографий пока нет</div>`;
-                window._photoLoaded = true;
-                return;
-            }
-            container.innerHTML = '';
-            data.photos.forEach(photo => {
-                const card = document.createElement('div');
-                card.className = 'photo-card';
-                const img = document.createElement('img');
-                img.src = photo.image || 'placeholder.webp';
-                img.alt = photo.title || 'Фото';
-                img.loading = 'lazy';
-                img.onerror = function() {
-                    this.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'200\' viewBox=\'0 0 400 200\'%3E%3Crect fill=\'%23333\' width=\'400\' height=\'200\'/%3E%3Ctext fill=\'%23666\' x=\'50\' y=\'115\' font-family=\'sans-serif\' font-size=\'24\'%3EФото отсутствует%3C/text%3E%3C/svg%3E';
-                };
-                img.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    window.openLightbox(this.src);
-                });
-                const body = document.createElement('div');
-                body.className = 'card-body';
-                const title = document.createElement('div');
-                title.className = 'card-title';
-                title.textContent = photo.title || 'Без названия';
-                const date = document.createElement('div');
-                date.className = 'card-date';
-                date.textContent = photo.date ? `📅 ${photo.date}` : '';
-                const desc = document.createElement('div');
-                desc.className = 'card-desc';
-                desc.textContent = photo.description || '';
-                body.appendChild(title);
-                if (photo.date) body.appendChild(date);
-                if (photo.description) body.appendChild(desc);
-                card.appendChild(img);
-                card.appendChild(body);
-                container.appendChild(card);
-            });
-            window._photoLoaded = true;
-        } catch (error) {
-            console.error('Ошибка загрузки галереи:', error);
-            container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки фотографий. Проверьте файл photo_data.json</div>`;
-            window._photoLoaded = true;
-        }
-    }
-
-    async function loadOperators() {
-        if (window._operatorsLoaded) return;
-        const container = document.getElementById('operatorsContainer');
-        try {
-            const response = await fetch('operators_data.json');
-            if (!response.ok) throw new Error('Не удалось загрузить данные');
-            const data = await response.json();
-            if (!data.operators || data.operators.length === 0) {
-                container.innerHTML = `<div class="no-data">Оперативников пока нет</div>`;
-                window._operatorsLoaded = true;
-                return;
-            }
-            container.innerHTML = '';
-            data.operators.forEach(op => {
-                const card = document.createElement('div');
-                card.className = 'operator-card';
-                const avatar = document.createElement('div');
-                avatar.className = 'operator-avatar';
-                if (op.photo) {
-                    const img = document.createElement('img');
-                    img.src = op.photo;
-                    img.alt = op.name || 'Оператор';
-                    img.loading = 'lazy';
-                    img.onerror = function() {
-                        this.style.display = 'none';
-                        avatar.textContent = op.avatar || '👤';
-                        avatar.style.fontSize = '56px';
-                    };
-                    avatar.appendChild(img);
-                } else {
-                    avatar.textContent = op.avatar || '👤';
-                    avatar.style.fontSize = '56px';
-                }
-                const name = document.createElement('div');
-                name.className = 'operator-name';
-                name.textContent = op.name || 'Без имени';
-                const role = document.createElement('div');
-                role.className = 'operator-role';
-                role.textContent = op.role || '';
-                const desc = document.createElement('div');
-                desc.className = 'operator-desc';
-                desc.textContent = op.description || '';
-                card.appendChild(avatar);
-                card.appendChild(name);
-                if (op.role) card.appendChild(role);
-                if (op.description) card.appendChild(desc);
-                if (op.specialization) {
-                    const spec = document.createElement('div');
-                    spec.className = 'operator-spec';
-                    spec.textContent = op.specialization;
-                    card.appendChild(spec);
-                }
-                container.appendChild(card);
-            });
-            window._operatorsLoaded = true;
-        } catch (error) {
-            console.error('Ошибка загрузки оперативников:', error);
-            container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки данных. Проверьте файл operators_data.json</div>`;
-            window._operatorsLoaded = true;
-        }
-    }
-
-    async function loadInstructions() {
-        if (window._instructionsLoaded) return;
-        const container = document.getElementById('docsContainer');
-        try {
-            const response = await fetch('instructions_data.json');
-            if (!response.ok) throw new Error('Не удалось загрузить инструкции');
-            const data = await response.json();
-            if (!data.documents || data.documents.length === 0) {
-                container.innerHTML = `<div class="no-data">Документов пока нет</div>`;
-                window._instructionsLoaded = true;
-                return;
-            }
-            container.innerHTML = '';
-            data.documents.forEach(doc => {
-                const card = document.createElement('div');
-                card.className = 'doc-card';
-                const title = document.createElement('div');
-                title.className = 'doc-title';
-                title.textContent = doc.title || 'Без названия';
-                const desc = document.createElement('div');
-                desc.className = 'doc-desc';
-                desc.textContent = doc.description || '';
-                const link = document.createElement('a');
-                link.className = 'doc-link';
-                link.href = doc.link || '#';
-                link.target = '_blank';
-                link.textContent = '📄 Открыть PDF';
-                link.rel = 'noopener noreferrer';
-                card.appendChild(title);
-                if (doc.description) card.appendChild(desc);
-                card.appendChild(link);
-                container.appendChild(card);
-            });
-            window._instructionsLoaded = true;
-        } catch (error) {
-            console.error('Ошибка загрузки инструкций:', error);
-            container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки инструкций. Проверьте файл instructions_data.json</div>`;
-            window._instructionsLoaded = true;
-        }
-    }
-
-    async function loadAtak() {
-        if (window._atakLoaded) return;
-        const container = document.getElementById('atakContainer');
-        try {
-            const response = await fetch('atak_data.json');
-            if (!response.ok) throw new Error('Не удалось загрузить руководство ATAK');
-            const data = await response.json();
-            if (!data.sections || data.sections.length === 0) {
-                container.innerHTML = `<div class="no-data">Разделы отсутствуют</div>`;
-                window._atakLoaded = true;
-                return;
-            }
-            container.innerHTML = '';
-            const tree = document.createElement('div');
-            tree.className = 'atak-tree';
-            data.sections.forEach(section => {
-                const node = createAtakNode(section, 0);
-                tree.appendChild(node);
-            });
-            container.appendChild(tree);
-            window._atakLoaded = true;
-        } catch (error) {
-            console.error('Ошибка загрузки ATAK:', error);
-            container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки руководства ATAK. Проверьте файл atak_data.json</div>`;
-            window._atakLoaded = true;
-        }
-    }
-
-    function createAtakNode(item, depth) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'atak-node';
-        const header = document.createElement('div');
-        header.className = 'node-header';
-        const titleSpan = document.createElement('span');
-        titleSpan.textContent = item.title || 'Без названия';
-        header.appendChild(titleSpan);
-        const hasChildren = item.children && item.children.length > 0;
-        const hasContent = item.content && item.content.trim().length > 0;
-        if (hasChildren || hasContent) {
-            const arrow = document.createElement('span');
-            arrow.className = 'arrow';
-            arrow.textContent = '▶';
-            header.appendChild(arrow);
-            const childContainer = document.createElement('div');
-            childContainer.className = 'node-children';
-            if (hasContent) {
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'node-content';
-                contentDiv.innerHTML = item.content;
-                childContainer.appendChild(contentDiv);
-            }
-            if (hasChildren) {
-                item.children.forEach(child => {
-                    const childNode = createAtakNode(child, depth + 1);
-                    childContainer.appendChild(childNode);
-                });
-            }
-            wrapper.appendChild(header);
-            wrapper.appendChild(childContainer);
-            header.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const arrowEl = this.querySelector('.arrow');
-                const childrenEl = this.parentElement.querySelector('.node-children');
-                if (childrenEl) {
-                    const isOpen = childrenEl.classList.contains('open');
-                    if (isOpen) {
-                        childrenEl.classList.remove('open');
-                        if (arrowEl) arrowEl.classList.remove('open');
-                    } else {
-                        childrenEl.classList.add('open');
-                        if (arrowEl) arrowEl.classList.add('open');
-                    }
-                }
-            });
-        } else {
-            wrapper.classList.add('node-leaf');
-            wrapper.appendChild(header);
-        }
-        return wrapper;
-    }
-
-    async function loadRegulations() {
-        const container = document.getElementById('regulationsContainer');
-        try {
-            const response = await fetch('regulations_data.json');
-            if (!response.ok) throw new Error('Не удалось загрузить устав');
-            const data = await response.json();
-            if (!data.sections || data.sections.length === 0) {
-                container.innerHTML = `<div class="no-data">Разделы устава отсутствуют</div>`;
-                return;
-            }
-            container.innerHTML = '';
-            const tree = document.createElement('div');
-            tree.className = 'atak-tree';
-            data.sections.forEach(section => {
-                const node = createAtakNode(section, 0);
-                tree.appendChild(node);
-            });
-            container.appendChild(tree);
-        } catch (error) {
-            console.error('Ошибка загрузки устава:', error);
-            container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки устава. Проверьте файл regulations_data.json</div>`;
-        }
-    }
-
-    async function loadScenarios() {
-        const container = document.getElementById('scenariosContainer');
-        try {
-            const response = await fetch('scenarios_data.json');
-            if (!response.ok) throw new Error('Не удалось загрузить сценарии');
-            const data = await response.json();
-            if (!data.scenarios || data.scenarios.length === 0) {
-                container.innerHTML = `<div class="no-data">Сценариев пока нет</div>`;
-                return;
-            }
-            container.innerHTML = '';
-            data.scenarios.forEach((scenario) => {
-                const card = document.createElement('div');
-                card.className = 'item-card';
-                const titleDiv = document.createElement('div');
-                titleDiv.className = 'item-title';
-                titleDiv.innerHTML = `
-                    <span>${scenario.title || 'Без названия'}</span>
-                    <span class="arrow">▶</span>
-                `;
-                card.appendChild(titleDiv);
-                const details = document.createElement('div');
-                details.className = 'item-details';
-                if (scenario.description) {
-                    const descDiv = document.createElement('div');
-                    descDiv.style.cssText = 'margin-bottom:10px; color: var(--text-color); font-size:16px; line-height:1.5;';
-                    descDiv.textContent = scenario.description;
-                    details.appendChild(descDiv);
-                }
-                if (scenario.video_link) {
-                    const videoDiv = document.createElement('div');
-                    videoDiv.className = 'item-video';
-                    const iframe = document.createElement('iframe');
-                    iframe.width = '100%';
-                    iframe.height = '315';
-                    iframe.src = scenario.video_link;
-                    iframe.style.border = 'none';
-                    iframe.allowFullscreen = true;
-                    iframe.loading = 'lazy';
-                    videoDiv.appendChild(iframe);
-                    details.appendChild(videoDiv);
-                }
-                if (scenario.phases && scenario.phases.length > 0) {
-                    const phasesDiv = document.createElement('div');
-                    phasesDiv.style.marginTop = '10px';
-                    const phasesTitle = document.createElement('div');
-                    phasesTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
-                    phasesTitle.textContent = '🔹 Фазы';
-                    phasesDiv.appendChild(phasesTitle);
-                    scenario.phases.forEach(phase => {
-                        const phaseBlock = document.createElement('div');
-                        phaseBlock.style.cssText = 'margin-bottom:12px; padding-left:10px; border-left:2px solid var(--accent-color);';
-                        const phaseName = document.createElement('div');
-                        phaseName.style.cssText = 'font-weight:700; color:#fff; font-size:16px;';
-                        phaseName.textContent = `${phase.name} (${phase.time})`;
-                        phaseBlock.appendChild(phaseName);
-                        if (phase.description) {
-                            const desc = document.createElement('div');
-                            desc.style.cssText = 'color: var(--text-color); font-size:15px; margin:4px 0;';
-                            desc.textContent = phase.description;
-                            phaseBlock.appendChild(desc);
-                        }
-                        if (phase.map_image) {
-                            const img = document.createElement('img');
-                            img.src = phase.map_image;
-                            img.loading = 'lazy';
-                            img.style.cssText = 'max-width:100%; height:auto; border:1px solid var(--border-color); margin-top:6px;';
-                            img.alt = phase.name;
-                            phaseBlock.appendChild(img);
-                        }
-                        phasesDiv.appendChild(phaseBlock);
-                    });
-                    details.appendChild(phasesDiv);
-                }
-                if (scenario.inventory && scenario.inventory.length > 0) {
-                    const invDiv = document.createElement('div');
-                    invDiv.style.marginTop = '10px';
-                    const invTitle = document.createElement('div');
-                    invTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
-                    invTitle.textContent = '📦 Инвентарь';
-                    invDiv.appendChild(invTitle);
-                    const list = document.createElement('ul');
-                    list.style.cssText = 'margin-left:20px; color: var(--text-color);';
-                    scenario.inventory.forEach(item => {
-                        const li = document.createElement('li');
-                        li.textContent = item;
-                        list.appendChild(li);
-                    });
-                    invDiv.appendChild(list);
-                    details.appendChild(invDiv);
-                }
-                if (scenario.files && scenario.files.length > 0) {
-                    const filesDiv = document.createElement('div');
-                    filesDiv.className = 'item-files';
-                    const filesTitle = document.createElement('div');
-                    filesTitle.style.cssText = 'font-weight:700; color: var(--accent-color); margin-bottom:6px;';
-                    filesTitle.textContent = '📁 Файлы';
-                    filesDiv.appendChild(filesTitle);
-                    const list = document.createElement('ul');
-                    scenario.files.forEach(file => {
-                        const li = document.createElement('li');
-                        const link = document.createElement('a');
-                        link.href = file.link;
-                        link.target = '_blank';
-                        link.textContent = file.name;
-                        link.style.cssText = 'color: var(--blue); text-decoration: none; font-weight:700; border:1px solid var(--blue); padding:4px 14px; transition:0.2s; display:inline-block;';
-                        li.appendChild(link);
-                        list.appendChild(li);
-                    });
-                    filesDiv.appendChild(list);
-                    details.appendChild(filesDiv);
-                }
-                card.appendChild(details);
-                titleDiv.addEventListener('click', function() {
-                    const isOpen = details.classList.contains('open');
-                    if (isOpen) {
-                        details.classList.remove('open');
-                        this.querySelector('.arrow').classList.remove('open');
-                    } else {
-                        details.classList.add('open');
-                        this.querySelector('.arrow').classList.add('open');
-                    }
-                });
-                container.appendChild(card);
-            });
-        } catch (error) {
-            console.error('Ошибка загрузки сценариев:', error);
-            container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки сценариев. Проверьте файл scenarios_data.json</div>`;
-        }
-    }
-
-    async function loadDevices() {
-        const container = document.getElementById('devicesContainer');
-        try {
-            const response = await fetch('devices_data.json');
-            if (!response.ok) throw new Error('Не удалось загрузить устройства');
-            const data = await response.json();
-            if (!data.devices || data.devices.length === 0) {
-                container.innerHTML = `<div class="no-data">Устройств пока нет</div>`;
-                return;
-            }
-            container.innerHTML = '';
-            data.devices.forEach((device) => {
-                const card = document.createElement('div');
-                card.className = 'item-card';
-                const titleDiv = document.createElement('div');
-                titleDiv.className = 'item-title';
-                titleDiv.innerHTML = `
-                    <span>${device.name || 'Без названия'}</span>
-                    <span class="arrow">▶</span>
-                `;
-                card.appendChild(titleDiv);
-                const details = document.createElement('div');
-                details.className = 'item-details';
-                if (device.photo) {
-                    const photo = document.createElement('img');
-                    photo.src = device.photo;
-                    photo.className = 'item-photo';
-                    photo.loading = 'lazy';
-                    photo.style.maxWidth = '100%';
-                    photo.style.border = '1px solid var(--border-color)';
-                    details.appendChild(photo);
-                }
-                if (device.description) {
-                    const desc = document.createElement('div');
-                    desc.className = 'item-description';
-                    desc.textContent = device.description;
-                    details.appendChild(desc);
-                }
-                if (device.video_link) {
-                    const videoDiv = document.createElement('div');
-                    videoDiv.className = 'item-video';
-                    const iframe = document.createElement('iframe');
-                    iframe.width = '100%';
-                    iframe.height = '315';
-                    iframe.src = device.video_link;
-                    iframe.style.border = 'none';
-                    iframe.allowFullscreen = true;
-                    iframe.loading = 'lazy';
-                    videoDiv.appendChild(iframe);
-                    details.appendChild(videoDiv);
-                }
-                const linksDiv = document.createElement('div');
-                linksDiv.className = 'item-links';
-                if (device.schematic_link) {
-                    const a = document.createElement('a');
-                    a.href = device.schematic_link;
-                    a.target = '_blank';
-                    a.textContent = '📐 Схема';
-                    linksDiv.appendChild(a);
-                }
-                if (device.docs_link) {
-                    const a = document.createElement('a');
-                    a.href = device.docs_link;
-                    a.target = '_blank';
-                    a.textContent = '📄 Документация';
-                    linksDiv.appendChild(a);
-                }
-                if (device.files && device.files.length > 0) {
-                    device.files.forEach(file => {
-                        const a = document.createElement('a');
-                        a.href = file.link;
-                        a.target = '_blank';
-                        a.textContent = file.name;
-                        linksDiv.appendChild(a);
-                    });
-                }
-                if (linksDiv.children.length > 0) {
-                    details.appendChild(linksDiv);
-                }
-                card.appendChild(details);
-                titleDiv.addEventListener('click', function() {
-                    const isOpen = details.classList.contains('open');
-                    if (isOpen) {
-                        details.classList.remove('open');
-                        this.querySelector('.arrow').classList.remove('open');
-                    } else {
-                        details.classList.add('open');
-                        this.querySelector('.arrow').classList.add('open');
-                    }
-                });
-                container.appendChild(card);
-            });
-        } catch (error) {
-            console.error('Ошибка загрузки устройств:', error);
-            container.innerHTML = `<div class="error-msg">❌ Ошибка загрузки устройств. Проверьте файл devices_data.json</div>`;
-        }
-    }
-
-    // ================================================================
-    // 12. ИНИЦИАЛИЗАЦИЯ
-    // ================================================================
-    document.addEventListener('DOMContentLoaded', function() {
-        checkAuth().then(() => {
-            loadRadioData();
-            loadLogs();
-            initCalculator();
-            loadPhotos();
-            loadOperators();
-            loadInstructions();
-            loadAtak();
-            loadRegulations();
-            loadScenarios();
-            loadDevices();
-            showPage('page-home');
-        });
-    });
-})();
-</script>
+            <div class="form-group">
+                <label>Описание</label>
+                <textarea id="event-desc" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Дата и время *</label>
+                <input type="datetime-local" id="event-date" required />
+            </div>
+            <div class="form-group">
+                <label>Место</label>
+                <input type="text" id="event-location" placeholder="Название места" />
+            </div>
+            <button type="submit" class="radio-btn primary" style="width:auto; font-size:16px; padding:10px 24px;"><span class="material-icons">save</span> Сохранить</button>
+        </form>
+    </div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+<script src="/js/utils.js"></script>
+<script src="/js/navigation.js"></script>
+<script src="/js/radio.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/chat.js"></script>
+<script src="/js/polls.js"></script>
+<script src="/js/events.js"></script>
+<script src="/js/calculator.js"></script>
+<script src="/js/maps.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/operators.js"></script>
+<script src="/js/instructions.js"></script>
+<script src="/js/atak.js"></script>
+<script src="/js/regulations.js"></script>
+<script src="/js/scenarios.js"></script>
+<script src="/js/devices.js"></script>
+<script src="/js/logs.js"></script>
+<script src="/js/init.js"></script>
 </body>
 </html>

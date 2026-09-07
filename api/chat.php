@@ -6,7 +6,6 @@ if (!isset($_SESSION['user_id'])) {
     die(json_encode(['error' => 'Не авторизован']));
 }
 
-// Получение сообщений (последние 100)
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $since = intval($_GET['since'] ?? 0);
     $stmt = $db->prepare('
@@ -23,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     exit;
 }
 
-// Отправка сообщения
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     $text = trim($data['message'] ?? '');
@@ -34,16 +32,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $now = time();
     $db->beginTransaction();
     try {
-        // Вставляем новое сообщение
         $stmt = $db->prepare('INSERT INTO messages (user_id, message, timestamp) VALUES (?, ?, ?)');
         $stmt->execute([$_SESSION['user_id'], $text, $now]);
         $id = $db->lastInsertId();
 
-        // Проверяем общее количество сообщений
         $countStmt = $db->query('SELECT COUNT(*) FROM messages');
         $count = $countStmt->fetchColumn();
 
-        // Если больше 100, удаляем самые старые
         if ($count > 100) {
             $deleteStmt = $db->prepare('
             DELETE FROM messages
@@ -60,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $db->commit();
 
-        // Возвращаем новое сообщение с данными пользователя
         $stmt = $db->prepare('
         SELECT m.id, m.user_id, u.username, u.avatar, m.message, m.timestamp
         FROM messages m

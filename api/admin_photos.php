@@ -32,14 +32,12 @@ if ($action === 'upload') {
         http_response_code(400);
         die(json_encode(['error' => 'Недопустимый формат']));
     }
-    // Генерируем имя
     $filename = 'photo_' . time() . '.' . $ext;
     $dest = __DIR__ . '/../photos/' . $filename;
     if (!move_uploaded_file($file['tmp_name'], $dest)) {
         http_response_code(500);
         die(json_encode(['error' => 'Не удалось сохранить файл']));
     }
-    // Обновляем JSON
     $jsonPath = __DIR__ . '/../photo_data.json';
     $data = json_decode(file_get_contents($jsonPath), true);
     if (!isset($data['photos'])) $data['photos'] = [];
@@ -72,7 +70,6 @@ if ($action === 'delete') {
     $found = false;
     foreach ($data['photos'] as $index => $photo) {
         if ($photo['id'] == $id) {
-            // Удаляем файл
             $filePath = __DIR__ . '/../' . $photo['image'];
             if (file_exists($filePath)) unlink($filePath);
             unset($data['photos'][$index]);

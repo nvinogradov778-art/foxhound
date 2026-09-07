@@ -1,6 +1,5 @@
 <?php
 require_once 'db.php';
-// Проверка админа – аналогично
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
     die(json_encode(['error' => 'Не авторизован']));
@@ -36,7 +35,6 @@ if ($action === 'save') {
         'description' => $description
     ];
 
-    // Обработка фото
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         $file = $_FILES['photo'];
         $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
@@ -53,19 +51,16 @@ if ($action === 'save') {
         }
         $operator['photo'] = 'operators/' . $filename;
     } else {
-        // Если не загружено, сохраняем старое фото (если редактирование)
         if ($index !== null && isset($data['operators'][$index]['photo'])) {
             $operator['photo'] = $data['operators'][$index]['photo'];
         } else {
-            $operator['photo'] = null; // или заглушка
+            $operator['photo'] = null;
         }
     }
 
     if ($index !== null && isset($data['operators'][$index])) {
-        // Обновление
         $data['operators'][$index] = $operator;
     } else {
-        // Добавление
         $data['operators'][] = $operator;
     }
     file_put_contents($jsonPath, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
@@ -86,7 +81,6 @@ if ($action === 'delete') {
         http_response_code(404);
         die(json_encode(['error' => 'Оперативник не найден']));
     }
-    // Удаляем фото
     if (isset($data['operators'][$index]['photo'])) {
         $filePath = __DIR__ . '/../' . $data['operators'][$index]['photo'];
         if (file_exists($filePath)) unlink($filePath);

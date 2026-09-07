@@ -1,5 +1,4 @@
 <?php
-// Подключение к SQLite
 $db_path = __DIR__ . '/../data/foxhound.db';
 try {
     $db = new PDO('sqlite:' . $db_path);
@@ -10,7 +9,6 @@ try {
     die(json_encode(['error' => 'Database connection failed']));
 }
 
-// Сессии
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

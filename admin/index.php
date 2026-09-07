@@ -1,5 +1,4 @@
 <?php
-// Проверка авторизации и роли
 session_start();
 require_once __DIR__ . '/../api/db.php';
 
@@ -16,7 +15,6 @@ if ($role !== 'admin') {
     exit;
 }
 
-// Определяем активный раздел
 $section = $_GET['section'] ?? 'photos';
 ?>
 <!DOCTYPE html>
@@ -70,7 +68,6 @@ $section = $_GET['section'] ?? 'photos';
         <a href="/" style="margin-left: auto;">🏠 На сайт</a>
     </div>
 
-    <!-- ===== Раздел Фото ===== -->
     <div id="section-photos" class="section <?= $section === 'photos' ? 'active' : '' ?>">
         <h2>Управление фотографиями</h2>
         <form id="photo-form" enctype="multipart/form-data">
@@ -94,7 +91,6 @@ $section = $_GET['section'] ?? 'photos';
         <div id="photo-list"></div>
     </div>
 
-    <!-- ===== Раздел Оперативники ===== -->
     <div id="section-operators" class="section <?= $section === 'operators' ? 'active' : '' ?>">
         <h2>Управление оперативниками</h2>
         <form id="operator-form" enctype="multipart/form-data">
@@ -111,7 +107,6 @@ $section = $_GET['section'] ?? 'photos';
         <div id="operator-list"></div>
     </div>
 
-    <!-- ===== Раздел Инструкции ===== -->
     <div id="section-instructions" class="section <?= $section === 'instructions' ? 'active' : '' ?>">
         <h2>Управление инструкциями</h2>
         <form id="instruction-form">
@@ -123,35 +118,30 @@ $section = $_GET['section'] ?? 'photos';
         <div id="instruction-list"></div>
     </div>
 
-    <!-- ===== Раздел ATAK (дерево) ===== -->
     <div id="section-atak" class="section <?= $section === 'atak' ? 'active' : '' ?>">
         <h2>Редактор ATAK</h2>
         <p>Используйте JSON-редактор для изменения структуры ATAK (раздел JSON).</p>
         <button onclick="location.href='?section=json&file=atak_data.json'" class="btn">Перейти к ATAK JSON</button>
     </div>
 
-    <!-- ===== Раздел Устав (дерево) ===== -->
     <div id="section-regulations" class="section <?= $section === 'regulations' ? 'active' : '' ?>">
         <h2>Редактор Устава</h2>
         <p>Используйте JSON-редактор для изменения структуры Устава.</p>
         <button onclick="location.href='?section=json&file=regulations_data.json'" class="btn">Перейти к Уставу JSON</button>
     </div>
 
-    <!-- ===== Раздел Сценарии ===== -->
     <div id="section-scenarios" class="section <?= $section === 'scenarios' ? 'active' : '' ?>">
         <h2>Управление сценариями</h2>
         <p>Редактируйте сценарии через JSON-редактор.</p>
         <button onclick="location.href='?section=json&file=scenarios_data.json'" class="btn">Перейти к сценариям JSON</button>
     </div>
 
-    <!-- ===== Раздел Девайсы ===== -->
     <div id="section-devices" class="section <?= $section === 'devices' ? 'active' : '' ?>">
         <h2>Управление девайсами</h2>
         <p>Редактируйте девайсы через JSON-редактор.</p>
         <button onclick="location.href='?section=json&file=devices_data.json'" class="btn">Перейти к девайсам JSON</button>
     </div>
 
-    <!-- ===== JSON-редактор ===== -->
     <div id="section-json" class="section <?= $section === 'json' ? 'active' : '' ?>">
         <h2>Редактор JSON-файлов</h2>
         <div style="margin-bottom: 10px;">
@@ -181,9 +171,6 @@ $section = $_GET['section'] ?? 'photos';
     (function() {
         'use strict';
 
-        // ================================================================
-        // Общие функции для работы с JSON
-        // ================================================================
         function apiRequest(url, method, body) {
             return fetch(url, {
                 method: method,
@@ -201,9 +188,6 @@ $section = $_GET['section'] ?? 'photos';
             setTimeout(() => { el.style.display = 'none'; }, 5000);
         }
 
-        // ================================================================
-        // Фото
-        // ================================================================
         function loadPhotos() {
             fetch('/photo_data.json')
                 .then(res => res.json())
@@ -278,9 +262,6 @@ $section = $_GET['section'] ?? 'photos';
             .catch(err => alert('Ошибка сети'));
         });
 
-        // ================================================================
-        // Оперативники
-        // ================================================================
         function loadOperators() {
             fetch('/operators_data.json')
                 .then(res => res.json())
@@ -326,7 +307,7 @@ $section = $_GET['section'] ?? 'photos';
                     document.getElementById('op-role').value = op.role || '';
                     document.getElementById('op-spec').value = op.specialization || '';
                     document.getElementById('op-desc').value = op.description || '';
-                    document.getElementById('op-photo').value = ''; // сброс
+                    document.getElementById('op-photo').value = '';
                 })
                 .catch(err => alert('Ошибка загрузки данных'));
         };
@@ -374,9 +355,6 @@ $section = $_GET['section'] ?? 'photos';
             .catch(err => alert('Ошибка сети'));
         });
 
-        // ================================================================
-        // Инструкции
-        // ================================================================
         function loadInstructions() {
             fetch('/instructions_data.json')
                 .then(res => res.json())
@@ -443,9 +421,6 @@ $section = $_GET['section'] ?? 'photos';
             .catch(err => alert('Ошибка сети'));
         });
 
-        // ================================================================
-        // JSON-редактор
-        // ================================================================
         let currentJsonFile = document.getElementById('json-file-select').value;
 
         document.getElementById('json-load-btn')?.addEventListener('click', function() {
@@ -468,7 +443,7 @@ $section = $_GET['section'] ?? 'photos';
         document.getElementById('json-save-btn')?.addEventListener('click', function() {
             const content = document.getElementById('json-editor').value;
             try {
-                JSON.parse(content); // валидация
+                JSON.parse(content);
             } catch (e) {
                 showStatus('Неверный JSON: ' + e.message, 'error');
                 return;
@@ -497,10 +472,6 @@ $section = $_GET['section'] ?? 'photos';
             }
         });
 
-        // ================================================================
-        // Инициализация
-        // ================================================================
-        // При загрузке страницы загружаем данные для активного раздела
         const activeSection = document.querySelector('.section.active');
         if (activeSection) {
             const id = activeSection.id;
@@ -510,10 +481,8 @@ $section = $_GET['section'] ?? 'photos';
             else if (id === 'section-json') document.getElementById('json-load-btn').click();
         }
 
-        // При переключении навигации загружаем данные
         document.querySelectorAll('.nav a').forEach(link => {
             link.addEventListener('click', function(e) {
-                // данные загрузятся при отображении раздела – используем setTimeout
                 setTimeout(() => {
                     const active = document.querySelector('.section.active');
                     if (active) {

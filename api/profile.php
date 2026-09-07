@@ -1,7 +1,6 @@
 <?php
 require_once 'db.php';
 
-// Проверяем авторизацию
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
     die(json_encode(['error' => 'Не авторизован']));
@@ -9,7 +8,6 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// GET – данные профиля
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $stmt = $db->prepare('SELECT id, username, avatar, about, role, registered_at, last_seen FROM users WHERE id = ?');
     $stmt->execute([$user_id]);
@@ -22,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     exit;
 }
 
-// POST – обновление about
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_GET['action'] ?? '';
 
@@ -36,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($action === 'avatar') {
-        // Проверяем файл
         if (!isset($_FILES['avatar']) || $_FILES['avatar']['error'] !== UPLOAD_ERR_OK) {
             http_response_code(400);
             die(json_encode(['error' => 'Ошибка загрузки файла']));
@@ -48,14 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             http_response_code(400);
             die(json_encode(['error' => 'Разрешены только JPG, PNG, GIF, WEBP']));
         }
-        // Генерируем имя
         $filename = 'avatar_' . $user_id . '.' . $ext;
         $dest = __DIR__ . '/../uploads/avatars/' . $filename;
         if (!move_uploaded_file($file['tmp_name'], $dest)) {
             http_response_code(500);
             die(json_encode(['error' => 'Не удалось сохранить файл']));
         }
-        // Обновляем в БД
         $stmt = $db->prepare('UPDATE users SET avatar = ? WHERE id = ?');
         $stmt->execute([$filename, $user_id]);
         echo json_encode(['success' => true, 'avatar' => $filename]);

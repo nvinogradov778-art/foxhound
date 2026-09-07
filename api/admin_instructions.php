@@ -1,6 +1,5 @@
 <?php
 require_once 'db.php';
-// Проверка админа – аналогично
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
     die(json_encode(['error' => 'Не авторизован']));
