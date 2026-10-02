@@ -1,1490 +1,741 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FOXHOUND</title>
+
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192.png">
+    <link rel="manifest" href="/manifest.json">
+
+    <meta name="description" content="Инженерно-тактическая страйкбольная команда FOXHOUND. Тактика, дисциплина, техническое превосходство.">
+    <meta name="theme-color" content="#ff6600">
+    <meta name="author" content="FOXHOUND">
+    <meta name="format-detection" content="telephone=no">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FOXHOUND">
+
+    <meta property="og:type"        content="website">
+    <meta property="og:site_name"   content="FOXHOUND">
+    <meta property="og:title"       content="FOXHOUND — Страйкбольная команда">
+    <meta property="og:description" content="Инженерно-тактическая страйкбольная команда.">
+    <meta property="og:url"         content="https://foxhound-team.ru/">
+    <meta property="og:image"       content="https://foxhound-team.ru/og-image.jpg">
+    <meta property="og:image:width"  content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt"   content="Логотип команды FOXHOUND">
+    <meta property="og:locale"      content="ru_RU">
+
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:title"       content="FOXHOUND — Страйкбольная команда">
+    <meta name="twitter:description" content="Инженерно-тактическая страйкбольная команда.">
+    <meta name="twitter:image"       content="https://foxhound-team.ru/og-image.jpg">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"></noscript>
-    <link rel="preload" href="logo-foxhound.webp" as="image">
-    <link rel="preload" href="background.mp4" as="video" type="video/mp4">
-    <link rel="manifest" href="/manifest.json">
-    <style>
-        :root {
-            --bg-color: #0a0a0a;
-            --panel-bg: #111111;
-            --accent-color: #ff6600;
-            --accent-glow: rgba(255, 102, 0, 0.2);
-            --text-color: #c0c0c0;
-            --text-muted: #666666;
-            --border-color: #2a2a2a;
-            --glass-bg: rgba(17, 17, 17, 0.7);
-            --green: #33cc33;
-            --red: #ff3333;
-            --blue: var(--accent-color);
-            --shadow: 0 0 30px rgba(0,0,0,0.7);
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'PT Sans', 'Arial', sans-serif;
-            line-height: 1.6;
-            padding: 40px 20px;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-            word-break: break-word;
-        }
-        .video-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -2;
-            pointer-events: none;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: var(--panel-bg);
-            border: 2px solid var(--accent-color);
-            padding: 30px;
-            box-shadow: var(--shadow), inset 0 0 20px rgba(255,102,0,0.04);
-            position: relative;
-            z-index: 1;
-        }
-        .header {
-            position: relative;
-            text-align: center;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 25px;
-            margin-bottom: 25px;
-        }
-        .header::after {
-            content: '/// FOXHOUND ///';
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--panel-bg);
-            padding: 0 15px;
-            color: var(--accent-color);
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            font-family: 'PT Sans', sans-serif;
-        }
-        .logo-image {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-            margin: 0 auto 16px;
-            display: block;
-            background: #000;
-            border: 2px solid var(--accent-color);
-            padding: 8px;
-            box-shadow: 0 0 30px var(--accent-glow);
-            transition: all 0.3s;
-            filter: grayscale(0.2);
-        }
-        .logo-image:hover { transform: scale(1.05); filter: grayscale(0); }
-        h1 {
-            color: #fff;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            font-size: 40px;
-            letter-spacing: 4px;
-            font-weight: 700;
-            margin-bottom: 4px;
-            text-shadow: 0 0 20px var(--accent-glow);
-            text-transform: uppercase;
-        }
-        .subtitle {
-            color: var(--accent-color);
-            font-size: 16px;
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 4px;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-        }
-        #auth-block {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            z-index: 10;
-        }
-        #auth-block .header-link {
-            border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 4px;
-            background: transparent;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 700;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.2s ease;
-            color: var(--text-muted);
-            white-space: nowrap;
-        }
-        #auth-block .profile-btn {
-            padding: 8px 18px;
-            font-size: 16px;
-        }
-        #auth-block #login-btn {
-            padding: 8px 18px;
-            font-size: 16px;
-        }
-        #auth-block .header-link:hover {
-            color: #fff;
-            background: rgba(255,102,0,0.08);
-        }
-        #auth-block .profile-btn {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-            background: rgba(255,102,0,0.05);
-        }
-        #auth-block .profile-btn.active-profile {
-            background: var(--accent-color);
-            color: #0a0a0a;
-            border-color: var(--accent-color);
-        }
-        #auth-block .profile-btn.active-profile:hover {
-            background: #ff8833;
-            color: #0a0a0a;
-        }
-        .nav-wrapper {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 20px;
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            padding: 4px 0;
-        }
-        .header-links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 4px 6px;
-            border: none;
-            padding: 0;
-            margin: 0;
-        }
-        .header-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            padding: 6px 12px;
-            font-size: 14px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            border-radius: 4px;
-            white-space: nowrap;
-        }
-        .header-link .material-icons {
-            font-size: 18px;
-        }
-        .header-link:hover {
-            color: #fff;
-            background: rgba(255,102,0,0.08);
-        }
-        .header-link.active {
-            color: var(--accent-color);
-            background: rgba(255,102,0,0.12);
-            box-shadow: inset 0 -2px 0 var(--accent-color);
-        }
-        .page {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-        .page.active { display: block; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .quote {
-            background: var(--glass-bg);
-            padding: 16px 20px;
-            margin: 20px 0;
-            font-style: italic;
-            color: #c9d1d9;
-            border: 1px solid var(--accent-color);
-        }
-        h2 {
-            color: #fff;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            font-size: 24px;
-            text-transform: uppercase;
-            margin: 40px 0 16px 0;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-        }
-        h2::after {
-            content: '';
-            flex: 1;
-            margin-left: 15px;
-            height: 1px;
-            background: var(--border-color);
-        }
-        h3 {
-            color: var(--accent-color);
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            font-size: 18px;
-            text-transform: uppercase;
-            margin: 20px 0 10px 0;
-            letter-spacing: 1px;
-        }
-        p { margin-bottom: 15px; color: var(--text-color); font-size: 16px; }
-        .tasks-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-            margin-top: 16px;
-        }
-        @media (min-width: 600px) { .tasks-grid { grid-template-columns: 1fr 1fr; } }
-        .task-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--accent-color);
-            padding: 18px;
-            transition: all 0.2s;
-            font-size: 15px;
-        }
-        .task-card:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 20px var(--accent-glow);
-            transform: translateY(-2px);
-        }
-        .task-card strong {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--accent-color);
-            margin-bottom: 6px;
-            font-size: 16px;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            letter-spacing: 1px;
-        }
-        .task-card strong .material-icons {
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-        .radio-station {
-            background: #0a0a0a;
-            border: 2px solid var(--accent-color);
-            padding: 20px;
-            margin-top: 16px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-            box-shadow: inset 0 0 30px rgba(0,20,0,0.4);
-            position: relative;
-        }
-        .radio-station::before {
-            content: 'TAC-COM';
-            position: absolute;
-            top: -11px;
-            right: 20px;
-            background: #0a0a0a;
-            padding: 0 12px;
-            color: var(--green);
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 3px;
-            border: 1px solid var(--green);
-        }
-        @media (min-width: 600px) { .radio-station { grid-template-columns: 2fr 1fr; } }
-        .radio-display {
-            background: #0a180a;
-            border: 1px solid var(--green);
-            padding: 16px;
-            font-family: 'PT Sans', sans-serif;
-            color: #33ff33;
-            text-shadow: 0 0 8px rgba(51, 255, 51, 0.25);
-            font-size: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .radio-display .freq-tag {
-            font-weight: 700;
-            font-size: 17px;
-            color: #fff;
-            border-bottom: 1px dashed #1a3a1a;
-            padding-bottom: 4px;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            letter-spacing: 1px;
-        }
-        .radio-display .desc-tag {
-            color: #85ff7a;
-            font-size: 13px;
-            line-height: 1.3;
-            margin-top: 4px;
-        }
-        .progress-container { margin-top: 12px; }
-        .progress-bar {
-            height: 4px;
-            background: #2a2a2a;
-            border-radius: 2px;
-            cursor: pointer;
-            position: relative;
-        }
-        .progress-fill {
-            height: 100%;
-            background: var(--green);
-            border-radius: 2px;
-            transition: width 0.1s;
-            width: 0%;
-        }
-        .time-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: #666;
-            margin-top: 4px;
-        }
-        .radio-controls {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 10px;
-        }
-        .radio-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            background: rgba(255,102,0,0.08);
-            border: 1px solid var(--accent-color);
-            color: var(--accent-color);
-            padding: 10px 16px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 20px;
-            transition: all 0.2s ease;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            letter-spacing: 1px;
-            border-radius: 4px;
-            line-height: 1;
-            text-decoration: none;
-        }
-        .radio-btn .material-icons {
-            font-size: 20px;
-        }
-        .radio-btn:hover {
-            background: var(--accent-color);
-            color: #0a0a0a;
-        }
-        .radio-btn.primary {
-            background: var(--accent-color);
-            color: #0a0a0a;
-            border-color: var(--accent-color);
-        }
-        .radio-btn.primary:hover {
-            background: #ff8833;
-        }
-        .playlist-select {
-            background: #111;
-            border: 1px solid var(--border-color);
-            color: #fff;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 15px;
-            font-family: 'PT Sans', sans-serif;
-            border-radius: 4px;
-        }
-        .log-container {
-            background: #0d0d0d;
-            border: 1px solid var(--accent-color);
-            padding: 16px;
-            font-family: 'PT Sans', sans-serif;
-            font-size: 15px;
-        }
-        .log-row {
-            margin-bottom: 10px;
-            border-bottom: 1px dashed #1a1a1a;
-            padding-bottom: 6px;
-        }
-        .log-row:last-child { border-bottom: none; margin-bottom: 0; }
-        .log-date { color: var(--accent-color); margin-right: 10px; font-weight: 700; }
-        .rules-list {
-            list-style: none;
-        }
-        .rules-list li {
-            position: relative;
-            padding-left: 24px;
-            margin-bottom: 8px;
-            font-size: 15px;
-        }
-        .rules-list li::before {
-            content: '[+]';
-            position: absolute;
-            left: 0;
-            color: var(--accent-color);
-            font-weight: 700;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-        }
-        .join-btn, .vk-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            text-align: center;
-            padding: 16px;
-            border: 2px solid;
-            font-size: 17px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            background: transparent;
-            margin-top: 16px;
-        }
-        .join-btn .material-icons,
-        .vk-btn .material-icons {
-            font-size: 20px;
-        }
-        .join-btn {
-            color: var(--accent-color);
-            border-color: var(--accent-color);
-            margin-top: 35px;
-        }
-        .join-btn:hover {
-            background: var(--accent-color);
-            color: #0a0a0a;
-            box-shadow: 0 0 30px var(--accent-glow);
-        }
-        .vk-btn {
-            color: #3399ff;
-            border-color: #3399ff;
-        }
-        .vk-btn:hover {
-            background: #3399ff;
-            color: #0a0a0a;
-            box-shadow: 0 0 30px rgba(51,153,255,0.3);
-        }
-        .param-group { background: var(--glass-bg); border: 1px solid var(--accent-color); padding: 20px; margin-bottom: 20px; }
-        .slider-row { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
-        .slider-row label { min-width: 110px; font-weight: 700; color: #fff; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 0.5px; font-size: 15px; }
-        .slider-row input[type="range"] { flex: 1; min-width: 150px; background: #2a2a2a; height: 4px; -webkit-appearance: none; appearance: none; }
-        .slider-row input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: var(--accent-color); cursor: pointer; border: none; box-shadow: 0 0 10px var(--accent-glow); }
-        .slider-row input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; background: var(--accent-color); cursor: pointer; border: none; }
-        .value-display { min-width: 70px; text-align: right; font-weight: 700; color: var(--accent-color); font-size: 19px; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; }
-        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
-        @media (max-width: 500px) { .result-grid { grid-template-columns: 1fr; } }
-        .result-item { background: #0d0d0d; padding: 12px 15px; border: 1px solid var(--accent-color); }
-        .result-item .label { font-size: 13px; text-transform: uppercase; color: var(--text-muted); font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; font-weight: 700; letter-spacing: 1px; }
-        .result-item .value { font-size: 24px; font-weight: 700; color: #fff; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; }
-        .result-item .value.highlight { color: var(--accent-color); }
-        .rules-table { width: 100%; border-collapse: collapse; margin-top: 5px; font-size: 15px; }
-        .rules-table th, .rules-table td { padding: 12px 10px; border-bottom: 1px solid var(--border-color); text-align: left; }
-        .rules-table th { color: var(--text-muted); font-weight: 700; font-size: 14px; text-transform: uppercase; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 1px; }
-        .rules-table tr.active { background: rgba(255,102,0,0.08); border: 1px solid var(--accent-color); }
-        .rules-table tr.warning { background: rgba(255,51,51,0.08); border: 1px solid var(--red); }
-        .status-msg { margin-top: 15px; padding: 15px; font-weight: 700; text-align: center; background: var(--glass-bg); border: 1px solid var(--accent-color); font-size: 16px; }
-        .status-msg.ok { border-color: var(--green); color: var(--green); }
-        .status-msg.fail { border-color: var(--red); color: var(--red); }
-        .gallery-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 600px) { .gallery-grid { grid-template-columns: 1fr 1fr; } }
-        .photo-card { background: var(--glass-bg); border: 1px solid var(--accent-color); overflow: hidden; transition: all 0.2s; cursor: pointer; }
-        .photo-card:hover { transform: scale(1.02); border-color: var(--accent-color); box-shadow: 0 0 20px var(--accent-glow); }
-        .photo-card img { width: 100%; height: 200px; object-fit: cover; display: block; background: #000; }
-        .photo-card .card-body { padding: 12px 15px 15px; }
-        .photo-card .card-title { font-weight: 700; color: #fff; font-size: 17px; margin-bottom: 4px; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 1px; }
-        .photo-card .card-date { font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
-        .photo-card .card-desc { font-size: 15px; color: var(--text-color); }
-        .no-data { grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted); font-style: italic; }
-        .error-msg { grid-column: 1 / -1; padding: 20px; text-align: center; color: var(--red); border: 1px solid var(--red); background: rgba(255,51,51,0.05); }
-        #lightbox {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-        #lightbox img {
-            max-width: 90%;
-            max-height: 90%;
-            object-fit: contain;
-            border: 2px solid var(--accent-color);
-            box-shadow: 0 0 50px rgba(255,102,0,0.3);
-            pointer-events: none;
-            user-select: none;
-        }
-        #lightbox .close-btn {
-            position: absolute;
-            top: 30px;
-            right: 40px;
-            font-size: 48px;
-            color: #fff;
-            cursor: pointer;
-            font-family: 'PT Sans', sans-serif;
-            font-weight: 700;
-            transition: 0.2s;
-            z-index: 10000;
-            user-select: none;
-            line-height: 1;
-        }
-        #lightbox .close-btn:hover {
-            color: var(--accent-color);
-            transform: scale(1.2);
-        }
-        .operator-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 600px) { .operator-grid { grid-template-columns: 1fr 1fr; } }
-        .operator-card { background: var(--glass-bg); border: 1px solid var(--accent-color); padding: 20px; transition: all 0.2s; text-align: center; }
-        .operator-card:hover { transform: scale(1.02); border-color: var(--accent-color); box-shadow: 0 0 20px var(--accent-glow); }
-        .operator-avatar { display: flex; justify-content: center; align-items: center; margin: 0 auto 10px; width: 100%; max-width: 120px; aspect-ratio: 1/1; background: #0d0d0d; border: 2px solid var(--border-color); overflow: hidden; font-size: 56px; }
-        .operator-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .operator-name { font-size: 20px; font-weight: 700; color: #fff; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 1px; }
-        .operator-role { color: var(--accent-color); font-size: 15px; text-transform: uppercase; letter-spacing: 1px; margin: 5px 0 10px; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; font-weight: 700; }
-        .operator-desc { color: var(--text-muted); font-size: 15px; line-height: 1.5; }
-        .operator-spec { display: inline-block; background: rgba(255,102,0,0.12); border: 1px solid var(--accent-color); padding: 2px 12px; font-size: 13px; color: var(--accent-color); margin-top: 8px; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; font-weight: 700; }
-        .docs-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 16px; }
-        @media (min-width: 600px) { .docs-grid { grid-template-columns: 1fr 1fr; } }
-        .doc-card { background: var(--glass-bg); border: 1px solid var(--accent-color); padding: 18px; transition: all 0.2s; }
-        .doc-card:hover { border-color: var(--accent-color); box-shadow: 0 0 20px var(--accent-glow); }
-        .doc-card .doc-title { font-weight: 700; color: #fff; font-size: 17px; margin-bottom: 5px; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 0.5px; }
-        .doc-card .doc-desc { color: var(--text-muted); font-size: 15px; margin-bottom: 10px; }
-        .doc-card .doc-link { display: inline-block; color: var(--blue); text-decoration: none; font-weight: 700; border: 1px solid var(--blue); padding: 4px 14px; transition: all 0.2s; font-family: 'PT Sans Narrow', 'PT Sans', sans-serif; letter-spacing: 1px; }
-        .doc-card .doc-link:hover { background: var(--blue); color: #0a0a0a; }
-        .atak-tree { margin-top: 10px; }
-        .atak-node { margin-left: 0; }
-        .atak-node .node-header { cursor: pointer; padding: 10px 15px; background: var(--glass-bg); border: 1px solid var(--accent-color); margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s; user-select: none; font-family: 'PT Sans', sans-serif; font-size: 16px; }
-        .atak-node .node-header:hover { border-color: var(--accent-color); box-shadow: 0 0 20px var(--accent-glow); }
-        .atak-node .node-header .arrow { transition: transform 0.2s; font-size: 14px; color: var(--text-muted); }
-        .atak-node .node-header .arrow.open { transform: rotate(90deg); }
-        .atak-node .node-children { margin-left: 20px; overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
-        .atak-node .node-children.open { max-height: 2000px; }
-        .atak-node .node-content { padding: 10px 15px; background: var(--glass-bg); border: 1px solid var(--accent-color); margin: 4px 0 8px; color: var(--text-color); font-family: 'PT Sans', sans-serif; font-size: 15px; }
-        .atak-node .node-content img { max-width: 100%; margin: 10px 0; }
-        .atak-node .node-content ul, .atak-node .node-content ol { margin-left: 20px; margin-bottom: 10px; }
-        .atak-node .node-content a { color: var(--blue); text-decoration: none; }
-        .atak-node .node-content a:hover { text-decoration: underline; }
-        .node-leaf .node-header { cursor: default; background: rgba(0,0,0,0.15); }
-        .node-leaf .node-header:hover { border-color: var(--border-color); }
-        .node-leaf .node-header .arrow { display: none; }
-        #map-container {
-            height: 500px;
-            border: 1px solid var(--accent-color);
-            margin: 10px 0;
-            background: #1a1a1a;
-            width: 100%;
-        }
-        .map-layer-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 4px 0;
-        }
-        .map-layer-item input[type="checkbox"] {
-            accent-color: var(--accent-color);
-            width: 16px;
-            height: 16px;
-        }
-        .map-layer-item label {
-            color: var(--text-color);
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .leaflet-control-attribution { color: #666 !important; font-size: 10px !important; }
-        .item-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--accent-color);
-            padding: 15px;
-            margin-bottom: 12px;
-            transition: all 0.2s;
-        }
-        .item-card:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-        .item-card .item-title {
-            font-weight: 700;
-            color: #fff;
-            font-size: 18px;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .item-card .item-title .arrow {
-            transition: transform 0.2s;
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-        .item-card .item-title .arrow.open { transform: rotate(90deg); }
-        .item-card .item-details {
-            overflow: hidden;
-            max-height: 0;
-            transition: max-height 0.5s ease;
-        }
-        .item-card .item-details.open { max-height: 9999px; }
-        .item-card .item-details .item-description { margin-top: 10px; color: var(--text-color); font-size: 15px; }
-        .item-card .item-details .item-map { width: 100%; height: 300px; border: 1px solid var(--border-color); margin: 10px 0; background: #1a1a1a; }
-        .item-card .item-details .item-links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
-        .item-card .item-details .item-links a,
-        .item-card .item-details .item-files a {
-            display: inline-block;
-            color: var(--blue);
-            text-decoration: none;
-            font-weight: 700;
-            border: 1px solid var(--blue);
-            padding: 4px 14px;
-            transition: all 0.2s;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            letter-spacing: 1px;
-        }
-        .item-card .item-details .item-links a:hover,
-        .item-card .item-details .item-files a:hover {
-            background: var(--blue);
-            color: #0a0a0a;
-        }
-        .item-card .item-details .item-photo { max-width: 100%; height: auto; margin: 10px 0; border: 1px solid var(--border-color); }
-        .item-card .item-details .item-video { width: 100%; max-width: 560px; margin: 10px 0; }
-        .item-card .item-details .item-schematic { margin-top: 10px; }
-        .item-card .item-details .item-schematic a {
-            color: var(--accent-color);
-            text-decoration: none;
-            border: 1px solid var(--accent-color);
-            padding: 4px 14px;
-            font-weight: 700;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            letter-spacing: 1px;
-            transition: all 0.2s;
-        }
-        .item-card .item-details .item-schematic a:hover {
-            background: var(--accent-color);
-            color: #0a0a0a;
-        }
-        .item-card .item-details .item-files { margin-top: 10px; }
-        .item-card .item-details .item-files ul { list-style: none; padding-left: 0; }
-        .item-card .item-details .item-files ul li { margin-bottom: 6px; }
-        .profile-layout {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-        .profile-sidebar {
-            flex: 1;
-            min-width: 200px;
-            text-align: center;
-        }
-        .avatar-wrapper {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 0 auto;
-        }
-        .avatar-wrapper .avatar,
-        .avatar-wrapper .avatar-placeholder {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 2px solid var(--accent-color);
-            object-fit: cover;
-            background: #0a0a0a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 60px;
-            color: #666;
-        }
-        .avatar-wrapper .avatar { display: block; }
-        .avatar-wrapper .avatar-placeholder { display: none; }
-        .profile-sidebar .username {
-            color: #fff;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            font-size: 24px;
-            margin-top: 8px;
-        }
-        .profile-sidebar .role {
-            color: var(--accent-color);
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .profile-sidebar .stats {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin-top: 6px;
-        }
-        .profile-sidebar .tab-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 20px;
-        }
-        .profile-sidebar .tab-menu button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 10px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            font-size: 16px;
-            letter-spacing: 1px;
-            border-radius: 4px;
-            text-align: left;
-            padding-left: 16px;
-        }
-        .profile-sidebar .tab-menu button .material-icons {
-            font-size: 20px;
-        }
-        .profile-sidebar .tab-menu button:hover {
-            border-color: var(--accent-color);
-            color: #fff;
-        }
-        .profile-sidebar .tab-menu button.active-tab {
-            border-color: var(--accent-color);
-            background: rgba(255,102,0,0.1);
-            color: var(--accent-color);
-        }
-        .profile-sidebar .tab-menu .logout-btn {
-            border-color: var(--red);
-            color: var(--red);
-            margin-top: 12px;
-        }
-        .profile-sidebar .tab-menu .logout-btn:hover {
-            background: var(--red);
-            color: #0a0a0a;
-        }
-        .profile-content {
-            flex: 3;
-            min-width: 300px;
-        }
-        .profile-content .tab-pane {
-            display: none;
-        }
-        .profile-content .tab-pane.active-pane {
-            display: block;
-        }
-        .chat-messages {
-            max-height: 400px;
-            overflow-y: auto;
-            background: #0a0a0a;
-            border: 1px solid var(--border-color);
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-        .chat-message {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 8px;
-            border-bottom: 1px solid #1a1a1a;
-            padding-bottom: 6px;
-        }
-        .chat-message .avatar {
-            width: 36px;
-            height: 36px;
-            border: 1px solid var(--border-color);
-            object-fit: cover;
-            background: #0a0a0a;
-        }
-        .chat-message .msg-content {
-            flex: 1;
-        }
-        .chat-message .msg-content .user {
-            font-weight: 700;
-            color: var(--accent-color);
-        }
-        .chat-message .msg-content .time {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-left: 10px;
-        }
-        .chat-message .msg-content .text {
-            color: var(--text-color);
-        }
-        .chat-input {
-            display: flex;
-            gap: 10px;
-        }
-        .chat-input input {
-            flex: 1;
-            padding: 10px;
-            background: #0a0a0a;
-            border: 1px solid var(--border-color);
-            color: #fff;
-            border-radius: 4px;
-            font-family: 'PT Sans', sans-serif;
-        }
-        .chat-input input:focus {
-            border-color: var(--accent-color);
-            outline: none;
-        }
-        .chat-input button {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 20px;
-            background: var(--accent-color);
-            color: #0a0a0a;
-            border: none;
-            font-weight: 700;
-            cursor: pointer;
-            border-radius: 4px;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .chat-input button .material-icons {
-            font-size: 18px;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal.active-modal {
-            display: flex;
-        }
-        .modal-content {
-            background: var(--panel-bg);
-            border: 2px solid var(--accent-color);
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .modal-content .close-modal {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 28px;
-            color: var(--text-muted);
-            cursor: pointer;
-        }
-        .modal-content .close-modal:hover {
-            color: #fff;
-        }
-        .modal-content h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-        .modal-content label {
-            display: block;
-            margin: 10px 0 5px;
-            font-weight: 700;
-            color: #fff;
-        }
-        .modal-content input,
-        .modal-content textarea,
-        .modal-content select {
-            width: 100%;
-            padding: 8px 12px;
-            background: #0a0a0a;
-            border: 1px solid var(--border-color);
-            color: #fff;
-            border-radius: 4px;
-            font-family: 'PT Sans', sans-serif;
-        }
-        .modal-content input:focus,
-        .modal-content textarea:focus,
-        .modal-content select:focus {
-            border-color: var(--accent-color);
-            outline: none;
-        }
-        .modal-content .btn-submit {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            width: 100%;
-            margin-top: 16px;
-            padding: 12px;
-            background: var(--accent-color);
-            color: #0a0a0a;
-            border: none;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            font-size: 16px;
-            letter-spacing: 1px;
-            border-radius: 4px;
-            justify-content: center;
-        }
-        .modal-content .btn-submit .material-icons {
-            font-size: 20px;
-        }
-        .modal-content .btn-submit:hover {
-            background: #ff8833;
-        }
-        .modal-content .switch-form {
-            text-align: center;
-            margin-top: 12px;
-            color: var(--text-muted);
-            cursor: pointer;
-        }
-        .modal-content .switch-form span {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            color: var(--accent-color);
-            font-weight: 700;
-        }
-        .modal-content .switch-form span:hover {
-            text-decoration: underline;
-        }
-        #tab-settings {
-            padding: 10px 0;
-        }
-        #tab-settings .settings-card {
-            background: #0a0a0a;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        #tab-settings .settings-card h3 {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 0;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-            margin-bottom: 16px;
-            color: var(--accent-color);
-            font-family: 'PT Sans Narrow', 'PT Sans', sans-serif;
-            font-size: 18px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        #tab-settings .settings-card h3 .material-icons {
-            font-size: 22px;
-        }
-        #tab-settings .settings-card label {
-            display: block;
-            margin: 10px 0 5px;
-            font-weight: 700;
-            color: #fff;
-            font-size: 14px;
-        }
-        #tab-settings .settings-card input[type="password"],
-        #tab-settings .settings-card input[type="file"] {
-            width: 100%;
-            padding: 8px 12px;
-            background: #111;
-            border: 1px solid var(--border-color);
-            color: #fff;
-            border-radius: 4px;
-            font-family: 'PT Sans', sans-serif;
-        }
-        #tab-settings .settings-card input:focus {
-            border-color: var(--accent-color);
-            outline: none;
-        }
-        #tab-settings .settings-card .btn-submit {
-            width: auto;
-            margin-top: 12px;
-            padding: 10px 24px;
-        }
-        #change-password-form button[type="submit"] {
-            margin-top: 25px;
-        }
-        #tab-settings .settings-card .file-input-wrapper {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        #tab-settings .settings-card .file-input-wrapper input[type="file"] {
-            flex: 1;
-            min-width: 150px;
-            background: #111;
-            border: 1px solid var(--border-color);
-            color: #fff;
-            padding: 6px;
-        }
-        #tab-settings .settings-card .file-input-wrapper button {
-            flex-shrink: 0;
-        }
-        #calendar-container {
-            background: #0a0a0a;
-            border: 1px solid var(--border-color);
-            padding: 15px;
-            margin-bottom: 10px;
-        }
-        #calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        #calendar-grid {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-        }
-        #calendar-grid th {
-            color: var(--text-muted);
-            font-weight: 700;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-        #calendar-grid td {
-            padding: 10px 0;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: 0.2s;
-            color: var(--text-color);
-        }
-        #calendar-grid td:hover {
-            background: rgba(255,102,0,0.15);
-        }
-        #calendar-grid td.calendar-day.today {
-            background: rgba(255,102,0,0.25);
-            font-weight: 700;
-            color: var(--accent-color);
-        }
-        #calendar-grid td.calendar-day.selected {
-            background: var(--accent-color);
-            color: #0a0a0a;
-            font-weight: 700;
-        }
-        #calendar-grid td.calendar-day.has-event::after {
-            content: '•';
-            display: block;
-            color: var(--accent-color);
-            font-size: 14px;
-            margin-top: -4px;
-        }
-        #calendar-grid td:empty {
-            cursor: default;
-        }
-        #calendar-grid td:empty:hover {
-            background: transparent;
-        }
-        @media (max-width: 768px) {
-            body { padding: 20px 10px; }
-            .container { padding: 15px; }
-            h1 { font-size: 28px; letter-spacing: 2px; }
-            .subtitle { font-size: 14px; letter-spacing: 2px; }
-            #auth-block {
-                top: 10px;
-                right: 10px;
-            }
-            #auth-block .header-link {
-                font-size: 12px;
-                padding: 4px 8px;
-            }
-            .header-link { font-size: 14px; padding: 6px 10px; }
-            .header-link .material-icons { font-size: 16px; }
-            .nav-wrapper { flex-direction: column; align-items: center; }
-            .profile-layout { flex-direction: column; }
-            .profile-sidebar { text-align: center; }
-            .profile-sidebar .tab-menu button { text-align: center; justify-content: center; }
-            .radio-station { grid-template-columns: 1fr; }
-            #map-container { height: 300px; }
-            #lightbox .close-btn { font-size: 36px; top: 20px; right: 20px; }
-            #tab-settings .settings-card .file-input-wrapper {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .modal-content { padding: 20px; max-width: 95%; }
-        }
-        @media (max-width: 480px) {
-            body { padding: 10px 5px; }
-            .container { padding: 10px; }
-            h1 { font-size: 24px; letter-spacing: 1px; }
-            #auth-block .header-link { font-size: 11px; padding: 3px 6px; }
-            .header-link { font-size: 13px; padding: 4px 8px; }
-            .header-link .material-icons { font-size: 14px; }
-            .modal-content { padding: 15px; }
-            .chat-messages { max-height: 250px; }
-            .task-card strong .material-icons { font-size: 20px; }
-        }
-    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <link rel="stylesheet" href="/css/design-system.css">
+    <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
-<video class="video-background" autoplay muted loop playsinline>
-    <source src="background.mp4" type="video/mp4">
-</video>
-<div class="container">
-    <div class="header">
-        <img src="logo-foxhound.webp" alt="FOXHOUND LOGO" class="logo-image" loading="lazy" />
-        <h1>FOXHOUND</h1>
-        <div class="subtitle">Страйкбольная команда</div>
-        <div id="auth-block">
-            <a href="#profile" id="profile-link" class="header-link profile-btn" data-page="page-profile" style="display: none;"><span class="material-icons">person</span> Профиль</a>
-            <button id="login-btn" class="header-link"><span class="material-icons">login</span> Войти</button>
-        </div>
-        <div class="nav-wrapper">
-            <div class="header-links">
-                <button class="header-link main active" data-page="page-home"><span class="material-icons">home</span> Главная</button>
-                <button class="header-link calc" data-page="page-calc"><span class="material-icons">calculate</span> Калькулятор</button>
-                <button class="header-link photo" data-page="page-photo"><span class="material-icons">photo_camera</span> Фото</button>
-                <button class="header-link ops" data-page="page-operators"><span class="material-icons">people</span> Оперативники</button>
-                <button class="header-link instructions" data-page="page-instructions"><span class="material-icons">description</span> Инструкции</button>
-                <button class="header-link atak" data-page="page-atak"><span class="material-icons">satellite</span> ATAK</button>
-                <button class="header-link maps" data-page="page-maps"><span class="material-icons">map</span> Карты</button>
-                <button class="header-link regulations" data-page="page-regulations"><span class="material-icons">book</span> Устав</button>
-                <button class="header-link scenarios" data-page="page-scenarios"><span class="material-icons">flag</span> Сценарии</button>
-                <button class="header-link devices" data-page="page-devices"><span class="material-icons">build</span> Девайсы</button>
+
+<!-- ============================================================
+     ШАПКА
+     ============================================================ -->
+<header class="app-header">
+    <div class="app-header-inner">
+
+        <a href="#/home" class="app-logo" data-page="page-home">
+            <img src="/logo-foxhound.webp" alt="FOXHOUND" />
+            <span class="app-logo-text">FOXHOUND</span>
+        </a>
+
+        <nav class="app-nav">
+            <a href="#/home" class="nav-link" data-page="page-home">
+                <span class="material-icons">home</span> Главная
+            </a>
+
+            <a href="#/chat" class="nav-link" data-page="page-chat">
+                <span class="material-icons">chat</span> Чат
+            </a>
+
+            <div class="nav-group">
+                <button type="button" class="nav-link nav-trigger">
+                    <span class="material-icons">groups</span> Команда
+                    <span class="material-icons nav-arrow">expand_more</span>
+                </button>
+                <div class="nav-dropdown">
+                    <a href="#/operators" data-page="page-operators"><span class="material-icons">person</span> Оперативники</a>
+                    <a href="#/regulations" data-page="page-regulations"><span class="material-icons">gavel</span> Устав</a>
+                    <a href="#/photo" data-page="page-photo"><span class="material-icons">photo_library</span> Фото</a>
+                    <a href="#/logs" data-page="page-logs"><span class="material-icons">history_edu</span> Журнал</a>
+                </div>
             </div>
+
+            <div class="nav-group">
+                <button type="button" class="nav-link nav-trigger">
+                    <span class="material-icons">flag</span> Игры
+                    <span class="material-icons nav-arrow">expand_more</span>
+                </button>
+                <div class="nav-dropdown">
+                    <a href="#/scenarios" data-page="page-scenarios"><span class="material-icons">movie</span> Сценарии</a>
+                    <a href="#/maps" data-page="page-maps"><span class="material-icons">map</span> Карты</a>
+                </div>
+            </div>
+
+            <div class="nav-group">
+                <button type="button" class="nav-link nav-trigger">
+                    <span class="material-icons">menu_book</span> База
+                    <span class="material-icons nav-arrow">expand_more</span>
+                </button>
+                <div class="nav-dropdown">
+                    <a href="#/instructions" data-page="page-instructions"><span class="material-icons">description</span> Инструкции</a>
+                    <a href="#/atak" data-page="page-atak"><span class="material-icons">satellite_alt</span> ATAK</a>
+                    <a href="#/devices" data-page="page-devices"><span class="material-icons">build</span> Девайсы</a>
+                </div>
+            </div>
+
+            <div class="nav-group">
+                <button type="button" class="nav-link nav-trigger">
+                    <span class="material-icons">construction</span> Инструменты
+                    <span class="material-icons nav-arrow">expand_more</span>
+                </button>
+                <div class="nav-dropdown">
+                    <a href="#/calc" data-page="page-calc"><span class="material-icons">calculate</span> Калькулятор</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="app-header-right">
+            <button id="login-btn" type="button" class="btn btn-primary btn-sm" style="display: none;">
+                <span class="material-icons">login</span> Войти
+            </button>
+            <a href="#/profile" id="profile-btn" class="btn btn-icon btn-ghost"
+               data-page="page-profile" title="Профиль" style="display: none;">
+                <span class="material-icons">account_circle</span>
+            </a>
         </div>
+
+        <button type="button" class="app-mobile-toggle" id="mobile-toggle" aria-label="Меню">
+            <span class="material-icons">menu</span>
+        </button>
+
     </div>
+</header>
+
+<!-- ============================================================
+     МОБИЛЬНОЕ МЕНЮ
+     ============================================================ -->
+<div class="mobile-menu" id="mobile-menu">
+    <a href="#/home" data-page="page-home" class="mobile-link"><span class="material-icons">home</span> Главная</a>
+    <a href="#/chat" data-page="page-chat" class="mobile-link"><span class="material-icons">chat</span> Чат</a>
+
+    <div class="mobile-group-title">Команда</div>
+    <a href="#/operators" data-page="page-operators" class="mobile-link"><span class="material-icons">person</span> Оперативники</a>
+    <a href="#/regulations" data-page="page-regulations" class="mobile-link"><span class="material-icons">gavel</span> Устав</a>
+    <a href="#/photo" data-page="page-photo" class="mobile-link"><span class="material-icons">photo_library</span> Фото</a>
+    <a href="#/logs" data-page="page-logs" class="mobile-link"><span class="material-icons">history_edu</span> Журнал</a>
+
+    <div class="mobile-group-title">Игры</div>
+    <a href="#/scenarios" data-page="page-scenarios" class="mobile-link"><span class="material-icons">movie</span> Сценарии</a>
+    <a href="#/maps" data-page="page-maps" class="mobile-link"><span class="material-icons">map</span> Карты</a>
+
+    <div class="mobile-group-title">База</div>
+    <a href="#/instructions" data-page="page-instructions" class="mobile-link"><span class="material-icons">description</span> Инструкции</a>
+    <a href="#/atak" data-page="page-atak" class="mobile-link"><span class="material-icons">satellite_alt</span> ATAK</a>
+    <a href="#/devices" data-page="page-devices" class="mobile-link"><span class="material-icons">build</span> Девайсы</a>
+
+    <div class="mobile-group-title">Инструменты</div>
+    <a href="#/calc" data-page="page-calc" class="mobile-link"><span class="material-icons">calculate</span> Калькулятор</a>
+
+    <div class="mobile-group-title">Профиль</div>
+    <a href="#/profile" data-page="page-profile" class="mobile-link"><span class="material-icons">account_circle</span> Профиль</a>
+</div>
+
+<!-- ============================================================
+     ОСНОВНОЙ КОНТЕНТ
+     ============================================================ -->
+<main class="app-main">
+
+    <!-- Главная -->
     <div id="page-home" class="page active">
-        <div class="quote">«На поле боя нет места надежде. Здесь есть только расчет и воля к победе».</div>
-        <h2>О команде</h2>
-        <p>Наша команда названа в честь культового отряда из вселенной Metal Gear, чей подход к операциям стал нашей главной философией. FOXHOUND — это элита, решающая задачи за счет превосходства в тактике и технологиях.</p>
-        <p>Мы проецируем эти принципы на реальный страйкбол. Нашими приоритетами являются строгая дисциплина, инженерный расчет и техническое превосходство. Каждая игра для нас — это комплексная интеграция современных технологий в тактический игровой процесс.</p>
-        <h2>Наши задачи</h2>
-        <div class="tasks-grid">
-            <div class="task-card"><strong><span class="material-icons">build</span> Разработка</strong> Проектируем уникальные игровые устройства и софт. Паяльник и код — полноценное оружие наравне с приводом.</div>
-            <div class="task-card"><strong><span class="material-icons">settings</span> Технический апгрейд</strong> Доводим снаряжение до идеала. Глубокий тюнинг, интеграция умной электроники и прецизионная настройка систем.</div>
-            <div class="task-card"><strong><span class="material-icons">satellite_alt</span> Навигация и связь</strong> Внедряем современные протоколы связи и цифровые карты. Полный контроль радиоэфира и знание полигона.</div>
-            <div class="task-card"><strong><span class="material-icons">flash_on</span> Тактическая гибкость</strong> Ставим на маневренность, дисциплину и слаженность. Четкие действия группы гарантируют победу над превосходящим противником.</div>
-            <div class="task-card"><strong><span class="material-icons">handshake</span> Атмосфера</strong> FOXHOUND — это братство. Ценим адекватность, надежность, качественный отдых и выезды в кругу своих.</div>
-            <div class="task-card"><strong><span class="material-icons">park</span> Снаряжение</strong> Единый командный стиль в расцветках Woodland и Ranger Green.</div>
-        </div>
-        <h2>Полевое Радио</h2>
-        <div class="radio-station">
-            <div class="radio-display">
-                <div id="radio-freq" class="freq-tag">FREQ: ---.--- MHz</div>
-                <div id="radio-purpose" style="font-weight: bold; color: var(--accent-color);">СЕТЬ ОТКЛЮЧЕНА</div>
-                <div id="track-title" style="color: #fff; margin-top: 5px;">ШУМ ЭФИРА...</div>
-                <div id="radio-desc" class="desc-tag">Для активации аудио-модуля нажмите ВКЛ РАДИО</div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="progress-bar">
-                        <div class="progress-fill" id="progress-fill"></div>
-                    </div>
-                    <div class="time-labels">
-                        <span id="current-time">00:00</span>
-                        <span id="duration-time">00:00</span>
+        <div class="container">
+
+            <section class="hero">
+                <img src="/hero.jpg" alt="" class="hero-img" onerror="this.style.display='none'">
+                <div class="hero-content">
+                    <h1 class="hero-title">FOXHOUND</h1>
+                    <p class="hero-subtitle">«На поле боя нет места надежде. Здесь есть только расчёт и воля к победе»</p>
+                    <div class="hero-actions">
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdCmb8iLGiwe5nbRQl4SpGQPjZiFfVIw1meTqHWFHm5yhAPzg/viewform?usp=dialog"
+                           target="_blank" rel="noopener" class="btn btn-primary btn-lg">
+                            <span class="material-icons">how_to_reg</span> Подать заявку
+                        </a>
+                        <a href="https://vk.ru/club239972469" target="_blank" rel="noopener"
+                           class="btn btn-secondary btn-lg">
+                            <span class="material-icons">open_in_new</span> Мы ВКонтакте
+                        </a>
                     </div>
                 </div>
-            </div>
-            <div class="radio-controls">
-                <select id="playlist-select" class="playlist-select"></select>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
-                    <button id="prev-btn" class="radio-btn"><span class="material-icons">skip_previous</span></button>
-                    <button id="play-btn" class="radio-btn"><span class="material-icons">play_arrow</span></button>
-                    <button id="next-btn" class="radio-btn"><span class="material-icons">skip_next</span></button>
+            </section>
+
+            <section class="dashboard-grid">
+                <article class="widget">
+                    <div class="widget-header">
+                        <span class="material-icons">event</span>
+                        <span class="widget-title">Ближайшее событие</span>
+                    </div>
+                    <div class="widget-body" id="widget-event-body">Загрузка…</div>
+                </article>
+
+                <article class="widget">
+                    <div class="widget-header">
+                        <span class="material-icons">history_edu</span>
+                        <span class="widget-title">Бортовой журнал</span>
+                    </div>
+                    <div class="widget-body" id="widget-log-body">Загрузка…</div>
+                </article>
+
+                <article class="widget">
+                    <div class="widget-header">
+                        <span class="material-icons">how_to_vote</span>
+                        <span class="widget-title">Открытые опросы</span>
+                    </div>
+                    <div class="widget-body" id="widget-polls-body">Загрузка…</div>
+                </article>
+
+                <article class="widget">
+                    <div class="widget-header">
+                        <span class="material-icons">wb_sunny</span>
+                        <span class="widget-title">Погода на игру</span>
+                    </div>
+                    <div class="widget-body" id="widget-weather-body">Загрузка…</div>
+                </article>
+            </section>
+
+            <section class="radio-block">
+                <div class="radio-block-header">
+                    <span class="material-icons">radio</span>
+                    <h2 class="radio-block-title">Полевое радио</h2>
                 </div>
-            </div>
+
+                <div class="radio-console">
+                    <div class="radio-info">
+                        <div class="radio-freq" id="radio-freq">FREQ: ---.--- MHz</div>
+                        <div class="radio-purpose" id="radio-purpose">СЕТЬ ОТКЛЮЧЕНА</div>
+                        <div class="radio-track" id="radio-track">ШУМ ЭФИРА...</div>
+                        <div class="radio-desc" id="radio-desc">Для активации нажмите ВКЛ</div>
+                    </div>
+
+                    <div class="radio-progress">
+                        <div class="radio-progress-bar" id="radio-progress-bar">
+                            <div class="radio-progress-fill" id="radio-progress-fill"></div>
+                        </div>
+                        <div class="radio-times">
+                            <span id="radio-current">00:00</span>
+                            <span id="radio-duration">00:00</span>
+                        </div>
+                    </div>
+
+                    <div class="radio-controls">
+                        <div class="radio-dd" id="radio-station-dd">
+                            <button type="button" class="radio-dd-trigger" id="radio-dd-trigger">
+                                <span class="material-icons radio-dd-icon">tune</span>
+                                <span class="radio-dd-label" id="radio-dd-label">— нет станций —</span>
+                                <span class="material-icons radio-dd-arrow">expand_more</span>
+                            </button>
+                            <div class="radio-dd-menu" id="radio-dd-menu"></div>
+                        </div>
+
+                        <div class="radio-buttons">
+                            <button type="button" class="btn btn-secondary btn-icon" id="radio-prev" title="Предыдущий">
+                                <span class="material-icons">skip_previous</span>
+                            </button>
+                            <button type="button" class="btn btn-primary btn-icon" id="radio-play" title="Играть / Пауза">
+                                <span class="material-icons">play_arrow</span>
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-icon" id="radio-next" title="Следующий">
+                                <span class="material-icons">skip_next</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="about-block">
+                <div class="about-title">
+                    <span class="material-icons">info</span>
+                    <span>О команде</span>
+                </div>
+                <div class="about-content">
+                    <p>Наша команда названа в честь культового отряда из вселенной Metal Gear, чей подход к операциям стал нашей главной философией. FOXHOUND — это элита, решающая задачи за счёт превосходства в тактике и технологиях.</p>
+                    <p>Мы проецируем эти принципы на реальный страйкбол. Нашими приоритетами являются строгая дисциплина, инженерный расчёт и техническое превосходство. Каждая игра для нас — это комплексная интеграция современных технологий в тактический игровой процесс.</p>
+                    <p>FOXHOUND — это братство. Ценим адекватность, надёжность, качественный отдых и выезды в кругу своих.</p>
+                </div>
+            </section>
+
         </div>
-        <h2>Бортовой журнал</h2>
-        <div id="log-container" class="log-container">
-            <div class="log-row" style="color: var(--text-muted);">Загрузка записей...</div>
-        </div>
-        <h2>Порядок</h2>
-        <ul class="rules-list">
-            <li>Работаем строго по правилам Уральской Ассоциации Страйкбола (УАС).</li>
-            <li>Адекватность, честность и отсутствие овертюна — база нашей команды.</li>
-        </ul>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdCmb8iLGiwe5nbRQl4SpGQPjZiFfVIw1meTqHWFHm5yhAPzg/viewform?usp=dialog" target="_blank" class="join-btn"><span class="material-icons">how_to_reg</span> Подать заявку в команду</a>
-        <a href="https://vk.ru/club239972469" target="_blank" class="vk-btn"><span class="material-icons">open_in_new</span> Мы ВКонтакте</a>
     </div>
-    <div id="page-calc" class="page">
-        <h2>Калькулятор страйкбола</h2>
-        <div class="param-group">
-            <div class="slider-row">
-                <label for="weightSlider">Вес шара</label>
-                <input type="range" id="weightSlider" min="0.12" max="0.43" step="0.01" value="0.25" />
-                <span class="value-display" id="weightValue">0.25 г</span>
-            </div>
-            <div class="slider-row">
-                <label for="speedSlider">Скорость</label>
-                <input type="range" id="speedSlider" min="60" max="160" step="1" value="120" />
-                <span class="value-display" id="speedValue">120 м/с</span>
-            </div>
-        </div>
-        <div class="result-grid">
-            <div class="result-item">
-                <div class="label">Дульная энергия</div>
-                <div class="value highlight" id="energyDisplay">1.80 Дж</div>
-            </div>
-            <div class="result-item">
-                <div class="label">Скорость на 0.20 г</div>
-                <div class="value highlight" id="speedOn20Display">134 м/с</div>
-            </div>
-        </div>
-        <h3>Регламент полигона (Уральская ассоциация страйкбола)</h3>
-        <table class="rules-table" id="rulesTable">
-            <thead><tr><th>Категория</th><th>Ограничение по энергии</th><th>Дистанция</th><th>Статус</th></tr></thead>
-            <tbody>
-                <tr data-weapon="secondary"><td>Вторичка (пистолеты, автоматы в здании)</td><td>до 1.5 Дж</td><td>0 м</td><td id="statusSecondary">✔</td></tr>
-                <tr data-weapon="primary"><td>Основное (автомат на открытой местности)</td><td>до 2.4 Дж</td><td>10 м</td><td id="statusPrimary">✔</td></tr>
-                <tr data-weapon="sniper"><td>Снайперка (болтовка, полуавтомат, только одиночный)</td><td>до 2.9 Дж</td><td>25 м</td><td id="statusSniper">✔</td></tr>
-            </tbody>
-        </table>
-        <div id="statusMessage" class="status-msg ok">✅ Допуск: разрешено, дистанция 10 м (категория «Основное»)</div>
-    </div>
-    <div id="page-photo" class="page">
-        <h2>Фотогалерея</h2>
-        <div id="galleryContainer" class="gallery-grid">
-            <div class="no-data">Загрузка фотографий...</div>
-        </div>
-    </div>
+
+    <!-- Оперативники -->
     <div id="page-operators" class="page">
-        <h2>Оперативный состав</h2>
-        <div id="operatorsContainer" class="operator-grid">
-            <div class="no-data">Загрузка данных...</div>
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Оперативный состав</h1>
+            </div>
+            <div id="operators-root">
+                <div class="text-muted text-center">Загрузка…</div>
+            </div>
         </div>
     </div>
-    <div id="page-instructions" class="page">
-        <h2>Инструкции и руководства</h2>
-        <div id="docsContainer" class="docs-grid">
-            <div class="no-data">Загрузка документов...</div>
-        </div>
-    </div>
-    <div id="page-atak" class="page">
-        <h2>Руководство по ATAK</h2>
-        <div id="atakContainer" class="atak-tree">
-            <div class="no-data">Загрузка руководства...</div>
-        </div>
-    </div>
-    <div id="page-maps" class="page">
-        <h2>Карты полигонов</h2>
-        <div style="margin-bottom: 10px;">
-            <label for="polygon-select" style="color: var(--text-color); font-weight: 700; margin-right: 10px;">Выберите полигон:</label>
-            <select id="polygon-select" style="background: #1a1a1a; color: #fff; border: 1px solid var(--accent-color); padding: 6px 12px; font-family: 'PT Sans', sans-serif; font-size: 15px; cursor: pointer;"></select>
-        </div>
-        <div id="map-container"></div>
-        <div id="map-layers" style="margin-top: 10px;"></div>
-        <div id="map-loading" class="no-data" style="display: none;">Загрузка карты...</div>
-    </div>
+
+    <!-- Устав -->
     <div id="page-regulations" class="page">
-        <h2>Устав подразделения</h2>
-        <div id="regulationsContainer" class="atak-tree">
-            <div class="no-data">Загрузка устава...</div>
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Устав подразделения</h1>
+            </div>
+            <div id="regulations-root">
+                <div class="text-muted text-center">Загрузка…</div>
+            </div>
         </div>
     </div>
+
+    <!-- Фото -->
+    <div id="page-photo" class="page">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Фотогалерея</h1>
+            </div>
+            <div id="gallery-root">
+                <div class="text-muted text-center">Загрузка…</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Сценарии -->
     <div id="page-scenarios" class="page">
-        <h2>Сценарии для игр</h2>
-        <div id="scenariosContainer">
-            <div class="no-data">Загрузка сценариев...</div>
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Сценарии</h1>
+            </div>
+            <div id="scenarios-root">
+                <div class="text-muted text-center">Загрузка…</div>
+            </div>
         </div>
     </div>
+
+    <!-- Карты -->
+    <div id="page-maps" class="page">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Карты полигонов</h1>
+            </div>
+
+            <div class="map-toolbar">
+                <label for="polygon-select">Полигон:</label>
+                <select id="polygon-select" class="select"></select>
+            </div>
+
+            <div id="map-container" class="map-container"></div>
+
+            <div id="map-loading" class="map-loading">Загрузка карты…</div>
+
+            <div id="map-layers" class="map-layers"></div>
+        </div>
+    </div>
+
+    <!-- Инструкции -->
+    <div id="page-instructions" class="page">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Инструкции</h1>
+            </div>
+            <div id="instructions-root">
+                <div class="text-muted text-center">Загрузка…</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ATAK -->
+    <div id="page-atak" class="page">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Руководство по ATAK</h1>
+            </div>
+            <div id="atak-root">
+                <div class="text-muted text-center">Загрузка…</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Девайсы -->
     <div id="page-devices" class="page">
-        <h2>Девайсы собственного производства</h2>
-        <div id="devicesContainer">
-            <div class="no-data">Загрузка устройств...</div>
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Девайсы</h1>
+            </div>
+            <div id="devices-root">
+                <div class="text-muted text-center">Загрузка…</div>
+            </div>
         </div>
     </div>
+
+    <!-- Калькулятор -->
+    <div id="page-calc" class="page">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Калькулятор страйкбола</h1>
+            </div>
+
+            <div id="calculator-root">
+                <div class="calc-wrap">
+                    <div class="calc-params">
+                        <div class="calc-slider">
+                            <div class="calc-slider-head">
+                                <span class="calc-slider-label">Вес шара</span>
+                                <span class="calc-slider-value" id="calc-weight-value">0.25 г</span>
+                            </div>
+                            <input type="range" id="calc-weight" min="0.12" max="0.43" step="0.01" value="0.25">
+                            <div class="calc-slider-scale">
+                                <span>0.12 г</span>
+                                <span>0.43 г</span>
+                            </div>
+                        </div>
+
+                        <div class="calc-slider">
+                            <div class="calc-slider-head">
+                                <span class="calc-slider-label">Скорость вылета</span>
+                                <span class="calc-slider-value" id="calc-speed-value">120 м/с</span>
+                            </div>
+                            <input type="range" id="calc-speed" min="60" max="160" step="1" value="120">
+                            <div class="calc-slider-scale">
+                                <span>60 м/с</span>
+                                <span>160 м/с</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="calc-results">
+                        <div class="calc-result">
+                            <div class="calc-result-label">Дульная энергия</div>
+                            <div class="calc-result-value accent" id="calc-energy">1.80 Дж</div>
+                        </div>
+                        <div class="calc-result">
+                            <div class="calc-result-label">Скорость на 0.20 г</div>
+                            <div class="calc-result-value" id="calc-speed-20">134 м/с</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="calc-status calc-status-ok" id="calc-status">
+                    <span class="material-icons">check_circle</span>
+                    <span>Допуск: разрешено, дистанция 10 м (категория «Основное»)</span>
+                </div>
+
+                <div class="calc-table-wrap">
+                    <div class="calc-table-title">
+                        <span class="material-icons">rule</span>
+                        Допуск
+                    </div>
+                    <table class="calc-table">
+                        <thead>
+                            <tr>
+                                <th>Категория</th>
+                                <th>Ограничение</th>
+                                <th>Дистанция</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-weapon="secondary">
+                                <td>Вторичка (пистолеты, автоматы в здании)</td>
+                                <td>до 1.5 Дж</td>
+                                <td>0 м</td>
+                                <td data-status="secondary">—</td>
+                            </tr>
+                            <tr data-weapon="primary">
+                                <td>Основное (автомат на открытой местности)</td>
+                                <td>до 2.4 Дж</td>
+                                <td>10 м</td>
+                                <td data-status="primary">—</td>
+                            </tr>
+                            <tr data-weapon="sniper">
+                                <td>Снайперка (болтовка, полуавтомат, только одиночный)</td>
+                                <td>до 2.9 Дж</td>
+                                <td>25 м</td>
+                                <td data-status="sniper">—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Журнал -->
+    <div id="page-logs" class="page">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Бортовой журнал</h1>
+            </div>
+            <div id="logs-root">
+                <div class="text-muted text-center">Загрузка…</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Профиль -->
     <div id="page-profile" class="page">
-        <h2>Личный кабинет</h2>
-        <div class="profile-layout">
-            <div class="profile-sidebar">
-                <div class="avatar-wrapper">
-                    <img id="profile-avatar" class="avatar" src="/uploads/avatars/default.png" alt="" />
-                    <span id="avatar-placeholder" class="avatar-placeholder">👤</span>
-                </div>
-                <div class="username" id="profile-username"></div>
-                <div class="role" id="profile-role">Пользователь</div>
-                <div class="stats" id="profile-stats">Зарегистрирован: —</div>
-                <div class="tab-menu">
-                    <button class="active-tab" data-tab="chat"><span class="material-icons">chat</span> Чат</button>
-                    <button data-tab="polls"><span class="material-icons">how_to_vote</span> Голосования</button>
-                    <button data-tab="events"><span class="material-icons">calendar_today</span> Календарь</button>
-                    <button data-tab="settings"><span class="material-icons">settings</span> Настройки</button>
-                    <button data-tab="admin" id="admin-tab-btn" style="display: none;"><span class="material-icons">admin_panel_settings</span> Администрирование</button>
-                    <button class="logout-btn" id="logout-btn"><span class="material-icons">logout</span> Выйти</button>
-                </div>
-            </div>
-            <div class="profile-content">
-                <div id="tab-chat" class="tab-pane active-pane">
-                    <div class="chat-messages" id="chat-messages">
-                        <div style="color: var(--text-muted); text-align: center;">Авторизуйтесь, чтобы видеть сообщения.</div>
-                    </div>
-                    <div class="chat-input">
-                        <input type="text" id="chat-input" placeholder="Напишите сообщение..." disabled />
-                        <button id="chat-send-btn" disabled><span class="material-icons">send</span> Отправить</button>
-                    </div>
-                </div>
-                <div id="tab-polls" class="tab-pane">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h3 style="margin:0;">Голосования</h3>
-                        <div>
-                            <button class="radio-btn" id="polls-toggle-archived" style="font-size:13px; padding:4px 12px;"><span class="material-icons">archive</span> Показать архив</button>
-                        </div>
-                    </div>
-                    <div id="polls-list"></div>
-                    <div id="poll-create-form" style="display: none; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-                        <h3>Создать опрос</h3>
-                        <form id="poll-form">
-                            <label style="display:block; margin-top:10px;">Заголовок</label>
-                            <input type="text" id="poll-title" required style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
-                            <label style="display:block; margin-top:10px;">Тип вопроса</label>
-                            <select id="poll-type" style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;">
-                                <option value="single">Одиночный выбор</option>
-                                <option value="multiple">Множественный выбор</option>
-                            </select>
-                            <div id="poll-options-group">
-                                <label style="display:block; margin-top:10px;">Варианты (через запятую)</label>
-                                <input type="text" id="poll-options" placeholder="Вариант1, Вариант2, Вариант3" style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
-                            </div>
-                            <label style="display:block; margin-top:10px;">Действительно до (дата и время)</label>
-                            <input type="datetime-local" id="poll-expires" required style="width:100%; padding:8px; background:#0a0a0a; border:1px solid var(--border-color); color:#fff; border-radius:4px;" />
-                            <button type="submit" class="radio-btn primary" style="margin-top:12px; width:auto; font-size:16px; padding:10px 24px;"><span class="material-icons">add</span> Создать</button>
-                        </form>
-                    </div>
-                </div>
-                <div id="tab-events" class="tab-pane">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h3 style="margin:0; display: flex; align-items: center; gap: 6px;"><span class="material-icons">event_note</span> Расписание</h3>
-                        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                            <button class="radio-btn" id="events-toggle-archived" style="font-size:13px; padding:4px 12px;"><span class="material-icons">archive</span> Показать архив</button>
-                            <!-- Кнопка "Создать" теперь видна -->
-                            <button id="event-create-btn" class="radio-btn primary" style="font-size:13px; padding:4px 12px;"><span class="material-icons">add_circle</span> Создать</button>
-                        </div>
-                    </div>
-                    <div id="calendar-container" style="background: #0a0a0a; border: 1px solid var(--border-color); padding: 15px; margin-bottom: 10px;">
-                        <div id="calendar-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <button id="calendar-prev" class="radio-btn" style="font-size:16px; padding:6px 12px;"><span class="material-icons">chevron_left</span></button>
-                            <span id="calendar-month-year" style="font-size:20px; font-weight:700; color:#fff; min-width:180px; text-align:center;"></span>
-                            <button id="calendar-next" class="radio-btn" style="font-size:16px; padding:6px 12px;"><span class="material-icons">chevron_right</span></button>
-                        </div>
-                        <table id="calendar-grid" style="width:100%; border-collapse:collapse; text-align:center;">
-                            <thead>
-                                <tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr>
-                            </thead>
-                            <tbody id="calendar-body"></tbody>
-                        </table>
-                    </div>
-                    <div id="calendar-events-list" style="margin-top:20px; border-top:1px solid var(--border-color); padding-top:15px;">
-                        <div style="color: var(--text-muted); text-align:center;">Загрузка...</div>
-                    </div>
-                </div>
-                <div id="tab-settings" class="tab-pane">
-                    <div class="settings-card">
-                        <h3><span class="material-icons">lock</span> Сменить пароль</h3>
-                        <form id="change-password-form">
-                            <label>Текущий пароль</label>
-                            <input type="password" id="old-password" required />
-                            <label>Новый пароль</label>
-                            <input type="password" id="new-password" required />
-                            <button type="submit" class="radio-btn primary" style="width:auto; font-size:16px; padding:10px 24px;"><span class="material-icons">save</span> Изменить</button>
-                        </form>
-                    </div>
-                    <div class="settings-card">
-                        <h3><span class="material-icons">photo</span> Сменить аватар</h3>
-                        <form id="avatar-form" enctype="multipart/form-data">
-                            <div class="file-input-wrapper">
-                                <input type="file" id="avatar-file" name="avatar" accept="image/*" required />
-                                <button type="submit" class="radio-btn primary" style="width:auto; font-size:16px; padding:10px 24px;"><span class="material-icons">upload</span> Загрузить</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div id="tab-admin" class="tab-pane">
-                    <h3><span class="material-icons">admin_panel_settings</span> Управление контентом</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 20px;">Полный доступ к управлению фото, оперативниками, инструкциями и другими разделами сайта.</p>
-                    <a href="/admin/" class="radio-btn primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 40px; text-decoration: none; background: var(--accent-color); color: #0a0a0a; border: none; border-radius: 4px; font-weight: 700; font-family: 'PT Sans Narrow', sans-serif; letter-spacing: 1px; transition: 0.2s;"><span class="material-icons">dashboard</span> Открыть панель администрирования</a>
-                </div>
+        <div class="container">
+            <div id="profile-root">
+                <div class="text-muted text-center">Загрузка…</div>
             </div>
         </div>
     </div>
-</div>
-<div id="lightbox">
-    <span class="close-btn">&times;</span>
-    <img id="lightbox-img" src="" alt="Увеличенное фото" />
-</div>
-<div id="auth-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" id="close-modal">&times;</span>
-        <h2 id="auth-modal-title">Вход</h2>
-        <form id="auth-form">
-            <label>Имя пользователя</label>
-            <input type="text" id="auth-username" required />
-            <label>Пароль</label>
-            <input type="password" id="auth-password" required />
-            <button type="submit" class="btn-submit" id="auth-submit-btn"><span class="material-icons">login</span> Войти</button>
-        </form>
-        <div class="switch-form" id="auth-switch">
-            Нет аккаунта? <span id="auth-switch-link"><span class="material-icons">person_add</span> Зарегистрироваться</span>
+
+    <!-- Настройки -->
+    <div id="page-settings" class="page">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Настройки</h1>
+            </div>
+            <div id="settings-root">
+                <div class="text-muted text-center">Загрузка…</div>
+            </div>
         </div>
     </div>
-</div>
-<div id="event-modal" class="modal">
-    <div class="modal-content" style="max-width: 600px;">
-        <span class="close-modal" id="close-event-modal">&times;</span>
-        <h2 id="event-modal-title">Создание события</h2>
-        <form id="event-form-modal">
-            <input type="hidden" id="event-id" value="" />
+
+    <!-- Голосования -->
+    <div id="page-polls" class="page">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Голосования</h1>
+            </div>
+            <div id="polls-root">
+                <div class="text-muted text-center">Загрузка…</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Календарь -->
+    <div id="page-events" class="page">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Календарь</h1>
+            </div>
+            <div id="events-root">
+                <div class="text-muted text-center">Загрузка…</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Чат -->
+    <div id="page-chat" class="page">
+        <div id="chat-layout" class="chat-layout">
+
+            <div class="chat-backdrop" id="chat-backdrop"></div>
+
+            <aside class="chat-sidebar" id="chat-sidebar">
+                <div class="chat-sidebar-head">
+                    <span>Каналы</span>
+                    <button type="button" class="chat-new-btn" id="chat-new-channel" style="display: none;" title="Создать канал">
+                        <span class="material-icons">add</span>
+                    </button>
+                </div>
+                <div class="chat-channels" id="chat-channels"></div>
+            </aside>
+
+            <section class="chat-main">
+                <header class="chat-main-head">
+                    <button type="button" class="chat-mobile-toggle" id="chat-mobile-toggle" title="Каналы">
+                        <span class="material-icons">menu</span>
+                    </button>
+                    <div class="chat-main-title" id="chat-channel-name">канал</div>
+                    <div class="chat-main-desc" id="chat-channel-desc"></div>
+                    <button type="button" class="chat-status-toggle" id="chat-status-toggle" title="Участники">
+                        <span class="material-icons">people</span>
+                    </button>
+                </header>
+
+                <div class="chat-messages" id="chat-messages"></div>
+
+                <div class="chat-input-wrap">
+                    <div class="chat-reply-preview" id="chat-reply-preview" style="display: none;">
+                        <span class="material-icons">reply</span>
+                        <span class="chat-reply-text"></span>
+                        <button type="button" id="chat-reply-cancel" title="Отменить">
+                            <span class="material-icons">close</span>
+                        </button>
+                    </div>
+                    <form class="chat-input-form" id="chat-input-form">
+                        <textarea id="chat-input" placeholder="Написать сообщение…" rows="1"></textarea>
+                        <button type="submit" class="btn btn-primary btn-icon" title="Отправить">
+                            <span class="material-icons">send</span>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <aside class="chat-statuses" id="chat-statuses"></aside>
+
+        </div>
+    </div>
+
+</main>
+
+<!-- ============================================================
+     МОДАЛКИ
+     ============================================================ -->
+
+<div id="poll-create-modal" class="modal-backdrop">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Создать опрос</h3>
+            <button type="button" class="btn btn-ghost btn-icon" id="poll-create-close" title="Закрыть">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+        <form id="poll-create-form">
             <div class="form-group">
-                <label>Название *</label>
-                <input type="text" id="event-title" required />
+                <label>Название</label>
+                <input type="text" id="poll-create-title" required>
+            </div>
+            <div class="form-group">
+                <label>Тип</label>
+                <select id="poll-create-type">
+                    <option value="single">Одиночный выбор</option>
+                    <option value="multiple">Множественный выбор</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Варианты (по одному на строку)</label>
+                <textarea id="poll-create-options" rows="5" placeholder="Вариант 1&#10;Вариант 2&#10;Вариант 3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Дата окончания</label>
+                <div class="form-row-2">
+                    <input type="date" id="poll-create-expires-date" required>
+                    <input type="time" id="poll-create-expires-time" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-full">Создать</button>
+        </form>
+    </div>
+</div>
+
+<div id="event-modal" class="modal-backdrop">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title" id="event-modal-title">Создать событие</h3>
+            <button type="button" class="btn btn-ghost btn-icon" id="event-modal-close" title="Закрыть">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+        <form id="event-form">
+            <input type="hidden" id="event-id" value="">
+            <div class="form-group">
+                <label>Название</label>
+                <input type="text" id="event-title" required>
             </div>
             <div class="form-group">
                 <label>Описание</label>
                 <textarea id="event-desc" rows="3"></textarea>
             </div>
             <div class="form-group">
-                <label>Дата и время *</label>
-                <input type="datetime-local" id="event-date" required />
+                <label>Место</label>
+                <input type="text" id="event-location" placeholder="Название или координаты">
             </div>
             <div class="form-group">
-                <label>Место</label>
-                <input type="text" id="event-location" placeholder="Название места" />
+                <label>Дата и время</label>
+                <div class="form-row-2">
+                    <input type="date" id="event-date" required>
+                    <input type="time" id="event-time" required>
+                </div>
             </div>
-            <button type="submit" class="radio-btn primary" style="width:auto; font-size:16px; padding:10px 24px;"><span class="material-icons">save</span> Сохранить</button>
+            <button type="submit" class="btn btn-primary w-full">Сохранить</button>
         </form>
     </div>
 </div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
-<script src="/js/utils.js"></script>
-<script src="/js/navigation.js"></script>
-<script src="/js/radio.js"></script>
-<script src="/js/auth.js"></script>
-<script src="/js/chat.js"></script>
-<script src="/js/polls.js"></script>
-<script src="/js/events.js"></script>
-<script src="/js/calculator.js"></script>
-<script src="/js/maps.js"></script>
-<script src="/js/gallery.js"></script>
-<script src="/js/operators.js"></script>
-<script src="/js/instructions.js"></script>
-<script src="/js/atak.js"></script>
-<script src="/js/regulations.js"></script>
-<script src="/js/scenarios.js"></script>
-<script src="/js/devices.js"></script>
-<script src="/js/logs.js"></script>
-<script src="/js/init.js"></script>
+
+<div id="auth-modal" class="modal-backdrop">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title" id="auth-modal-title">Вход</h3>
+            <button type="button" class="btn btn-ghost btn-icon" id="auth-close" title="Закрыть">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+        <form id="auth-form">
+            <div class="form-group">
+                <label>Имя пользователя</label>
+                <input type="text" id="auth-username" autocomplete="username" required>
+            </div>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" id="auth-password" autocomplete="current-password" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-full" id="auth-submit">Войти</button>
+        </form>
+        <div class="text-center mt-4">
+            <a href="#" id="auth-switch" class="text-accent">Зарегистрироваться</a>
+        </div>
+    </div>
+</div>
+
+<div id="lightbox" class="lightbox">
+    <button type="button" class="lightbox-close" title="Закрыть">
+        <span class="material-icons">close</span>
+    </button>
+    <img class="lightbox-img" src="" alt="">
+    <div class="lightbox-caption"></div>
+</div>
+
+<!-- ============================================================
+     СКРИПТЫ
+     ============================================================ -->
+
+<!-- Ядро -->
+<script src="js/core/utils.js"></script>
+<script src="js/core/modal.js"></script>
+<script src="js/core/notify.js"></script>
+<script src="js/core/auth.js"></script>
+
+<!-- Внешние библиотеки -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Фичи (порядок важен: tree-renderer до atak/regulations, event-logistics до events/profile) -->
+<script src="js/features/tree-renderer.js"></script>
+<script src="js/features/atak.js"></script>
+<script src="js/features/regulations.js"></script>
+<script src="js/features/operators.js"></script>
+<script src="js/features/scenarios.js"></script>
+<script src="js/features/instructions.js"></script>
+<script src="js/features/devices.js"></script>
+<script src="js/features/maps.js"></script>
+<script src="js/features/gallery.js"></script>
+<script src="js/features/calculator.js"></script>
+<script src="js/features/logs.js"></script>
+<script src="js/features/event-logistics.js"></script>
+<script src="js/features/events.js"></script>
+<script src="js/features/profile.js"></script>
+<script src="js/features/polls.js"></script>
+<script src="js/features/chat.js"></script>
+<script src="js/features/widgets.js"></script>
+<script src="js/features/radio-player.js"></script>
+
+<!-- Роутер и точка входа -->
+    <script src="js/features/profile-settings.js"></script>
+<script src="js/core/router.js"></script>
+<script src="js/core/app.js"></script>
+
 </body>
 </html>

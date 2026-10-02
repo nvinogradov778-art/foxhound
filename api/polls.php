@@ -1,166 +1,188 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+declare(strict_types=1);
 
-require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/_bootstrap.php';
 
-if (!isset($_SESSION['user_id'])) {
-    http_response_code(401);
-    die(json_encode(['error' => 'Не авторизован']));
-}
-
-$user_id = $_SESSION['user_id'];
+$me = require_auth();
 $method = $_SERVER['REQUEST_METHOD'];
 
-$stmt = $db->prepare('SELECT role FROM users WHERE id = ?');
-$stmt->execute([$user_id]);
-$user = $stmt->fetch();
-$is_admin = ($user && $user['role'] === 'admin');
-
 if ($method === 'GET') {
-    try {
-        $archived = isset($_GET['archived']) ? intval($_GET['archived']) : 0;
-        $now = time();
-
-        $sql = 'SELECT * FROM polls';
-        if ($archived) {
-            $sql .= ' WHERE expires_at <= ?';
-            $params = [$now];
-        } else {
-            $sql .= ' WHERE expires_at > ?';
-            $params = [$now];
-        }
-        $sql .= ' ORDER BY created_at DESC';
-
-        $stmt = $db->prepare($sql);
-        $stmt->execute($params);
-        $polls = $stmt->fetchAll();
-
-        foreach ($polls as &$poll) {
-            $options = json_decode($poll['options'], true);
-            $poll['options'] = $options;
-
-            $voteCounts = [];
-            foreach ($options as $idx => $label) {
-                $cnt = $db->prepare('SELECT COUNT(*) FROM votes WHERE poll_id = ? AND option_index = ?');
-                $cnt->execute([$poll['id'], $idx]);
-                $voteCounts[] = $cnt->fetchColumn();
-            }
-            $poll['vote_counts'] = $voteCounts;
-            $poll['total_votes'] = array_sum($voteCounts);
-
-            $myVotesStmt = $db->prepare('SELECT option_index FROM votes WHERE poll_id = ? AND user_id = ?');
-            $myVotesStmt->execute([$poll['id'], $user_id]);
-            $poll['my_votes'] = $myVotesStmt->fetchAll(PDO::FETCH_COLUMN);
-        }
-
-        header('Content-Type: application/json');
-        echo json_encode($polls);
-        exit;
-    } catch (PDOException $e) {
-        http_response_code(500);
-        die(json_encode(['error' => 'Ошибка БД: ' . $e->getMessage()]));
-    }
+    handle_get($db, $me);
 }
 
-if ($method === 'POST') {
-    $raw = file_get_contents('php://input');
-    $data = json_decode($raw, true);
-    if ($data === null) {
-        http_response_code(400);
-        die(json_encode(['error' => 'Неверный JSON']));
-    }
-    $action = $data['action'] ?? '';
-
-    if ($action === 'vote') {
-        $poll_id = intval($data['poll_id'] ?? 0);
-        $option_indexes = $data['option_indexes'] ?? [];
-
-        if (!$poll_id || !is_array($option_indexes) || empty($option_indexes)) {
-            http_response_code(400);
-            die(json_encode(['error' => 'Неверные данные голосования']));
-        }
-
-        try {
-            $check = $db->prepare('SELECT expires_at FROM polls WHERE id = ?');
-            $check->execute([$poll_id]);
-            $row = $check->fetch();
-            if (!$row || $row['expires_at'] <= time()) {
-                http_response_code(400);
-                die(json_encode(['error' => 'Опрос завершён']));
-            }
-
-            $db->prepare('DELETE FROM votes WHERE poll_id = ? AND user_id = ?')->execute([$poll_id, $user_id]);
-
-            $insert = $db->prepare('INSERT INTO votes (poll_id, user_id, option_index) VALUES (?, ?, ?)');
-            foreach ($option_indexes as $idx) {
-                $insert->execute([$poll_id, $user_id, $idx]);
-            }
-
-            echo json_encode(['success' => true]);
-            exit;
-        } catch (PDOException $e) {
-            http_response_code(500);
-            die(json_encode(['error' => 'Ошибка БД: ' . $e->getMessage()]));
-        }
-    }
-
-    if ($action === 'create') {
-        if (!$is_admin) {
-            http_response_code(403);
-            die(json_encode(['error' => 'Доступ запрещён (нужна роль admin)']));
-        }
-
-        $title = trim($data['title'] ?? '');
-        $type = trim($data['type'] ?? 'single');
-        $options = $data['options'] ?? [];
-        $expires_at = intval($data['expires_at'] ?? 0);
-
-        if (empty($title) || count($options) < 2 || $expires_at <= time()) {
-            http_response_code(400);
-            die(json_encode(['error' => 'Заполните все поля (минимум 2 варианта, дата в будущем)']));
-        }
-
-        $optionsJson = json_encode($options);
-        try {
-            $stmt = $db->prepare('INSERT INTO polls (title, type, options, created_by, created_at, expires_at) VALUES (?, ?, ?, ?, ?, ?)');
-            $now = time();
-            $stmt->execute([$title, $type, $optionsJson, $user_id, $now, $expires_at]);
-            echo json_encode(['success' => true, 'id' => $db->lastInsertId()]);
-            exit;
-        } catch (PDOException $e) {
-            http_response_code(500);
-            die(json_encode(['error' => 'Ошибка БД: ' . $e->getMessage()]));
-        }
-    }
-
-    http_response_code(400);
-    echo json_encode(['error' => 'Неизвестное действие']);
-    exit;
+if ($method !== 'POST' && $method !== 'DELETE') {
+    fail(405, 'Метод не разрешён');
 }
+
+$input = read_json();
 
 if ($method === 'DELETE') {
-    if (!$is_admin) {
-        http_response_code(403);
-        die(json_encode(['error' => 'Доступ запрещён']));
-    }
-    $data = json_decode(file_get_contents('php://input'), true);
-    $poll_id = intval($data['poll_id'] ?? 0);
-    if (!$poll_id) {
-        http_response_code(400);
-        die(json_encode(['error' => 'ID опроса не указан']));
-    }
-    try {
-        $db->prepare('DELETE FROM votes WHERE poll_id = ?')->execute([$poll_id]);
-        $db->prepare('DELETE FROM polls WHERE id = ?')->execute([$poll_id]);
-        echo json_encode(['success' => true]);
-        exit;
-    } catch (PDOException $e) {
-        http_response_code(500);
-        die(json_encode(['error' => 'Ошибка БД: ' . $e->getMessage()]));
-    }
+    handle_delete($db, $me, $input);
 }
 
-http_response_code(405);
-echo json_encode(['error' => 'Метод не разрешён']);
-?>
+$action = $input['action'] ?? '';
+
+match ($action) {
+    'vote'   => handle_vote($db, $me, $input),
+    'create' => handle_create($db, $me, $input),
+    default  => fail(400, 'Неизвестное действие'),
+};
+
+// ---------- Обработчики ----------
+
+function handle_get(PDO $db, int $me): void {
+    $archived = (int)($_GET['archived'] ?? 0);
+    $now = time();
+
+    $sql = 'SELECT * FROM polls WHERE expires_at ' . ($archived ? '<=' : '>') . ' ? ORDER BY created_at DESC';
+    $stmt = $db->prepare($sql);
+    $stmt->execute([$now]);
+    $polls = $stmt->fetchAll();
+
+    if (!$polls) {
+        respond([]);
+    }
+
+    $pollIds = array_map(fn($p) => (int)$p['id'], $polls);
+    $placeholders = implode(',', array_fill(0, count($pollIds), '?'));
+
+    // Одним запросом — все голоса по всем опросам
+    $votesStmt = $db->prepare("
+        SELECT poll_id, option_index, COUNT(*) AS cnt
+        FROM votes
+        WHERE poll_id IN ($placeholders)
+        GROUP BY poll_id, option_index
+    ");
+    $votesStmt->execute($pollIds);
+
+    $votesMap = [];
+    foreach ($votesStmt->fetchAll() as $r) {
+        $pid = (int)$r['poll_id'];
+        $idx = (int)$r['option_index'];
+        if (!isset($votesMap[$pid])) $votesMap[$pid] = [];
+        $votesMap[$pid][$idx] = (int)$r['cnt'];
+    }
+
+    // Мои голоса — одним запросом
+    $myVotesStmt = $db->prepare("
+        SELECT poll_id, option_index
+        FROM votes
+        WHERE poll_id IN ($placeholders) AND user_id = ?
+    ");
+    $myVotesStmt->execute(array_merge($pollIds, [$me]));
+
+    $myVotesMap = [];
+    foreach ($myVotesStmt->fetchAll() as $r) {
+        $pid = (int)$r['poll_id'];
+        if (!isset($myVotesMap[$pid])) $myVotesMap[$pid] = [];
+        $myVotesMap[$pid][] = (int)$r['option_index'];
+    }
+
+    foreach ($polls as &$poll) {
+        $pid = (int)$poll['id'];
+        $poll['id'] = $pid;
+        $poll['options'] = json_decode($poll['options'], true) ?: [];
+        $poll['expires_at'] = (int)$poll['expires_at'];
+        $poll['created_at'] = (int)$poll['created_at'];
+        $poll['created_by'] = (int)($poll['created_by'] ?? 0);
+
+        $counts = [];
+        foreach ($poll['options'] as $idx => $_) {
+            $counts[] = $votesMap[$pid][$idx] ?? 0;
+        }
+        $poll['vote_counts'] = $counts;
+        $poll['total_votes'] = array_sum($counts);
+        $poll['my_votes'] = $myVotesMap[$pid] ?? [];
+    }
+    unset($poll);
+
+    respond($polls);
+}
+
+function handle_vote(PDO $db, int $me, array $input): void {
+    $pollId = (int)($input['poll_id'] ?? 0);
+    $indexes = $input['option_indexes'] ?? [];
+
+    if (!$pollId || !is_array($indexes) || !count($indexes)) {
+        fail(400, 'Неверные данные голосования');
+    }
+
+    $stmt = $db->prepare('SELECT expires_at FROM polls WHERE id = ?');
+    $stmt->execute([$pollId]);
+    $expires = $stmt->fetchColumn();
+
+    if ($expires === false || (int)$expires <= time()) {
+        fail(400, 'Опрос завершён');
+    }
+
+    $db->beginTransaction();
+    try {
+        $db->prepare('DELETE FROM votes WHERE poll_id = ? AND user_id = ?')->execute([$pollId, $me]);
+
+        $insert = $db->prepare('INSERT INTO votes (poll_id, user_id, option_index) VALUES (?, ?, ?)');
+        foreach ($indexes as $idx) {
+            $insert->execute([$pollId, $me, (int)$idx]);
+        }
+
+        $db->commit();
+    } catch (Throwable $e) {
+        $db->rollBack();
+        fail(500, 'Ошибка голосования');
+    }
+
+    ok();
+}
+
+function handle_create(PDO $db, int $me, array $input): void {
+    // Проверка админа
+    $stmt = $db->prepare('SELECT role FROM users WHERE id = ?');
+    $stmt->execute([$me]);
+    if ($stmt->fetchColumn() !== 'admin') {
+        fail(403, 'Доступ запрещён (нужна роль admin)');
+    }
+
+    $title     = trim($input['title'] ?? '');
+    $type      = trim($input['type'] ?? 'single');
+    $options   = $input['options'] ?? [];
+    $expiresAt = (int)($input['expires_at'] ?? 0);
+
+    if ($title === '' || !is_array($options) || count($options) < 2 || $expiresAt <= time()) {
+        fail(400, 'Заполните все поля (минимум 2 варианта, дата в будущем)');
+    }
+
+    if (!in_array($type, ['single', 'multiple'], true)) {
+        $type = 'single';
+    }
+
+    $now = time();
+    $db->prepare('
+        INSERT INTO polls (title, type, options, created_by, created_at, expires_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ')->execute([$title, $type, json_encode($options, JSON_UNESCAPED_UNICODE), $me, $now, $expiresAt]);
+
+    ok(['id' => (int)$db->lastInsertId()]);
+}
+
+function handle_delete(PDO $db, int $me, array $input): void {
+    // Проверка админа
+    $stmt = $db->prepare('SELECT role FROM users WHERE id = ?');
+    $stmt->execute([$me]);
+    if ($stmt->fetchColumn() !== 'admin') {
+        fail(403, 'Доступ запрещён');
+    }
+
+    $pollId = (int)($input['poll_id'] ?? 0);
+    if (!$pollId) fail(400, 'ID опроса не указан');
+
+    $db->beginTransaction();
+    try {
+        $db->prepare('DELETE FROM votes WHERE poll_id = ?')->execute([$pollId]);
+        $db->prepare('DELETE FROM polls WHERE id = ?')->execute([$pollId]);
+        $db->commit();
+    } catch (Throwable $e) {
+        $db->rollBack();
+        fail(500, 'Ошибка удаления');
+    }
+
+    ok();
+}

@@ -1,62 +1,96 @@
 <?php
-require_once 'db.php';
+declare(strict_types=1);
 
-if (!isset($_SESSION['user_id'])) {
-    http_response_code(401);
-    die(json_encode(['error' => 'Не авторизован']));
+require_once __DIR__ . '/_bootstrap.php';
+
+$me = require_auth();
+$method = $_SERVER['REQUEST_METHOD'];
+
+if ($method === 'GET') {
+    handle_get($db, $me);
 }
 
-$user_id = $_SESSION['user_id'];
+if ($method !== 'POST') {
+    fail(405, 'Метод не разрешён');
+}
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+$action = $_GET['action'] ?? '';
+
+match ($action) {
+    'update'   => handle_update($db, $me),
+    'password' => handle_password($db, $me),
+    'avatar'   => handle_avatar($db, $me),
+    default    => fail(400, 'Неизвестное действие'),
+};
+
+// ---------- Обработчики ----------
+
+function handle_get(PDO $db, int $userId): void {
     $stmt = $db->prepare('SELECT id, username, avatar, about, role, registered_at, last_seen FROM users WHERE id = ?');
-    $stmt->execute([$user_id]);
+    $stmt->execute([$userId]);
     $user = $stmt->fetch();
-    if (!$user) {
-        http_response_code(404);
-        die(json_encode(['error' => 'Пользователь не найден']));
-    }
-    echo json_encode($user);
-    exit;
+
+    if (!$user) fail(404, 'Пользователь не найден');
+
+    $user['id'] = (int)$user['id'];
+    $user['registered_at'] = (int)$user['registered_at'];
+    $user['last_seen'] = (int)$user['last_seen'];
+
+    respond($user);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_GET['action'] ?? '';
+function handle_update(PDO $db, int $userId): void {
+    $data = read_json();
+    $about = trim($data['about'] ?? '');
 
-    if ($action === 'update') {
-        $data = json_decode(file_get_contents('php://input'), true);
-        $about = trim($data['about'] ?? '');
-        $stmt = $db->prepare('UPDATE users SET about = ? WHERE id = ?');
-        $stmt->execute([$about, $user_id]);
-        echo json_encode(['success' => true]);
-        exit;
-    }
+    $db->prepare('UPDATE users SET about = ? WHERE id = ?')->execute([$about, $userId]);
 
-    if ($action === 'avatar') {
-        if (!isset($_FILES['avatar']) || $_FILES['avatar']['error'] !== UPLOAD_ERR_OK) {
-            http_response_code(400);
-            die(json_encode(['error' => 'Ошибка загрузки файла']));
-        }
-        $file = $_FILES['avatar'];
-        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        if (!in_array($ext, $allowed)) {
-            http_response_code(400);
-            die(json_encode(['error' => 'Разрешены только JPG, PNG, GIF, WEBP']));
-        }
-        $filename = 'avatar_' . $user_id . '.' . $ext;
-        $dest = __DIR__ . '/../uploads/avatars/' . $filename;
-        if (!move_uploaded_file($file['tmp_name'], $dest)) {
-            http_response_code(500);
-            die(json_encode(['error' => 'Не удалось сохранить файл']));
-        }
-        $stmt = $db->prepare('UPDATE users SET avatar = ? WHERE id = ?');
-        $stmt->execute([$filename, $user_id]);
-        echo json_encode(['success' => true, 'avatar' => $filename]);
-        exit;
-    }
-
-    http_response_code(400);
-    echo json_encode(['error' => 'Неизвестное действие']);
+    ok();
 }
-?>
+
+function handle_password(PDO $db, int $userId): void {
+    $data = read_json();
+    $old = (string)($data['old_password'] ?? '');
+    $new = (string)($data['new_password'] ?? '');
+
+    if (strlen($new) < 4) {
+        fail(400, 'Новый пароль — минимум 4 символа');
+    }
+
+    $stmt = $db->prepare('SELECT password_hash FROM users WHERE id = ?');
+    $stmt->execute([$userId]);
+    $hash = $stmt->fetchColumn();
+
+    if (!$hash || !password_verify($old, $hash)) {
+        fail(400, 'Текущий пароль неверный');
+    }
+
+    $newHash = password_hash($new, PASSWORD_DEFAULT);
+    $db->prepare('UPDATE users SET password_hash = ? WHERE id = ?')->execute([$newHash, $userId]);
+
+    ok();
+}
+
+function handle_avatar(PDO $db, int $userId): void {
+    if (empty($_FILES['avatar']) || $_FILES['avatar']['error'] !== UPLOAD_ERR_OK) {
+        fail(400, 'Ошибка загрузки файла');
+    }
+
+    // Проверим MIME до удаления старого
+    $avatarDir = __DIR__ . '/../uploads/avatars';
+    $filename = upload_image($_FILES['avatar'], $avatarDir, 'avatar_' . $userId);
+
+    // Удаляем старый (если был и не default)
+    $stmt = $db->prepare('SELECT avatar FROM users WHERE id = ?');
+    $stmt->execute([$userId]);
+    $oldAvatar = $stmt->fetchColumn();
+
+    if ($oldAvatar && $oldAvatar !== 'default.png' && $oldAvatar !== $filename) {
+        $oldPath = $avatarDir . '/' . $oldAvatar;
+        if (is_file($oldPath)) @unlink($oldPath);
+    }
+
+    $db->prepare('UPDATE users SET avatar = ? WHERE id = ?')->execute([$filename, $userId]);
+
+    ok(['avatar' => $filename]);
+}

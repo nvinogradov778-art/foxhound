@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 session_start();
 require_once __DIR__ . '/../api/db.php';
 
@@ -9,494 +10,429 @@ if (!isset($_SESSION['user_id'])) {
 
 $stmt = $db->prepare('SELECT role FROM users WHERE id = ?');
 $stmt->execute([$_SESSION['user_id']]);
-$role = $stmt->fetchColumn();
-if ($role !== 'admin') {
+if ($stmt->fetchColumn() !== 'admin') {
     header('Location: /');
     exit;
 }
 
 $section = $_GET['section'] ?? 'photos';
+
+$navItems = [
+    'photos'       => ['icon' => 'photo_library',      'label' => 'Фото'],
+    'operators'    => ['icon' => 'groups',             'label' => 'Оперативники'],
+    'instructions' => ['icon' => 'description',        'label' => 'Инструкции'],
+    'atak'         => ['icon' => 'satellite_alt',      'label' => 'ATAK'],
+    'regulations'  => ['icon' => 'gavel',              'label' => 'Устав'],
+    'scenarios'    => ['icon' => 'movie',              'label' => 'Сценарии'],
+    'devices'      => ['icon' => 'build',              'label' => 'Девайсы'],
+    'radio'        => ['icon' => 'radio',              'label' => 'Радио'],
+    'maps'         => ['icon' => 'map',                'label' => 'Карты'],
+    'logs'         => ['icon' => 'history_edu',        'label' => 'Журнал'],
+    'users'        => ['icon' => 'admin_panel_settings','label' => 'Пользователи'],
+];
 ?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Админ-панель FOXHOUND</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet" />
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #0a0a0a; color: #c0c0c0; font-family: 'PT Sans', sans-serif; padding: 20px; }
-        .container { max-width: 1200px; margin: 0 auto; background: #111; border: 2px solid #ff6600; padding: 20px; }
-        h1 { color: #ff6600; font-family: 'PT Sans Narrow', sans-serif; letter-spacing: 2px; border-bottom: 1px solid #2a2a2a; padding-bottom: 10px; }
-        .nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; }
-        .nav a { background: transparent; border: 1px solid #2a2a2a; color: #c0c0c0; padding: 8px 16px; text-decoration: none; font-weight: 700; font-family: 'PT Sans Narrow', sans-serif; letter-spacing: 1px; }
-        .nav a.active, .nav a:hover { border-color: #ff6600; color: #ff6600; background: rgba(255,102,0,0.1); }
-        .section { display: none; margin-top: 20px; }
-        .section.active { display: block; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-weight: 700; color: #fff; margin-bottom: 4px; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 8px 12px; background: #0a0a0a; border: 1px solid #2a2a2a; color: #fff; border-radius: 4px; font-family: 'PT Sans', sans-serif; }
-        .form-group textarea { min-height: 80px; }
-        .btn { background: #ff6600; color: #0a0a0a; border: none; padding: 10px 20px; font-weight: 700; cursor: pointer; border-radius: 4px; font-family: 'PT Sans Narrow', sans-serif; letter-spacing: 1px; }
-        .btn:hover { background: #ff8833; }
-        .btn-danger { background: #ff3333; color: #0a0a0a; }
-        .btn-danger:hover { background: #ff5555; }
-        .list-item { background: #0a0a0a; border: 1px solid #2a2a2a; padding: 10px 15px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-        .list-item .actions { display: flex; gap: 8px; }
-        .list-item .actions .btn { padding: 4px 12px; font-size: 13px; }
-        .preview-img { max-width: 100px; max-height: 100px; object-fit: cover; border: 1px solid #2a2a2a; }
-        .file-input-wrapper { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-        .file-input-wrapper input[type="file"] { flex: 1; min-width: 150px; }
-        @media (max-width: 600px) { .list-item { flex-direction: column; align-items: stretch; gap: 8px; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Админ-панель FOXHOUND</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="/css/design-system.css">
+<link rel="stylesheet" href="/admin/css/admin.css">
 </head>
-<body>
-<div class="container">
-    <h1>🛠️ Администрирование FOXHOUND</h1>
-    <div class="nav">
-        <a href="?section=photos" class="<?= $section === 'photos' ? 'active' : '' ?>">📸 Фото</a>
-        <a href="?section=operators" class="<?= $section === 'operators' ? 'active' : '' ?>">👥 Оперативники</a>
-        <a href="?section=instructions" class="<?= $section === 'instructions' ? 'active' : '' ?>">📄 Инструкции</a>
-        <a href="?section=atak" class="<?= $section === 'atak' ? 'active' : '' ?>">📡 ATAK</a>
-        <a href="?section=regulations" class="<?= $section === 'regulations' ? 'active' : '' ?>">📜 Устав</a>
-        <a href="?section=scenarios" class="<?= $section === 'scenarios' ? 'active' : '' ?>">🎯 Сценарии</a>
-        <a href="?section=devices" class="<?= $section === 'devices' ? 'active' : '' ?>">🛠️ Девайсы</a>
-        <a href="?section=json" class="<?= $section === 'json' ? 'active' : '' ?>">📝 JSON-редактор</a>
-        <a href="/" style="margin-left: auto;">🏠 На сайт</a>
+<body class="admin">
+<div class="admin-container">
+
+<h1 class="admin-title">
+    <span class="material-icons">build</span>
+    Администрирование FOXHOUND
+</h1>
+
+<nav class="admin-nav">
+    <div class="admin-nav-links">
+        <?php foreach ($navItems as $key => $item): ?>
+            <a href="?section=<?= htmlspecialchars($key, ENT_QUOTES) ?>"
+               class="<?= $section === $key ? 'active' : '' ?>">
+                <span class="material-icons"><?= htmlspecialchars($item['icon'], ENT_QUOTES) ?></span>
+                <?= htmlspecialchars($item['label'], ENT_QUOTES) ?>
+            </a>
+        <?php endforeach; ?>
+    </div>
+    <div class="admin-nav-right">
+        <a href="/" class="nav-home">
+            <span class="material-icons">home</span> На сайт
+        </a>
+    </div>
+</nav>
+
+<!-- ==================== ФОТО ==================== -->
+<div id="section-photos" class="admin-section <?= $section === 'photos' ? 'active' : '' ?>">
+    <h2><span class="material-icons">photo_library</span> Медиа-галерея</h2>
+
+    <div class="admin-actions">
+        <button type="button" class="btn" id="photo-new-album-btn">
+            <span class="material-icons">add</span> Новый альбом
+        </button>
+        <button type="button" class="btn btn-secondary" id="photo-collapse-all">
+            <span class="material-icons">unfold_less</span> Свернуть всё
+        </button>
     </div>
 
-    <div id="section-photos" class="section <?= $section === 'photos' ? 'active' : '' ?>">
-        <h2>Управление фотографиями</h2>
-        <form id="photo-form" enctype="multipart/form-data">
-            <div class="form-group">
-                <label>Заголовок</label>
-                <input type="text" id="photo-title" required />
-            </div>
-            <div class="form-group">
-                <label>Описание</label>
-                <textarea id="photo-desc"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Дата</label>
-                <input type="date" id="photo-date" />
-            </div>
-            <div class="form-group file-input-wrapper">
-                <input type="file" id="photo-file" accept="image/*" required />
-                <button type="submit" class="btn">Добавить фото</button>
-            </div>
-        </form>
-        <div id="photo-list"></div>
-    </div>
-
-    <div id="section-operators" class="section <?= $section === 'operators' ? 'active' : '' ?>">
-        <h2>Управление оперативниками</h2>
-        <form id="operator-form" enctype="multipart/form-data">
-            <div class="form-group"><label>Имя</label><input type="text" id="op-name" required /></div>
-            <div class="form-group"><label>Роль</label><input type="text" id="op-role" /></div>
-            <div class="form-group"><label>Специализация</label><input type="text" id="op-spec" /></div>
-            <div class="form-group"><label>Описание</label><textarea id="op-desc"></textarea></div>
-            <div class="form-group file-input-wrapper">
-                <input type="file" id="op-photo" accept="image/*" />
-                <button type="submit" class="btn">Добавить / Обновить</button>
-            </div>
-            <input type="hidden" id="op-id" value="" />
-        </form>
-        <div id="operator-list"></div>
-    </div>
-
-    <div id="section-instructions" class="section <?= $section === 'instructions' ? 'active' : '' ?>">
-        <h2>Управление инструкциями</h2>
-        <form id="instruction-form">
-            <div class="form-group"><label>Название</label><input type="text" id="inst-title" required /></div>
-            <div class="form-group"><label>Описание</label><textarea id="inst-desc"></textarea></div>
-            <div class="form-group"><label>Ссылка на PDF</label><input type="url" id="inst-link" required /></div>
-            <button type="submit" class="btn">Добавить инструкцию</button>
-        </form>
-        <div id="instruction-list"></div>
-    </div>
-
-    <div id="section-atak" class="section <?= $section === 'atak' ? 'active' : '' ?>">
-        <h2>Редактор ATAK</h2>
-        <p>Используйте JSON-редактор для изменения структуры ATAK (раздел JSON).</p>
-        <button onclick="location.href='?section=json&file=atak_data.json'" class="btn">Перейти к ATAK JSON</button>
-    </div>
-
-    <div id="section-regulations" class="section <?= $section === 'regulations' ? 'active' : '' ?>">
-        <h2>Редактор Устава</h2>
-        <p>Используйте JSON-редактор для изменения структуры Устава.</p>
-        <button onclick="location.href='?section=json&file=regulations_data.json'" class="btn">Перейти к Уставу JSON</button>
-    </div>
-
-    <div id="section-scenarios" class="section <?= $section === 'scenarios' ? 'active' : '' ?>">
-        <h2>Управление сценариями</h2>
-        <p>Редактируйте сценарии через JSON-редактор.</p>
-        <button onclick="location.href='?section=json&file=scenarios_data.json'" class="btn">Перейти к сценариям JSON</button>
-    </div>
-
-    <div id="section-devices" class="section <?= $section === 'devices' ? 'active' : '' ?>">
-        <h2>Управление девайсами</h2>
-        <p>Редактируйте девайсы через JSON-редактор.</p>
-        <button onclick="location.href='?section=json&file=devices_data.json'" class="btn">Перейти к девайсам JSON</button>
-    </div>
-
-    <div id="section-json" class="section <?= $section === 'json' ? 'active' : '' ?>">
-        <h2>Редактор JSON-файлов</h2>
-        <div style="margin-bottom: 10px;">
-            <label>Выберите файл:</label>
-            <select id="json-file-select">
-                <option value="photo_data.json">photo_data.json</option>
-                <option value="operators_data.json">operators_data.json</option>
-                <option value="instructions_data.json">instructions_data.json</option>
-                <option value="atak_data.json">atak_data.json</option>
-                <option value="regulations_data.json">regulations_data.json</option>
-                <option value="scenarios_data.json">scenarios_data.json</option>
-                <option value="devices_data.json">devices_data.json</option>
-            </select>
-            <button class="btn" id="json-load-btn">Загрузить</button>
+    <div id="album-editor" style="display:none; background:#0d0d0d; border:1px solid #ff6600; padding:15px; margin-bottom:20px;">
+        <h3 style="color:#ff6600; margin-bottom:12px;" id="album-editor-title">Новый альбом</h3>
+        <input type="hidden" id="album-id" value="">
+        <div class="form-group"><label>Название</label><input type="text" id="album-title"></div>
+        <div class="form-group"><label>Slug (латиница, опционально)</label><input type="text" id="album-slug" placeholder="black_hawk_2026"></div>
+        <div class="form-group"><label>Описание</label><textarea id="album-desc"></textarea></div>
+        <div class="form-group">
+            <label>Обложка</label>
+            <div id="album-cover-current" style="margin-bottom:8px;"></div>
+            <input type="file" id="album-cover" accept="image/*">
         </div>
-        <textarea id="json-editor" style="width:100%; height:400px; background:#0a0a0a; color:#33ff33; border:1px solid #2a2a2a; padding:10px; font-family:monospace;"></textarea>
-        <div style="margin-top: 10px;">
-            <button class="btn" id="json-save-btn">💾 Сохранить</button>
-            <button class="btn" id="json-format-btn">🔧 Форматировать</button>
+        <div class="admin-actions">
+            <button type="button" class="btn" id="album-save">Сохранить</button>
+            <button type="button" class="btn btn-secondary" id="album-cancel">Отмена</button>
         </div>
-        <div id="json-status" style="margin-top:10px; padding:10px; border:1px solid #2a2a2a; display:none;"></div>
     </div>
 
+    <div id="photo-list"></div>
 </div>
 
-<script>
-    (function() {
-        'use strict';
+<!-- ==================== ОПЕРАТИВНИКИ ==================== -->
+<div id="section-operators" class="admin-section <?= $section === 'operators' ? 'active' : '' ?>">
+    <h2><span class="material-icons">groups</span> Управление оперативниками</h2>
+    <form id="operator-form" enctype="multipart/form-data">
+        <div class="form-group"><label>Имя</label><input type="text" id="op-name" required></div>
+        <div class="form-group"><label>Роль</label><input type="text" id="op-role"></div>
+        <div class="form-group"><label>Специализация</label><input type="text" id="op-spec"></div>
+        <div class="form-group"><label>Описание</label><textarea id="op-desc"></textarea></div>
+        <div class="form-group file-input-wrapper">
+            <input type="file" id="op-photo" accept="image/*">
+            <button type="submit" class="btn">Добавить / Обновить</button>
+        </div>
+        <input type="hidden" id="op-id" value="">
+    </form>
+    <div id="operator-list"></div>
+</div>
 
-        function apiRequest(url, method, body) {
-            return fetch(url, {
-                method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: body ? JSON.stringify(body) : undefined
-            }).then(res => res.json());
-        }
+<!-- ==================== ИНСТРУКЦИИ ==================== -->
+<div id="section-instructions" class="admin-section <?= $section === 'instructions' ? 'active' : '' ?>">
+    <h2><span class="material-icons">description</span> Управление инструкциями</h2>
+    <form id="instruction-form">
+        <input type="hidden" id="inst-id" value="">
+        <div class="form-group"><label>Название</label><input type="text" id="inst-title" required></div>
+        <div class="form-group"><label>Описание</label><textarea id="inst-desc"></textarea></div>
+        <div class="form-group"><label>Ссылка на PDF</label><input type="url" id="inst-link" required></div>
+        <div class="admin-actions">
+            <button type="submit" class="btn" id="inst-submit-btn">Добавить инструкцию</button>
+        </div>
+    </form>
+    <div id="instruction-list"></div>
+</div>
 
-        function showStatus(msg, type) {
-            const el = document.getElementById('json-status');
-            el.style.display = 'block';
-            el.textContent = msg;
-            el.style.color = type === 'success' ? '#33cc33' : '#ff3333';
-            el.style.borderColor = type === 'success' ? '#33cc33' : '#ff3333';
-            setTimeout(() => { el.style.display = 'none'; }, 5000);
-        }
+<!-- ==================== ATAK ==================== -->
+<div id="section-atak" class="admin-section <?= $section === 'atak' ? 'active' : '' ?>">
+    <h2><span class="material-icons">satellite_alt</span> Редактор ATAK</h2>
+    <p class="text-muted">Дерево разделов. Редактируется как JSON.</p>
+    <div class="admin-actions">
+        <button type="button" class="btn btn-secondary" id="atak-load-btn">
+            <span class="material-icons">cloud_download</span> Загрузить из БД
+        </button>
+        <button type="button" class="btn" id="atak-save-btn">
+            <span class="material-icons">save</span> Сохранить в БД
+        </button>
+        <button type="button" class="btn btn-secondary" id="atak-format-btn">
+            <span class="material-icons">code</span> Форматировать
+        </button>
+    </div>
+    <textarea id="atak-editor" class="admin-editor"></textarea>
+    <div id="atak-status" class="admin-status"></div>
+</div>
 
-        function loadPhotos() {
-            fetch('/photo_data.json')
-                .then(res => res.json())
-                .then(data => {
-                    const container = document.getElementById('photo-list');
-                    container.innerHTML = '';
-                    if (!data.photos || data.photos.length === 0) {
-                        container.innerHTML = '<p style="color:#666;">Нет фотографий.</p>';
-                        return;
-                    }
-                    data.photos.forEach(photo => {
-                        const div = document.createElement('div');
-                        div.className = 'list-item';
-                        div.innerHTML = `
-                            <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
-                                <img src="${photo.image}" alt="${photo.title}" class="preview-img" onerror="this.style.display='none'" />
-                                <div>
-                                    <strong>${photo.title}</strong>
-                                    <div style="font-size:14px; color:#666;">${photo.description || ''}</div>
-                                    <div style="font-size:12px; color:#666;">${photo.date || ''}</div>
-                                </div>
-                            </div>
-                            <div class="actions">
-                                <button class="btn btn-danger" onclick="deletePhoto(${photo.id})">Удалить</button>
-                            </div>
-                        `;
-                        container.appendChild(div);
-                    });
-                })
-                .catch(err => console.error('Ошибка загрузки фото:', err));
-        }
+<!-- ==================== УСТАВ ==================== -->
+<div id="section-regulations" class="admin-section <?= $section === 'regulations' ? 'active' : '' ?>">
+    <h2><span class="material-icons">gavel</span> Редактор Устава</h2>
+    <p class="text-muted">Дерево разделов. Редактируется как JSON.</p>
+    <div class="admin-actions">
+        <button type="button" class="btn btn-secondary" id="reg-load-btn">
+            <span class="material-icons">cloud_download</span> Загрузить из БД
+        </button>
+        <button type="button" class="btn" id="reg-save-btn">
+            <span class="material-icons">save</span> Сохранить в БД
+        </button>
+        <button type="button" class="btn btn-secondary" id="reg-format-btn">
+            <span class="material-icons">code</span> Форматировать
+        </button>
+    </div>
+    <textarea id="reg-editor" class="admin-editor"></textarea>
+    <div id="reg-status" class="admin-status"></div>
+</div>
 
-        window.deletePhoto = function(id) {
-            if (!confirm('Удалить фото?')) return;
-            fetch('/api/admin_photos.php?action=delete', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: id })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) loadPhotos();
-                else alert('Ошибка: ' + data.error);
-            })
-            .catch(err => alert('Ошибка сети'));
-        };
+<!-- ==================== СЦЕНАРИИ ==================== -->
+<div id="section-scenarios" class="admin-section <?= $section === 'scenarios' ? 'active' : '' ?>">
+    <h2><span class="material-icons">movie</span> Управление сценариями</h2>
+    <div class="admin-actions">
+        <select id="scenario-select" class="admin-select">
+            <option value="">— Выберите сценарий —</option>
+        </select>
+        <button type="button" class="btn" id="scenario-new-btn">+ Новый сценарий</button>
+        <button type="button" class="btn btn-danger" id="scenario-delete-btn" style="display:none;">Удалить</button>
+    </div>
+    <div id="scenario-editor" style="display:none;">
+        <div class="form-group"><label>Название</label><input type="text" id="sc-title"></div>
+        <div class="form-group"><label>Slug</label><input type="text" id="sc-slug" placeholder="black_hawk"></div>
+        <div class="form-group"><label>Описание</label><textarea id="sc-description"></textarea></div>
+        <div class="form-group"><label>Ссылка на видео</label><input type="text" id="sc-video"></div>
+        <div class="form-group">
+            <label style="display:flex; justify-content:space-between; align-items:center;">
+                <span>Фазы</span>
+                <button type="button" class="btn btn-sm" id="phase-add-btn">+ Добавить фазу</button>
+            </label>
+            <div id="phase-list"></div>
+        </div>
+        <div class="form-group">
+            <label style="display:flex; justify-content:space-between; align-items:center;">
+                <span>Инвентарь</span>
+                <button type="button" class="btn btn-sm" id="inv-add-btn">+ Добавить</button>
+            </label>
+            <div id="inv-list"></div>
+        </div>
+        <div class="form-group">
+            <label style="display:flex; justify-content:space-between; align-items:center;">
+                <span>Файлы</span>
+                <button type="button" class="btn btn-sm" id="file-add-btn">+ Добавить</button>
+            </label>
+            <div id="file-list"></div>
+        </div>
+        <div class="admin-row-end">
+            <button type="button" class="btn" id="sc-save-btn">Сохранить</button>
+            <button type="button" class="btn btn-secondary" id="sc-cancel-btn">Отмена</button>
+        </div>
+    </div>
+</div>
 
-        document.getElementById('photo-form')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData();
-            formData.append('title', document.getElementById('photo-title').value.trim());
-            formData.append('description', document.getElementById('photo-desc').value.trim());
-            formData.append('date', document.getElementById('photo-date').value);
-            const fileInput = document.getElementById('photo-file');
-            if (fileInput.files.length) {
-                formData.append('photo', fileInput.files[0]);
-            } else {
-                alert('Выберите файл');
-                return;
-            }
-            fetch('/api/admin_photos.php?action=upload', {
-                method: 'POST',
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    loadPhotos();
-                    this.reset();
-                } else alert('Ошибка: ' + data.error);
-            })
-            .catch(err => alert('Ошибка сети'));
-        });
+<!-- ==================== ДЕВАЙСЫ ==================== -->
+<div id="section-devices" class="admin-section <?= $section === 'devices' ? 'active' : '' ?>">
+    <h2><span class="material-icons">build</span> Управление девайсами</h2>
+    <div class="admin-actions">
+        <select id="device-select" class="admin-select">
+            <option value="">— Выберите устройство —</option>
+        </select>
+        <button type="button" class="btn" id="device-new-btn">+ Новое устройство</button>
+        <button type="button" class="btn btn-danger" id="device-delete-btn" style="display:none;">Удалить</button>
+    </div>
+    <div id="device-editor" style="display:none;">
+        <div class="form-group"><label>Slug</label><input type="text" id="dv-slug" placeholder="esp32_timer"></div>
+        <div class="form-group"><label>Название</label><input type="text" id="dv-name"></div>
+        <div class="form-group"><label>Описание</label><textarea id="dv-description"></textarea></div>
+        <div class="form-group"><label>Ссылка на видео</label><input type="text" id="dv-video"></div>
+        <div class="form-group"><label>Ссылка на схему</label><input type="text" id="dv-schematic"></div>
+        <div class="form-group"><label>Ссылка на документацию</label><input type="text" id="dv-docs"></div>
+        <div class="form-group">
+            <label>Фото</label>
+            <div id="dv-photo-current" style="margin-bottom:8px;"></div>
+            <input type="file" id="dv-photo" accept="image/*">
+        </div>
+        <div class="form-group">
+            <label style="display:flex; justify-content:space-between; align-items:center;">
+                <span>Файлы</span>
+                <button type="button" class="btn btn-sm" id="dv-file-add-btn">+ Добавить файл</button>
+            </label>
+            <div id="dv-file-list"></div>
+        </div>
+        <div class="admin-row-end">
+            <button type="button" class="btn" id="dv-save-btn">Сохранить</button>
+            <button type="button" class="btn btn-secondary" id="dv-cancel-btn">Отмена</button>
+        </div>
+    </div>
+</div>
 
-        function loadOperators() {
-            fetch('/operators_data.json')
-                .then(res => res.json())
-                .then(data => {
-                    const container = document.getElementById('operator-list');
-                    container.innerHTML = '';
-                    if (!data.operators || data.operators.length === 0) {
-                        container.innerHTML = '<p style="color:#666;">Нет оперативников.</p>';
-                        return;
-                    }
-                    data.operators.forEach((op, index) => {
-                        const div = document.createElement('div');
-                        div.className = 'list-item';
-                        div.innerHTML = `
-                            <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
-                                ${op.photo ? `<img src="${op.photo}" alt="${op.name}" class="preview-img" onerror="this.style.display='none'" />` : ''}
-                                <div>
-                                    <strong>${op.name}</strong>
-                                    <div style="font-size:14px; color:#ff6600;">${op.role || ''}</div>
-                                    <div style="font-size:14px; color:#666;">${op.specialization || ''}</div>
-                                    <div style="font-size:13px; color:#666;">${op.description || ''}</div>
-                                </div>
-                            </div>
-                            <div class="actions">
-                                <button class="btn" onclick="editOperator(${index})">✏️</button>
-                                <button class="btn btn-danger" onclick="deleteOperator(${index})">🗑️</button>
-                            </div>
-                        `;
-                        container.appendChild(div);
-                    });
-                })
-                .catch(err => console.error('Ошибка загрузки оперативников:', err));
-        }
+<!-- ==================== РАДИО ==================== -->
+<div id="section-radio" class="admin-section <?= $section === 'radio' ? 'active' : '' ?>">
+    <h2><span class="material-icons">radio</span> Управление радио</h2>
+    <div class="admin-actions">
+        <select id="radio-select" class="admin-select">
+            <option value="">— Выберите станцию —</option>
+        </select>
+        <button type="button" class="btn" id="radio-new-btn">+ Новая станция</button>
+        <button type="button" class="btn btn-danger" id="radio-delete-btn" style="display:none;">Удалить</button>
+    </div>
+    <div id="radio-editor" style="display:none;">
+        <div class="form-group"><label>Slug</label><input type="text" id="rd-slug" placeholder="main_hq"></div>
+        <div class="form-group"><label>Папка плейлиста</label><input type="text" id="rd-folder" placeholder="playlist_rock"></div>
+        <div class="form-group"><label>Название</label><input type="text" id="rd-name" placeholder="CH 1: Главный Штаб"></div>
+        <div class="form-group"><label>Частота</label><input type="text" id="rd-frequency"></div>
+        <div class="form-group"><label>Purpose</label><input type="text" id="rd-purpose"></div>
+        <div class="form-group"><label>Описание</label><textarea id="rd-desc"></textarea></div>
+        <div class="form-group">
+            <label style="display:flex; justify-content:space-between; align-items:center;">
+                <span>Треки</span>
+                <button type="button" class="btn btn-sm" id="rd-track-add-btn">+ Добавить трек</button>
+            </label>
+            <div id="rd-track-list"></div>
+        </div>
+        <div class="admin-row-end">
+            <button type="button" class="btn" id="rd-save-btn">Сохранить</button>
+            <button type="button" class="btn btn-secondary" id="rd-cancel-btn">Отмена</button>
+        </div>
+    </div>
+</div>
 
-        window.editOperator = function(index) {
-            fetch('/operators_data.json')
-                .then(res => res.json())
-                .then(data => {
-                    const op = data.operators[index];
-                    if (!op) return;
-                    document.getElementById('op-id').value = index;
-                    document.getElementById('op-name').value = op.name || '';
-                    document.getElementById('op-role').value = op.role || '';
-                    document.getElementById('op-spec').value = op.specialization || '';
-                    document.getElementById('op-desc').value = op.description || '';
-                    document.getElementById('op-photo').value = '';
-                })
-                .catch(err => alert('Ошибка загрузки данных'));
-        };
+<!-- ==================== КАРТЫ ==================== -->
+<div id="section-maps" class="admin-section <?= $section === 'maps' ? 'active' : '' ?>">
+    <h2><span class="material-icons">map</span> Управление картами</h2>
+    <div class="admin-actions">
+        <select id="map-select" class="admin-select">
+            <option value="">— Выберите полигон —</option>
+        </select>
+        <button type="button" class="btn" id="map-new-btn">+ Новый полигон</button>
+        <button type="button" class="btn btn-danger" id="map-delete-btn" style="display:none;">Удалить</button>
+    </div>
+    <div id="map-editor" style="display:none;">
+        <div class="form-group"><label>Slug</label><input type="text" id="mp-slug" placeholder="lyaminskaya"></div>
+        <div class="form-group"><label>Название</label><input type="text" id="mp-name"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <div class="form-group" style="flex:1; min-width:120px;"><label>Широта</label><input type="number" id="mp-lat" step="0.000001"></div>
+            <div class="form-group" style="flex:1; min-width:120px;"><label>Долгота</label><input type="number" id="mp-lng" step="0.000001"></div>
+            <div class="form-group" style="flex:0 0 100px;"><label>Увеличение</label><input type="number" id="mp-zoom" min="1" max="20" value="14"></div>
+        </div>
+        <div class="form-group">
+            <label style="display:flex; justify-content:space-between; align-items:center;">
+                <span>Слои (GeoJSON)</span>
+                <button type="button" class="btn btn-sm" id="mp-layer-add-btn">+ Добавить слой</button>
+            </label>
+            <div id="mp-layer-list"></div>
+        </div>
+        <div class="admin-row-end">
+            <button type="button" class="btn" id="mp-save-btn">Сохранить</button>
+            <button type="button" class="btn btn-secondary" id="mp-cancel-btn">Отмена</button>
+        </div>
+    </div>
+</div>
 
-        window.deleteOperator = function(index) {
-            if (!confirm('Удалить оперативника?')) return;
-            fetch('/api/admin_operators.php?action=delete', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ index: index })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) loadOperators();
-                else alert('Ошибка: ' + data.error);
-            })
-            .catch(err => alert('Ошибка сети'));
-        };
+<!-- ==================== ПОЛЬЗОВАТЕЛИ ==================== -->
+<div id="section-users" class="admin-section <?= $section === 'users' ? 'active' : '' ?>">
+    <h2><span class="material-icons">admin_panel_settings</span> Пользователи</h2>
 
-        document.getElementById('operator-form')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData();
-            const index = document.getElementById('op-id').value;
-            if (index) formData.append('index', index);
-            formData.append('name', document.getElementById('op-name').value.trim());
-            formData.append('role', document.getElementById('op-role').value.trim());
-            formData.append('specialization', document.getElementById('op-spec').value.trim());
-            formData.append('description', document.getElementById('op-desc').value.trim());
-            const fileInput = document.getElementById('op-photo');
-            if (fileInput.files.length) {
-                formData.append('photo', fileInput.files[0]);
-            }
-            fetch('/api/admin_operators.php?action=save', {
-                method: 'POST',
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    loadOperators();
-                    this.reset();
-                    document.getElementById('op-id').value = '';
-                } else alert('Ошибка: ' + data.error);
-            })
-            .catch(err => alert('Ошибка сети'));
-        });
+    <div style="margin-bottom:15px;">
+        <label style="font-size:13px; color:#888; margin-right:10px;">Фильтр:</label>
+        <button type="button" class="btn btn-sm" id="uf-all">Все</button>
+        <button type="button" class="btn btn-sm" id="uf-admins">Админы</button>
+        <button type="button" class="btn btn-sm" id="uf-banned">Забаненные</button>
+    </div>
 
-        function loadInstructions() {
-            fetch('/instructions_data.json')
-                .then(res => res.json())
-                .then(data => {
-                    const container = document.getElementById('instruction-list');
-                    container.innerHTML = '';
-                    if (!data.documents || data.documents.length === 0) {
-                        container.innerHTML = '<p style="color:#666;">Нет инструкций.</p>';
-                        return;
-                    }
-                    data.documents.forEach((doc, index) => {
-                        const div = document.createElement('div');
-                        div.className = 'list-item';
-                        div.innerHTML = `
-                            <div>
-                                <strong>${doc.title}</strong>
-                                <div style="font-size:14px; color:#666;">${doc.description || ''}</div>
-                                <div><a href="${doc.link}" target="_blank">${doc.link}</a></div>
-                            </div>
-                            <div class="actions">
-                                <button class="btn btn-danger" onclick="deleteInstruction(${index})">🗑️</button>
-                            </div>
-                        `;
-                        container.appendChild(div);
-                    });
-                })
-                .catch(err => console.error('Ошибка загрузки инструкций:', err));
-        }
+    <div id="users-list"></div>
+</div>
 
-        window.deleteInstruction = function(index) {
-            if (!confirm('Удалить инструкцию?')) return;
-            fetch('/api/admin_instructions.php?action=delete', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ index: index })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) loadInstructions();
-                else alert('Ошибка: ' + data.error);
-            })
-            .catch(err => alert('Ошибка сети'));
-        };
+<!-- ==================== ЖУРНАЛ ==================== -->
+<div id="section-logs" class="admin-section <?= $section === 'logs' ? 'active' : '' ?>">
+    <h2><span class="material-icons">history_edu</span> Бортовой журнал</h2>
+    <div class="admin-actions">
+        <button type="button" class="btn" id="log-new-btn">+ Добавить запись</button>
+    </div>
+    <div id="log-editor" style="display:none; margin-bottom:20px;">
+        <input type="hidden" id="lg-id" value="">
+        <div class="form-group"><label>Дата</label><input type="text" id="lg-date" placeholder="[11.05]"></div>
+        <div class="form-group"><label>Текст</label><textarea id="lg-text" required></textarea></div>
+        <div class="form-group"><label>Стиль (CSS)</label><input type="text" id="lg-style" placeholder="color: #2ecc71;"></div>
+        <div class="admin-row-end">
+            <button type="button" class="btn" id="lg-save-btn">Сохранить</button>
+            <button type="button" class="btn btn-secondary" id="lg-cancel-btn">Отмена</button>
+        </div>
+    </div>
+    <div id="log-list"></div>
+</div>
 
-        document.getElementById('instruction-form')?.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const data = {
-                title: document.getElementById('inst-title').value.trim(),
-                description: document.getElementById('inst-desc').value.trim(),
-                link: document.getElementById('inst-link').value.trim()
-            };
-            fetch('/api/admin_instructions.php?action=add', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    loadInstructions();
-                    this.reset();
-                } else alert('Ошибка: ' + data.error);
-            })
-            .catch(err => alert('Ошибка сети'));
-        });
+<!-- ==================== МОДАЛКИ ==================== -->
+<div id="pwd-modal" class="admin-modal-backdrop">
+    <div class="admin-modal">
+        <h3><span class="material-icons">key</span> Сброс пароля</h3>
+        <div class="form-group">
+            <label>Пользователь</label>
+            <input type="text" id="pwd-user" readonly>
+        </div>
+        <div class="form-group">
+            <label>Новый пароль</label>
+            <div style="display:flex; gap:8px; align-items:center;">
+                <input type="text" id="pwd-value" style="flex:1; font-family:'Consolas', monospace;">
+                <button type="button" class="btn btn-secondary btn-icon" id="pwd-generate" title="Сгенерировать">
+                    <span class="material-icons">casino</span>
+                </button>
+                <button type="button" class="btn btn-secondary btn-icon" id="pwd-copy" title="Скопировать">
+                    <span class="material-icons">content_copy</span>
+                </button>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="pwd-cancel">Отмена</button>
+            <button type="button" class="btn" id="pwd-save">Сбросить</button>
+        </div>
+    </div>
+</div>
 
-        let currentJsonFile = document.getElementById('json-file-select').value;
+<div id="ban-modal" class="admin-modal-backdrop">
+    <div class="admin-modal">
+        <h3><span class="material-icons">block</span> Блокировка</h3>
+        <div class="form-group">
+            <label>Пользователь</label>
+            <input type="text" id="ban-user" readonly>
+        </div>
+        <div class="form-group">
+            <label>Причина (необязательно)</label>
+            <textarea id="ban-reason" rows="3"></textarea>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="ban-cancel">Отмена</button>
+            <button type="button" class="btn btn-danger" id="ban-save">Забанить</button>
+        </div>
+    </div>
+</div>
 
-        document.getElementById('json-load-btn')?.addEventListener('click', function() {
-            const file = document.getElementById('json-file-select').value;
-            fetch('/' + file)
-                .then(res => {
-                    if (!res.ok) throw new Error('Файл не найден');
-                    return res.text();
-                })
-                .then(text => {
-                    document.getElementById('json-editor').value = text;
-                    currentJsonFile = file;
-                    showStatus('Загружено: ' + file, 'success');
-                })
-                .catch(err => {
-                    showStatus('Ошибка загрузки: ' + err.message, 'error');
-                });
-        });
+<div id="del-modal" class="admin-modal-backdrop">
+    <div class="admin-modal danger">
+        <h3><span class="material-icons">delete_forever</span> Удаление пользователя</h3>
+        <div class="form-group">
+            <label>Пользователь</label>
+            <input type="text" id="del-user" readonly>
+        </div>
+        <p class="text-muted" style="font-size:13px; margin-bottom:12px; line-height:1.5;">
+            Это действие необратимо. Сообщения в чате будут удалены.<br>
+            Введите имя пользователя для подтверждения:
+        </p>
+        <div class="form-group">
+            <input type="text" id="del-confirm" placeholder="Введите имя">
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="del-cancel">Отмена</button>
+            <button type="button" class="btn btn-danger" id="del-save" disabled>Удалить</button>
+        </div>
+    </div>
+</div>
 
-        document.getElementById('json-save-btn')?.addEventListener('click', function() {
-            const content = document.getElementById('json-editor').value;
-            try {
-                JSON.parse(content);
-            } catch (e) {
-                showStatus('Неверный JSON: ' + e.message, 'error');
-                return;
-            }
-            fetch('/api/admin_json.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ file: currentJsonFile, content: content })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) showStatus('Сохранено!', 'success');
-                else showStatus('Ошибка: ' + data.error, 'error');
-            })
-            .catch(err => showStatus('Ошибка сети: ' + err.message, 'error'));
-        });
+</div><!-- /.admin-container -->
 
-        document.getElementById('json-format-btn')?.addEventListener('click', function() {
-            const editor = document.getElementById('json-editor');
-            try {
-                const parsed = JSON.parse(editor.value);
-                editor.value = JSON.stringify(parsed, null, 4);
-                showStatus('Отформатировано', 'success');
-            } catch (e) {
-                showStatus('Неверный JSON: ' + e.message, 'error');
-            }
-        });
+<!-- Ядро сайта -->
+<script src="/js/core/utils.js"></script>
+<script src="/js/core/modal.js"></script>
 
-        const activeSection = document.querySelector('.section.active');
-        if (activeSection) {
-            const id = activeSection.id;
-            if (id === 'section-photos') loadPhotos();
-            else if (id === 'section-operators') loadOperators();
-            else if (id === 'section-instructions') loadInstructions();
-            else if (id === 'section-json') document.getElementById('json-load-btn').click();
-        }
+<!-- Админка -->
+<script src="/admin/js/_shared.js"></script>
+<script src="/admin/js/photos.js"></script>
+<script src="/admin/js/operators.js"></script>
+<script src="/admin/js/instructions.js"></script>
+<script src="/admin/js/trees.js"></script>
+<script src="/admin/js/scenarios.js"></script>
+<script src="/admin/js/devices.js"></script>
+<script src="/admin/js/radio.js"></script>
+<script src="/admin/js/maps.js"></script>
+<script src="/admin/js/users.js"></script>
+<script src="/admin/js/logs.js"></script>
 
-        document.querySelectorAll('.nav a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                setTimeout(() => {
-                    const active = document.querySelector('.section.active');
-                    if (active) {
-                        const id = active.id;
-                        if (id === 'section-photos') loadPhotos();
-                        else if (id === 'section-operators') loadOperators();
-                        else if (id === 'section-instructions') loadInstructions();
-                        else if (id === 'section-json') document.getElementById('json-load-btn').click();
-                    }
-                }, 100);
-            });
-        });
-
-    })();
-</script>
+<!-- Инициализатор — в самом конце -->
+<script src="/admin/js/app.js"></script>
 </body>
 </html>
