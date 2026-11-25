@@ -43,17 +43,21 @@
     const row = document.createElement('div');
     row.className = 'list-item';
 
-    const info = document.createElement('div');
+    const left = document.createElement('div');
+    left.className = 'list-left';
+    left.style.flexDirection = 'column';
+    left.style.alignItems = 'flex-start';
+    left.style.gap = '4px';
 
     const title = document.createElement('strong');
     title.textContent = doc.title;
-    info.appendChild(title);
+    left.appendChild(title);
 
     if (doc.description) {
       const desc = document.createElement('div');
       desc.style.cssText = 'font-size:14px; color:#666;';
       desc.textContent = doc.description;
-      info.appendChild(desc);
+      left.appendChild(desc);
     }
 
     if (doc.link) {
@@ -64,10 +68,10 @@
       a.rel = 'noopener';
       a.textContent = doc.link;
       linkBox.appendChild(a);
-      info.appendChild(linkBox);
+      left.appendChild(linkBox);
     }
 
-    row.appendChild(info);
+    row.appendChild(left);
 
     const actions = document.createElement('div');
     actions.className = 'actions';

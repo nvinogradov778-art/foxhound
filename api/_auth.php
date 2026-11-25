@@ -28,8 +28,16 @@ function require_me(PDO $db): array {
 
 function require_admin(PDO $db): array {
     $user = require_me($db);
-    if ($user['role'] !== 'admin') {
+    if ($user['role'] !== 'admin' && $user['role'] !== 'commander') {
         fail(403, 'Доступ запрещён');
+    }
+    return $user;
+}
+
+function require_commander(PDO $db): array {
+    $user = require_me($db);
+    if ($user['role'] !== 'commander') {
+        fail(403, 'Доступ только для Командира');
     }
     return $user;
 }

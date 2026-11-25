@@ -13,13 +13,15 @@ function count_table(PDO $db, string $table): int {
     }
 }
 
-respond([
-    'operators'    => count_table($db, 'users'),
-    'scenarios'    => count_table($db, 'scenarios'),
-    'devices'      => count_table($db, 'devices'),
-    'radio'        => count_table($db, 'radio_stations'),
-    'photos'       => count_table($db, 'photos'),
-    'events'       => count_table($db, 'events'),
-    'instructions' => count_table($db, 'instructions'),
-    'messages'     => count_table($db, 'channel_messages')
+ok([
+    'stats' => [
+        'operators'    => count_table($db, 'users'),
+        'scenarios'    => count_table($db, 'scenarios'),
+        'devices'      => count_table($db, 'devices'),
+        'radio'        => count_table($db, 'radio_stations'),
+        'photos'       => count_table($db, 'photos'),
+        'events'       => count_table($db, 'events'),
+        'instructions' => count_table($db, 'instructions'),
+        'messages'     => count_table($db, 'channel_messages')
+    ]
 ]);

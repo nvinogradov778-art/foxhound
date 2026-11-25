@@ -62,9 +62,12 @@ match ($action) {
 };
 
 function parse_save_input(): array {
-    $isMultipart = strpos($_SERVER['CONTENT_TYPE'] ?? '', 'multipart/form-data') !== false;
+    $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+    // ИСПРАВЛЕНО: принимаем и multipart, и form-urlencoded
+    $isFormLike = strpos($contentType, 'multipart/form-data') !== false
+               || strpos($contentType, 'application/x-www-form-urlencoded') !== false;
 
-    if ($isMultipart) {
+    if ($isFormLike) {
         return [
             'id'             => !empty($_POST['id']) ? (int)$_POST['id'] : 0,
             'slug'           => trim($_POST['slug'] ?? ''),

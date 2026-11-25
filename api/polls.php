@@ -24,11 +24,9 @@ $action = $input['action'] ?? '';
 
 match ($action) {
     'vote'   => handle_vote($db, $me, $input),
-    'create' => handle_create($db, $me, $input),
+    'create' => handle_create($db, $input),
     default  => fail(400, 'Неизвестное действие'),
 };
-
-// ---------- Обработчики ----------
 
 function handle_get(PDO $db, int $me): void {
     $archived = (int)($_GET['archived'] ?? 0);
@@ -40,13 +38,12 @@ function handle_get(PDO $db, int $me): void {
     $polls = $stmt->fetchAll();
 
     if (!$polls) {
-        respond([]);
+        ok(['polls' => []]);
     }
 
     $pollIds = array_map(fn($p) => (int)$p['id'], $polls);
     $placeholders = implode(',', array_fill(0, count($pollIds), '?'));
 
-    // Одним запросом — все голоса по всем опросам
     $votesStmt = $db->prepare("
         SELECT poll_id, option_index, COUNT(*) AS cnt
         FROM votes
@@ -63,7 +60,6 @@ function handle_get(PDO $db, int $me): void {
         $votesMap[$pid][$idx] = (int)$r['cnt'];
     }
 
-    // Мои голоса — одним запросом
     $myVotesStmt = $db->prepare("
         SELECT poll_id, option_index
         FROM votes
@@ -96,7 +92,7 @@ function handle_get(PDO $db, int $me): void {
     }
     unset($poll);
 
-    respond($polls);
+    ok(['polls' => $polls]);
 }
 
 function handle_vote(PDO $db, int $me, array $input): void {
@@ -107,23 +103,29 @@ function handle_vote(PDO $db, int $me, array $input): void {
         fail(400, 'Неверные данные голосования');
     }
 
-    $stmt = $db->prepare('SELECT expires_at FROM polls WHERE id = ?');
+    $stmt = $db->prepare('SELECT expires_at, options FROM polls WHERE id = ?');
     $stmt->execute([$pollId]);
-    $expires = $stmt->fetchColumn();
+    $poll = $stmt->fetch();
 
-    if ($expires === false || (int)$expires <= time()) {
+    if (!$poll || (int)$poll['expires_at'] <= time()) {
         fail(400, 'Опрос завершён');
+    }
+
+    $options = json_decode($poll['options'], true) ?: [];
+    $maxIdx = count($options) - 1;
+    foreach ($indexes as $idx) {
+        if (!is_numeric($idx) || (int)$idx < 0 || (int)$idx > $maxIdx) {
+            fail(400, 'Неверный индекс варианта');
+        }
     }
 
     $db->beginTransaction();
     try {
         $db->prepare('DELETE FROM votes WHERE poll_id = ? AND user_id = ?')->execute([$pollId, $me]);
-
         $insert = $db->prepare('INSERT INTO votes (poll_id, user_id, option_index) VALUES (?, ?, ?)');
         foreach ($indexes as $idx) {
             $insert->execute([$pollId, $me, (int)$idx]);
         }
-
         $db->commit();
     } catch (Throwable $e) {
         $db->rollBack();
@@ -133,13 +135,9 @@ function handle_vote(PDO $db, int $me, array $input): void {
     ok();
 }
 
-function handle_create(PDO $db, int $me, array $input): void {
-    // Проверка админа
-    $stmt = $db->prepare('SELECT role FROM users WHERE id = ?');
-    $stmt->execute([$me]);
-    if ($stmt->fetchColumn() !== 'admin') {
-        fail(403, 'Доступ запрещён (нужна роль admin)');
-    }
+function handle_create(PDO $db, array $input): void {
+    $admin = require_admin($db);
+    $me = $admin['id'];
 
     $title     = trim($input['title'] ?? '');
     $type      = trim($input['type'] ?? 'single');
@@ -164,25 +162,13 @@ function handle_create(PDO $db, int $me, array $input): void {
 }
 
 function handle_delete(PDO $db, int $me, array $input): void {
-    // Проверка админа
-    $stmt = $db->prepare('SELECT role FROM users WHERE id = ?');
-    $stmt->execute([$me]);
-    if ($stmt->fetchColumn() !== 'admin') {
-        fail(403, 'Доступ запрещён');
-    }
+    require_admin($db);
 
     $pollId = (int)($input['poll_id'] ?? 0);
     if (!$pollId) fail(400, 'ID опроса не указан');
 
-    $db->beginTransaction();
-    try {
-        $db->prepare('DELETE FROM votes WHERE poll_id = ?')->execute([$pollId]);
-        $db->prepare('DELETE FROM polls WHERE id = ?')->execute([$pollId]);
-        $db->commit();
-    } catch (Throwable $e) {
-        $db->rollBack();
-        fail(500, 'Ошибка удаления');
-    }
+    $stmt = $db->prepare('DELETE FROM polls WHERE id = ?');
+    $stmt->execute([$pollId]);
 
     ok();
 }

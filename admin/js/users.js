@@ -32,7 +32,6 @@
     qs('#uf-admins').addEventListener('click', () => setFilter('admins'));
     qs('#uf-banned').addEventListener('click', () => setFilter('banned'));
 
-    // Модалка сброса пароля
     qs('#pwd-generate').addEventListener('click', () => {
       setValue('pwd-value', generatePassword());
     });
@@ -40,16 +39,13 @@
     qs('#pwd-cancel').addEventListener('click', closePwdModal);
     qs('#pwd-save').addEventListener('click', savePwd);
 
-    // Модалка бана
     qs('#ban-cancel').addEventListener('click', closeBanModal);
     qs('#ban-save').addEventListener('click', saveBan);
 
-    // Модалка удаления
     qs('#del-confirm').addEventListener('input', onDelConfirmInput);
     qs('#del-cancel').addEventListener('click', closeDelModal);
     qs('#del-save').addEventListener('click', saveDel);
 
-    // Клик по фону модалки — закрыть
     ['pwd-modal', 'ban-modal', 'del-modal'].forEach(id => {
       const modal = document.getElementById(id);
       modal.addEventListener('click', event => {
@@ -62,8 +58,6 @@
     usersFilter = filter;
     renderList();
   }
-
-  // ---------- Рендер списка ----------
 
   function renderList() {
     const container = qs('#users-list');
@@ -86,18 +80,19 @@
     row.className = 'list-item';
     if (user.is_banned) row.style.opacity = '0.6';
 
-    const content = document.createElement('div');
-    content.style.cssText = 'display:flex; gap:15px; align-items:center; flex-wrap:wrap; flex:1;';
+    const left = document.createElement('div');
+    left.className = 'list-left';
+    left.style.flexDirection = 'column';
+    left.style.alignItems = 'flex-start';
+    left.style.gap = '4px';
 
     const idEl = document.createElement('div');
-    idEl.style.cssText = 'min-width:40px; color:#666; font-family:monospace;';
+    idEl.style.cssText = 'color:#666; font-family:monospace; font-size:12px;';
     idEl.textContent = '#' + user.id;
-    content.appendChild(idEl);
-
-    const info = document.createElement('div');
-    info.style.cssText = 'flex:1; min-width:200px;';
+    left.appendChild(idEl);
 
     const nameRow = document.createElement('div');
+    nameRow.style.cssText = 'display:flex; align-items:center; gap:8px;';
 
     const name = document.createElement('strong');
     name.style.color = '#fff';
@@ -109,25 +104,22 @@
     } else if (user.role === 'admin') {
       nameRow.appendChild(makeBadge('АДМИН', 'admin-badge-admin'));
     }
-
-    info.appendChild(nameRow);
+    left.appendChild(nameRow);
 
     const meta = document.createElement('div');
-    meta.style.cssText = 'font-size:13px; color:#666; margin-top:4px;';
+    meta.style.cssText = 'font-size:13px; color:#666;';
     meta.textContent = 'Регистрация: ' + formatDate(user.registered_at) +
                        ' · Был онлайн: ' + formatLastSeen(user.last_seen);
-    info.appendChild(meta);
+    left.appendChild(meta);
 
     if (user.is_banned && user.banned_reason) {
       const reason = document.createElement('div');
-      reason.style.cssText = 'color:#ff8888; font-size:12px; margin-top:4px;';
+      reason.style.cssText = 'color:#ff8888; font-size:12px;';
       reason.textContent = 'Причина: ' + user.banned_reason;
-      info.appendChild(reason);
+      left.appendChild(reason);
     }
 
-    content.appendChild(info);
-    row.appendChild(content);
-
+    row.appendChild(left);
     row.appendChild(buildActions(user));
     return row;
   }
@@ -172,8 +164,6 @@
     return btn;
   }
 
-  // ---------- Действия с пользователем ----------
-
   async function changeRole(user) {
     const newRole = user.role === 'admin' ? 'user' : 'admin';
     const message = newRole === 'admin'
@@ -207,8 +197,6 @@
     }
   }
 
-  // ---------- Модалка сброса пароля ----------
-
   function openPwdModal(user) {
     currentPwdUser = user;
     setValue('pwd-user', user.username);
@@ -234,7 +222,7 @@
 
   async function copyPassword() {
     const input = document.getElementById('pwd-value');
-    input.select();
+    if (!input || !input.value) return;
 
     try {
       await navigator.clipboard.writeText(input.value);
@@ -243,7 +231,8 @@
       btn.innerHTML = '<span class="material-icons">check</span>';
       setTimeout(() => { btn.innerHTML = original; }, 1500);
     } catch (_) {
-      // fallback
+      input.focus();
+      input.select();
       document.execCommand('copy');
     }
   }
@@ -275,8 +264,6 @@
     }
   }
 
-  // ---------- Модалка бана ----------
-
   function openBanModal(user) {
     currentBanUser = user;
     setValue('ban-user', user.username);
@@ -305,8 +292,6 @@
       Modal.alert({ title: 'Ошибка', message: error.message, danger: true });
     }
   }
-
-  // ---------- Модалка удаления ----------
 
   function openDelModal(user) {
     currentDelUser = user;
@@ -338,8 +323,6 @@
       Modal.alert({ title: 'Ошибка', message: error.message, danger: true });
     }
   }
-
-  // ---------- Форматирование ----------
 
   function formatLastSeen(ts) {
     if (!ts) return '—';

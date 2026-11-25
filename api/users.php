@@ -119,6 +119,19 @@ function handle_delete(PDO $db, int $meId, int $targetId, bool $targetIsAdmin): 
         if ($adminsCount <= 1) fail(400, 'Нельзя удалить последнего админа');
     }
 
-    $db->prepare('DELETE FROM users WHERE id = ?')->execute([$targetId]);
-    ok();
+    $db->beginTransaction();
+    try {
+        // Очищаем сообщения и реакции удаляемого пользователя
+        $db->prepare('UPDATE channel_messages SET is_deleted = 1, text = \'\' WHERE user_id = ?')->execute([$targetId]);
+        $db->prepare('DELETE FROM channel_reactions WHERE user_id = ?')->execute([$targetId]);
+        
+        // Удаляем пользователя
+        $db->prepare('DELETE FROM users WHERE id = ?')->execute([$targetId]);
+        
+        $db->commit();
+        ok();
+    } catch (Throwable $e) {
+        $db->rollBack();
+        fail(500, 'Ошибка удаления пользователя');
+    }
 }

@@ -161,7 +161,9 @@ function handle_upload_multi(PDO $db): void {
                 continue;
             }
 
-            $filename = 'photo_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
+            // ИСПРАВЛЕНО: Генерация уникального имени с микросекундами и увеличенной энтропией
+            $microtime = str_replace('.', '_', (string)microtime(true));
+            $filename = 'photo_' . $microtime . '_' . bin2hex(random_bytes(8)) . '.' . $ext;
             $dest = __DIR__ . '/../' . $targetDir . '/' . $filename;
 
             if (!move_uploaded_file($tmp, $dest)) {

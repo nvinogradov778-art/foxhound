@@ -132,9 +132,18 @@
     return el ? el.value : '';
   }
 
+  /**
+   * Показать элемент.
+   * ВАЖНО: снимаем HTML-атрибут hidden — иначе UA-стиль
+   * `[hidden] { display: none }` и авторский
+   * `.admin-editor-block[hidden] { display: none }` перебивают
+   * `style.display = ''`, и элемент остаётся невидимым.
+   */
   function show(id) {
     const el = document.getElementById(id);
-    if (el) el.style.display = '';
+    if (!el) return;
+    el.removeAttribute('hidden');
+    el.style.display = '';
   }
 
   function hide(id) {

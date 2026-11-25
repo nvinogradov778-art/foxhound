@@ -3,43 +3,50 @@
   if (!window.AdminShared) throw new Error('[admin/app] shared.js must load first');
 
   const SECTION_LOADERS = {
-    'section-photos':       () => window.AdminPhotos?.load(),
-    'section-operators':    () => window.AdminOperators?.load(),
-    'section-instructions': () => window.AdminInstructions?.load(),
-    'section-atak':         () => window.AdminTrees?.load('atak'),
-    'section-regulations':  () => window.AdminTrees?.load('regulations'),
-    'section-scenarios':    () => window.AdminScenarios?.load(),
-    'section-devices':      () => window.AdminDevices?.load(),
-    'section-radio':        () => window.AdminRadio?.load(),
-    'section-maps':         () => window.AdminMaps?.load(),
-    'section-users':        () => window.AdminUsers?.load(),
-    'section-logs':         () => window.AdminLogs?.load()
+    'photos':       () => window.AdminPhotos?.load(),
+    'operators':    () => window.AdminOperators?.load(),
+    'instructions': () => window.AdminInstructions?.load(),
+    'docs':         () => window.AdminDocs?.load(),
+    'atak':         () => window.AdminTrees?.load('atak'),
+    'regulations':  () => window.AdminTrees?.load('regulations'),
+    'scenarios':    () => window.AdminScenarios?.load(),
+    'devices':      () => window.AdminDevices?.load(),
+    'radio':        () => window.AdminRadio?.load(),
+    'maps':         () => window.AdminMaps?.load(),
+    'users':        () => window.AdminUsers?.load(),
+    'logs':         () => window.AdminLogs?.load()
   };
 
-  function loadActiveSection() {
-    const active = document.querySelector('.admin-section.active');
-    if (!active) return;
-    const loader = SECTION_LOADERS[active.id];
-    if (loader) loader();
+  const loaded = {};
+
+  async function loadSection(key) {
+    if (loaded[key]) return;
+
+    const loader = SECTION_LOADERS[key];
+    if (!loader) return;
+
+    try {
+      await loader();
+      loaded[key] = true;
+    } catch (error) {
+      // Не помечаем как загруженную — при следующем вызове попробуем снова.
+      // Это защищает от ситуации, когда сторонний модуль ещё не успел
+      // зарегистрировать window.AdminXxx (например, из-за кэша).
+      console.error('[AdminApp.loadSection] failed:', key, error);
+    }
   }
 
-  function initNavLinks() {
-    document.querySelectorAll('.admin-nav a[href^="?section="]').forEach(link => {
-      link.addEventListener('click', () => {
-        // Страница перезагрузится с ?section=..., но перед этим
-        // можно было бы делать что-то ещё. Пока — оставляем переход.
-      });
-    });
-  }
+  // Экспортируем функцию для использования в inline-скрипте index.php
+  window.AdminApp = { loadSection };
 
-  function boot() {
-    initNavLinks();
-    loadActiveSection();
-  }
-
+  // Запуск при загрузке страницы
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot);
+    document.addEventListener('DOMContentLoaded', () => {
+      const hash = location.hash ? location.hash.substring(1) : 'photos';
+      loadSection(hash);
+    });
   } else {
-    boot();
+    const hash = location.hash ? location.hash.substring(1) : 'photos';
+    loadSection(hash);
   }
 })();

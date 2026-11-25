@@ -4,7 +4,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/_bootstrap.php';
 
 $me = require_me($db);
-$isAdmin = $me['role'] === 'admin';
+$isAdmin = in_array($me['role'], ['admin', 'commander'], true);
 
 $method = $_SERVER['REQUEST_METHOD'];
 $action = $_GET['action'] ?? '';
@@ -49,7 +49,11 @@ function fetch_channels(PDO $db, int $userId, bool $isAdmin): array {
         $stmt = $db->prepare('
             SELECT c.id, c.slug, c.name, c.category, c.description,
                    c.sort_order, c.is_private,
-                   COALESCE(r.last_read_message_id, 0) AS last_read
+                   COALESCE(r.last_read_message_id, 0) AS last_read,
+                   (SELECT COUNT(*) FROM channel_messages m 
+                    WHERE m.channel_id = c.id 
+                      AND m.id > COALESCE(r.last_read_message_id, 0) 
+                      AND m.is_deleted = 0) AS unread
             FROM channels c
             LEFT JOIN channel_reads r ON r.channel_id = c.id AND r.user_id = ?
             ORDER BY c.sort_order ASC, c.id ASC
@@ -59,7 +63,11 @@ function fetch_channels(PDO $db, int $userId, bool $isAdmin): array {
         $stmt = $db->prepare('
             SELECT c.id, c.slug, c.name, c.category, c.description,
                    c.sort_order, c.is_private,
-                   COALESCE(r.last_read_message_id, 0) AS last_read
+                   COALESCE(r.last_read_message_id, 0) AS last_read,
+                   (SELECT COUNT(*) FROM channel_messages m 
+                    WHERE m.channel_id = c.id 
+                      AND m.id > COALESCE(r.last_read_message_id, 0) 
+                      AND m.is_deleted = 0) AS unread
             FROM channels c
             LEFT JOIN channel_reads r ON r.channel_id = c.id AND r.user_id = ?
             WHERE c.is_private = 0
@@ -73,33 +81,18 @@ function fetch_channels(PDO $db, int $userId, bool $isAdmin): array {
     }
 
     $rows = $stmt->fetchAll();
-
-    $unreadStmt = $db->prepare('
-        SELECT COUNT(*) FROM channel_messages
-        WHERE channel_id = ? AND id > ? AND is_deleted = 0
-    ');
-
     $channels = [];
+
     foreach ($rows as $r) {
-        $cid = (int)$r['id'];
-        $lastRead = (int)$r['last_read'];
-
-        if ($lastRead === 0) {
-            $unread = 0;
-        } else {
-            $unreadStmt->execute([$cid, $lastRead]);
-            $unread = (int)$unreadStmt->fetchColumn();
-        }
-
         $channels[] = [
-            'id'          => $cid,
+            'id'          => (int)$r['id'],
             'slug'        => $r['slug'],
             'name'        => $r['name'],
             'category'    => $r['category'],
             'description' => $r['description'],
             'sort_order'  => (int)$r['sort_order'],
             'is_private'  => (int)$r['is_private'],
-            'unread'      => $unread
+            'unread'      => (int)$r['unread']
         ];
     }
 
@@ -164,7 +157,11 @@ function handle_mark_read(PDO $db, int $userId): void {
         INSERT INTO channel_reads (channel_id, user_id, last_read_message_id, updated_at)
         VALUES (?, ?, ?, ?)
         ON CONFLICT(channel_id, user_id) DO UPDATE SET
-            last_read_message_id = MAX(channel_reads.last_read_message_id, excluded.last_read_message_id),
+            last_read_message_id = CASE
+                WHEN excluded.last_read_message_id > channel_reads.last_read_message_id
+                THEN excluded.last_read_message_id
+                ELSE channel_reads.last_read_message_id
+            END,
             updated_at = excluded.updated_at
     ')->execute([$channelId, $userId, $lastId, time()]);
 

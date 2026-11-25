@@ -46,6 +46,19 @@ function handle_save(PDO $db, array $input): void {
 
     if ($text === '') fail(400, 'Текст обязателен');
 
+    // ИСПРАВЛЕНО: Жесткая фильтрация CSS.
+    if ($style !== '') {
+        // Разрешаем только безопасные символы для CSS (буквы, цифры, дефисы, скобки и т.д.)
+        $cleanStyle = preg_replace('/[^a-zA-Z0-9\s\-:;().,#%]/', '', $style);
+        
+        // Блокируем опасные конструкции (url, javascript, expression)
+        if (preg_match('/(url|javascript|expression|behavior|@import)/i', $cleanStyle)) {
+            $style = ''; // Сброс при попытке инъекции
+        } else {
+            $style = $cleanStyle;
+        }
+    }
+
     $now = time();
 
     if ($id) {

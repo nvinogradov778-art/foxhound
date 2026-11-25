@@ -29,8 +29,6 @@
     }
   }
 
-  // ---------- Привязки ----------
-
   function bind() {
     qs('#photo-new-album-btn').addEventListener('click', () => openAlbumEditor(null));
     qs('#photo-collapse-all').addEventListener('click', toggleCollapseAll);
@@ -53,8 +51,6 @@
       ? '<span class="material-icons">unfold_more</span> Развернуть всё'
       : '<span class="material-icons">unfold_less</span> Свернуть всё';
   }
-
-  // ---------- Рендер ----------
 
   function render() {
     const container = qs('#photo-list');
@@ -124,8 +120,9 @@
     left.className = 'admin-album-left';
 
     const arrow = document.createElement('span');
-    arrow.className = 'admin-album-arrow';
-    arrow.textContent = '▼';
+    // FIX: Используем Material Icon вместо текстового '▼'
+    arrow.className = 'material-icons admin-album-arrow';
+    arrow.textContent = 'expand_more';
     left.appendChild(arrow);
 
     const titleEl = document.createElement('strong');
@@ -244,8 +241,6 @@
     return card;
   }
 
-  // ---------- Альбом: сохранение, удаление, сортировка ----------
-
   function openAlbumEditor(album) {
     const isNew = !album;
 
@@ -320,8 +315,6 @@
     }
   }
 
-  // ---------- Фото: загрузка, удаление, сортировка, перемещение ----------
-
   function openPhotoUploadForm(albumId, container) {
     let box = container.querySelector('.photo-forms-box');
     if (!box) {
@@ -364,6 +357,18 @@
       '<div class="form-group"><label>Описание</label><textarea class="pu-desc"></textarea></div>' +
       '<div class="form-group"><label>Дата</label><input type="date" class="pu-date"></div>' +
       '<div class="form-group"><label>Файл <span style="color:#ff3333;">*</span></label><input type="file" class="pu-file" accept="image/*"></div>';
+      
+    const titleInput = form.querySelector('.pu-title');
+    const fileInput = form.querySelector('.pu-file');
+    
+    const updateBar = () => {
+        const container = form.closest('.admin-album-body');
+        if (container) updateUploadAllBar(container);
+    };
+    
+    titleInput.addEventListener('input', updateBar);
+    fileInput.addEventListener('change', updateBar);
+
     return form;
   }
 
@@ -371,7 +376,7 @@
     const box = container.querySelector('.photo-forms-box');
     if (!box) return;
 
-    const forms = box.querySelectorAll('.photo-upload-form');
+    const forms = Array.from(box.querySelectorAll('.photo-upload-form'));
     let bar = box.querySelector('.photo-upload-all-bar');
 
     if (!forms.length) {
@@ -398,7 +403,21 @@
       });
     }
 
-    bar.querySelector('.pu-count').textContent = 'Готово к загрузке: ' + forms.length;
+    let readyCount = 0;
+    forms.forEach(form => {
+      const title = form.querySelector('.pu-title').value.trim();
+      const file = form.querySelector('.pu-file').files.length > 0;
+      if (title && file) readyCount++;
+    });
+
+    const total = forms.length;
+    const countEl = bar.querySelector('.pu-count');
+
+    if (readyCount === total) {
+        countEl.textContent = `Готово к загрузке: ${total}`;
+    } else {
+        countEl.textContent = `Заполнено: ${readyCount} из ${total}`;
+    }
   }
 
   async function uploadAllPhotos(container) {
@@ -517,12 +536,9 @@
     }
   }
 
-  // ---------- Lightbox ----------
-
   function openLightbox(src) {
     const lb = document.getElementById('lightbox');
     if (!lb) {
-      // создадим на лету, если в админке его нет
       const created = document.createElement('div');
       created.id = 'lightbox';
       created.className = 'lightbox';
@@ -533,9 +549,7 @@
       document.body.appendChild(created);
 
       created.addEventListener('click', event => {
-        if (event.target === created ||
-            event.target.classList.contains('lightbox-close') ||
-            event.target.classList.contains('lightbox-img')) {
+        if (event.target === created || event.target.closest('.lightbox-close') || event.target.classList.contains('lightbox-img')) {
           closeLightbox();
         }
       });

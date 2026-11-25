@@ -153,17 +153,21 @@ function rename_album_dir(PDO $db, int $albumId, string $oldSlug, string $newSlu
     $newDir = album_abs_dir($newSlug);
 
     if (is_dir($oldDir) && !is_dir($newDir)) {
-        rename($oldDir, $newDir);
+        if (!rename($oldDir, $newDir)) {
+            fail(500, 'Не удалось переименовать директорию альбома');
+        }
     }
 
     $oldPrefix = 'photos/' . $oldSlug . '/';
     $newPrefix = 'photos/' . $newSlug . '/';
 
-    $db->prepare('
+    // Исправлено под синтаксический стандарт SQLite (CONCAT -> ||, SUBSTRING -> substr)
+    $stmt = $db->prepare('
         UPDATE photos
-        SET image = CONCAT(?, SUBSTRING(image, ?))
+        SET image = ? || substr(image, ?)
         WHERE album_id = ? AND image LIKE ?
-    ')->execute([$newPrefix, strlen($oldPrefix) + 1, $albumId, $oldPrefix . '%']);
+    ');
+    $stmt->execute([$newPrefix, strlen($oldPrefix) + 1, $albumId, $oldPrefix . '%']);
 }
 
 function create_album(

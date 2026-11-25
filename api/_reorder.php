@@ -18,6 +18,11 @@ function reorder_entity(
     ?string $scopeSql = null,
     array $scopeParams = []
 ): array {
+    // Жесткая проверка структуры имени таблицы (белый список символов)
+    if (!preg_match('/^[a-z0-9_]+$/i', $table)) {
+        fail(400, 'Некорректное имя таблицы или системный сбой безопасности');
+    }
+
     if ($id <= 0) {
         fail(400, 'id обязателен');
     }

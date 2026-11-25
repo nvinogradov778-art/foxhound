@@ -23,6 +23,23 @@ fail(405, 'Метод не разрешён');
 // ---------- Обработчики ----------
 
 function handle_get(PDO $db, int $me): void {
+    $my_all = (int)($_GET['my_all'] ?? 0);
+
+    if ($my_all) {
+        $stmt = $db->prepare('SELECT event_id, status FROM event_rsvp WHERE user_id = ?');
+        $stmt->execute([$me]);
+        $rows = $stmt->fetchAll();
+        
+        $result = [];
+        foreach ($rows as $r) {
+            $result[] = [
+                'event_id' => (int)$r['event_id'],
+                'status'   => $r['status']
+            ];
+        }
+        respond(['my_all' => $result]);
+    }
+
     $eventId = (int)($_GET['event_id'] ?? 0);
     if (!$eventId) fail(400, 'event_id обязателен');
 

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 function fail(int $code, string $message): void {
     http_response_code($code);
-    echo json_encode(['error' => $message], JSON_UNESCAPED_UNICODE);
+    echo json_encode(['success' => false, 'error' => $message], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -13,8 +13,7 @@ function ok(array $data = []): void {
 }
 
 function respond(array $data): void {
-    echo json_encode($data, JSON_UNESCAPED_UNICODE);
-    exit;
+    ok($data);
 }
 
 function read_json(): array {
@@ -46,5 +45,31 @@ function unique_slug(PDO $db, string $table, string $slug, int $ignoreId = 0): s
             return $slug;
         }
         $slug = $base . '_' . (++$counter);
+    }
+}
+
+function check_rate_limit(PDO $db, string $action, int $limit, int $window): void {
+    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    if (strpos($ip, ',') !== false) {
+        $ip = trim(explode(',', $ip)[0]);
+    }
+    
+    $db->exec('CREATE TABLE IF NOT EXISTS rate_limits (ip TEXT, action TEXT, attempts INTEGER DEFAULT 0, last_attempt INTEGER, PRIMARY KEY (ip, action))');
+    
+    $now = time();
+    $stmt = $db->prepare('SELECT attempts, last_attempt FROM rate_limits WHERE ip = ? AND action = ?');
+    $stmt->execute([$ip, $action]);
+    $row = $stmt->fetch();
+
+    if ($row) {
+        if ($now - (int)$row['last_attempt'] > $window) {
+            $db->prepare('UPDATE rate_limits SET attempts = 1, last_attempt = ? WHERE ip = ? AND action = ?')->execute([$now, $ip, $action]);
+        } elseif ((int)$row['attempts'] >= $limit) {
+            fail(429, 'Слишком много попыток. Повторите позже.');
+        } else {
+            $db->prepare('UPDATE rate_limits SET attempts = attempts + 1, last_attempt = ? WHERE ip = ? AND action = ?')->execute([$now, $ip, $action]);
+        }
+    } else {
+        $db->prepare('INSERT INTO rate_limits (ip, action, attempts, last_attempt) VALUES (?, ?, 1, ?)')->execute([$ip, $action, $now]);
     }
 }

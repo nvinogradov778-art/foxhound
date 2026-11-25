@@ -4,7 +4,6 @@ declare(strict_types=1);
 require_once __DIR__ . '/_bootstrap.php';
 
 $me = require_auth();
-$isAdmin = is_admin($db, $me);
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {
@@ -20,20 +19,12 @@ $action = $input['action'] ?? '';
 
 match ($method) {
     'POST'   => match ($action) {
-        'create' => handle_save($db, $input, $me, false),
-        'update' => handle_save($db, $input, $me, true),
+        'create' => handle_save($db, $input, false),
+        'update' => handle_save($db, $input, true),
         default  => fail(400, 'Неизвестное действие'),
     },
     'DELETE' => handle_delete($db, $input),
 };
-
-// ---------- Хелперы ----------
-
-function is_admin(PDO $db, int $userId): bool {
-    $stmt = $db->prepare('SELECT role FROM users WHERE id = ?');
-    $stmt->execute([$userId]);
-    return $stmt->fetchColumn() === 'admin';
-}
 
 function handle_get(PDO $db): void {
     $archived = (int)($_GET['archived'] ?? 0);
@@ -57,13 +48,9 @@ function handle_get(PDO $db): void {
     respond($events);
 }
 
-function handle_save(PDO $db, array $input, int $userId, bool $isUpdate): void {
-    // проверка админа внутри — но require_admin делать не хочу, т.к. у нас уже $me
-    $stmt = $db->prepare('SELECT role FROM users WHERE id = ?');
-    $stmt->execute([$userId]);
-    if ($stmt->fetchColumn() !== 'admin') {
-        fail(403, 'Доступ запрещён (нужна роль admin)');
-    }
+function handle_save(PDO $db, array $input, bool $isUpdate): void {
+    $admin = require_admin($db);
+    $userId = $admin['id'];
 
     $title       = trim($input['title'] ?? '');
     $description = trim($input['description'] ?? '');
@@ -97,22 +84,29 @@ function handle_save(PDO $db, array $input, int $userId, bool $isUpdate): void {
 }
 
 function handle_delete(PDO $db, array $input): void {
-    // проверка админа — по require_admin не выйдет, потому что $me уже проверен
-    // сделаем локально
-    $userId = (int)($_SESSION['user_id'] ?? 0);
-    $stmt = $db->prepare('SELECT role FROM users WHERE id = ?');
-    $stmt->execute([$userId]);
-    if ($stmt->fetchColumn() !== 'admin') {
-        fail(403, 'Доступ запрещён');
-    }
+    require_admin($db);
 
     $eventId = (int)($input['event_id'] ?? 0);
     if (!$eventId) fail(400, 'ID события обязательно');
 
-    $stmt = $db->prepare('DELETE FROM events WHERE id = ?');
-    $stmt->execute([$eventId]);
+    $db->beginTransaction();
+    try {
+        $db->prepare('DELETE FROM event_ride_bookings WHERE event_id = ?')->execute([$eventId]);
+        $db->prepare('DELETE FROM event_logistics WHERE event_id = ?')->execute([$eventId]);
+        $db->prepare('DELETE FROM event_rsvp WHERE event_id = ?')->execute([$eventId]);
+        
+        $stmt = $db->prepare('DELETE FROM events WHERE id = ?');
+        $stmt->execute([$eventId]);
 
-    if ($stmt->rowCount() === 0) fail(404, 'Событие не найдено');
+        if ($stmt->rowCount() === 0) {
+            $db->rollBack();
+            fail(404, 'Событие не найдено');
+        }
 
-    ok();
+        $db->commit();
+        ok();
+    } catch (Throwable $e) {
+        $db->rollBack();
+        fail(500, 'Ошибка удаления события');
+    }
 }

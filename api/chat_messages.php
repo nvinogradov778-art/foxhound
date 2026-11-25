@@ -4,12 +4,10 @@ declare(strict_types=1);
 require_once __DIR__ . '/_bootstrap.php';
 
 $me = require_me($db);
-$isAdmin = $me['role'] === 'admin';
+$isAdmin = in_array($me['role'], ['admin', 'commander'], true);
 
 $method = $_SERVER['REQUEST_METHOD'];
 $action = $_GET['action'] ?? '';
-
-// ---------- GET ----------
 
 if ($method === 'GET') {
     handle_get($db, $me['id'], $isAdmin);
@@ -28,8 +26,6 @@ match ($action) {
     'react', 'unreact' => handle_reaction($db, $me, $action, $in),
     default    => fail(400, 'Неизвестное действие'),
 };
-
-// ---------- Общие хелперы ----------
 
 function get_channel_or_fail(PDO $db, int $channelId, int $userId, bool $isAdmin): array {
     $stmt = $db->prepare('SELECT id, slug, name, is_private FROM channels WHERE id = ?');
@@ -53,8 +49,6 @@ function get_channel_role(PDO $db, int $channelId, int $userId): ?string {
     return $role === false ? null : $role;
 }
 
-// ---------- GET ----------
-
 function handle_get(PDO $db, int $userId, bool $isAdmin): void {
     $channelId = (int)($_GET['channel_id'] ?? 0);
     $beforeId  = (int)($_GET['before_id'] ?? 0);
@@ -67,37 +61,50 @@ function handle_get(PDO $db, int $userId, bool $isAdmin): void {
     get_channel_or_fail($db, $channelId, $userId, $isAdmin);
 
     $rows = fetch_message_rows($db, $channelId, $beforeId, $limit);
-    if (!$rows) {
-        respond(['messages' => [], 'has_more' => false]);
-    }
-
-    $rows = array_reverse($rows);
-
-    $messageIds = array_map(fn($r) => (int)$r['id'], $rows);
-    $replyIds   = array_values(array_filter(array_map(fn($r) => (int)$r['reply_to_id'], $rows)));
-
-    $replyMap = fetch_replies($db, $replyIds);
-    $reactionsMap = fetch_reactions($db, $messageIds);
-
+    
     $messages = [];
-    foreach ($rows as $r) {
-        $messages[] = format_message($r, $userId, $replyMap, $reactionsMap);
-    }
-
-    $oldestId = $messages[0]['id'] ?? 0;
     $hasMore = false;
-    if ($oldestId) {
-        $hc = $db->prepare('SELECT COUNT(*) FROM channel_messages WHERE channel_id = ? AND id < ?');
-        $hc->execute([$channelId, $oldestId]);
-        $hasMore = ((int)$hc->fetchColumn()) > 0;
+
+    if ($rows) {
+        $rows = array_reverse($rows);
+
+        $messageIds = array_map(fn($r) => (int)$r['id'], $rows);
+        $replyIds   = array_values(array_filter(array_map(fn($r) => (int)$r['reply_to_id'], $rows)));
+
+        $replyMap = fetch_replies($db, $replyIds);
+        $reactionsMap = fetch_reactions($db, $messageIds);
+
+        foreach ($rows as $r) {
+            $messages[] = format_message($r, $userId, $replyMap, $reactionsMap);
+        }
+
+        $oldestId = $messages[0]['id'] ?? 0;
+        if ($oldestId) {
+            $hc = $db->prepare('SELECT COUNT(*) FROM channel_messages WHERE channel_id = ? AND id < ?');
+            $hc->execute([$channelId, $oldestId]);
+            $hasMore = ((int)$hc->fetchColumn()) > 0;
+        }
     }
 
-    respond(['messages' => $messages, 'has_more' => $hasMore]);
+    $typingStmt = $db->prepare('
+        SELECT u.username 
+        FROM user_typing t 
+        JOIN users u ON u.id = t.user_id 
+        WHERE t.channel_id = ? AND t.updated_at > ? AND t.user_id != ?
+    ');
+    $typingStmt->execute([$channelId, time() - 5, $userId]);
+    $typing = $typingStmt->fetchAll(PDO::FETCH_COLUMN);
+
+    respond([
+        'messages' => $messages, 
+        'has_more' => $hasMore,
+        'typing'   => $typing
+    ]);
 }
 
 function fetch_message_rows(PDO $db, int $channelId, int $beforeId, int $limit): array {
     $base = '
-        SELECT m.id, m.user_id, m.text, m.reply_to_id, m.is_deleted,
+        SELECT m.id, m.user_id, m.text, m.attachment, m.reply_to_id, m.is_deleted,
                m.edited_at, m.created_at,
                u.username, u.avatar
         FROM channel_messages m
@@ -116,8 +123,7 @@ function fetch_message_rows(PDO $db, int $channelId, int $beforeId, int $limit):
 }
 
 function fetch_replies(PDO $db, array $replyIds): array {
-    if (!$replyIds) return [];
-
+    if (empty($replyIds)) return [];
     $ph = implode(',', array_fill(0, count($replyIds), '?'));
     $stmt = $db->prepare("
         SELECT m.id, m.text, m.is_deleted, u.username
@@ -140,8 +146,7 @@ function fetch_replies(PDO $db, array $replyIds): array {
 }
 
 function fetch_reactions(PDO $db, array $messageIds): array {
-    if (!$messageIds) return [];
-
+    if (empty($messageIds)) return [];
     $ph = implode(',', array_fill(0, count($messageIds), '?'));
     $stmt = $db->prepare("
         SELECT r.message_id, r.emoji, r.user_id, u.username
@@ -188,6 +193,7 @@ function format_message(array $row, int $userId, array $replyMap, array $reactio
         'username'   => $row['username'],
         'avatar'     => $row['avatar'],
         'text'       => (int)$row['is_deleted'] === 1 ? '' : $row['text'],
+        'attachment' => (int)$row['is_deleted'] === 1 ? null : $row['attachment'],
         'is_deleted' => (int)$row['is_deleted'],
         'edited_at'  => (int)$row['edited_at'],
         'created_at' => (int)$row['created_at'],
@@ -196,18 +202,17 @@ function format_message(array $row, int $userId, array $replyMap, array $reactio
     ];
 }
 
-// ---------- POST: send ----------
-
 function handle_send(PDO $db, array $me, array $in): void {
-    $channelId = (int)($in['channel_id'] ?? 0);
-    $text      = trim($in['text'] ?? '');
-    $replyTo   = (int)($in['reply_to_id'] ?? 0);
+    $channelId  = (int)($in['channel_id'] ?? 0);
+    $text       = trim($in['text'] ?? '');
+    $replyTo    = (int)($in['reply_to_id'] ?? 0);
+    $attachment = trim($in['attachment'] ?? '');
 
     if (!$channelId) fail(400, 'channel_id обязателен');
-    if ($text === '') fail(400, 'Сообщение не может быть пустым');
+    if ($text === '' && $attachment === '') fail(400, 'Сообщение не может быть пустым');
     if (mb_strlen($text) > 4000) fail(400, 'Сообщение слишком длинное (макс. 4000)');
 
-    get_channel_or_fail($db, $channelId, $me['id'], $me['role'] === 'admin');
+    get_channel_or_fail($db, $channelId, $me['id'], $me['role'] === 'admin' || $me['role'] === 'commander');
 
     if ($replyTo > 0) {
         $r = $db->prepare('SELECT channel_id FROM channel_messages WHERE id = ?');
@@ -218,9 +223,9 @@ function handle_send(PDO $db, array $me, array $in): void {
 
     $now = time();
     $db->prepare('
-        INSERT INTO channel_messages (channel_id, user_id, text, reply_to_id, is_deleted, edited_at, created_at)
-        VALUES (?, ?, ?, ?, 0, 0, ?)
-    ')->execute([$channelId, $me['id'], $text, $replyTo, $now]);
+        INSERT INTO channel_messages (channel_id, user_id, text, attachment, reply_to_id, is_deleted, edited_at, created_at)
+        VALUES (?, ?, ?, ?, ?, 0, 0, ?)
+    ')->execute([$channelId, $me['id'], $text, $attachment ?: null, $replyTo, $now]);
 
     $newId = (int)$db->lastInsertId();
 
@@ -228,7 +233,11 @@ function handle_send(PDO $db, array $me, array $in): void {
         INSERT INTO channel_reads (channel_id, user_id, last_read_message_id, updated_at)
         VALUES (?, ?, ?, ?)
         ON CONFLICT(channel_id, user_id) DO UPDATE SET
-            last_read_message_id = MAX(channel_reads.last_read_message_id, excluded.last_read_message_id),
+            last_read_message_id = CASE
+                WHEN excluded.last_read_message_id > channel_reads.last_read_message_id
+                THEN excluded.last_read_message_id
+                ELSE channel_reads.last_read_message_id
+            END,
             updated_at = excluded.updated_at
     ')->execute([$channelId, $me['id'], $newId, $now]);
 
@@ -252,23 +261,50 @@ function handle_send(PDO $db, array $me, array $in): void {
         }
     }
 
-    ok([
-        'message' => [
-            'id'         => $newId,
-            'user_id'    => $me['id'],
-            'username'   => $me['username'],
-            'avatar'     => $me['avatar'],
-            'text'       => $text,
-            'is_deleted' => 0,
-            'edited_at'  => 0,
-            'created_at' => $now,
-            'reply_to'   => $reply,
-            'reactions'  => []
-        ]
-    ]);
-}
+    $messageData = [
+        'id'         => $newId,
+        'user_id'    => $me['id'],
+        'username'   => $me['username'],
+        'avatar'     => $me['avatar'],
+        'text'       => $text,
+        'attachment' => $attachment ?: null,
+        'is_deleted' => 0,
+        'edited_at'  => 0,
+        'created_at' => $now,
+        'reply_to'   => $reply,
+        'reactions'  => []
+    ];
 
-// ---------- POST: edit ----------
+    $wsPayload = json_encode([
+        'channel_id' => $channelId,
+        'message'    => $messageData
+    ]);
+
+    if (function_exists('fastcgi_finish_request')) {
+        http_response_code(200);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['success' => true, 'message' => $messageData]);
+        fastcgi_finish_request();
+    } else {
+        ignore_user_abort(true);
+        set_time_limit(5);
+        ob_start();
+        http_response_code(200);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode(['success' => true, 'message' => $messageData]);
+        ob_end_flush();
+        flush();
+    }
+
+    $ch = curl_init('http://127.0.0.1:8082');
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(['data' => $wsPayload]));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 1);
+    curl_exec($ch);
+    curl_close($ch);
+    exit;
+}
 
 function handle_edit(PDO $db, array $me, array $in): void {
     $msgId = (int)($in['id'] ?? 0);
@@ -290,8 +326,6 @@ function handle_edit(PDO $db, array $me, array $in): void {
     ok();
 }
 
-// ---------- POST: delete ----------
-
 function handle_delete(PDO $db, array $me, bool $isAdmin, array $in): void {
     $msgId = (int)($in['id'] ?? 0);
     if (!$msgId) fail(400, 'id обязателен');
@@ -311,7 +345,7 @@ function handle_delete(PDO $db, array $me, bool $isAdmin, array $in): void {
 
     $db->beginTransaction();
     try {
-        $db->prepare('UPDATE channel_messages SET is_deleted = 1, text = \'\' WHERE id = ?')->execute([$msgId]);
+        $db->prepare('UPDATE channel_messages SET is_deleted = 1, text = \'\', attachment = NULL WHERE id = ?')->execute([$msgId]);
         $db->prepare('DELETE FROM channel_reactions WHERE message_id = ?')->execute([$msgId]);
         $db->commit();
     } catch (Throwable $e) {
@@ -321,8 +355,6 @@ function handle_delete(PDO $db, array $me, bool $isAdmin, array $in): void {
 
     ok();
 }
-
-// ---------- POST: react/unreact ----------
 
 function handle_reaction(PDO $db, array $me, string $action, array $in): void {
     $msgId = (int)($in['id'] ?? 0);
@@ -337,7 +369,7 @@ function handle_reaction(PDO $db, array $me, string $action, array $in): void {
     if (!$row) fail(404, 'Сообщение не найдено');
     if ((int)$row['is_deleted'] === 1) fail(400, 'Сообщение удалено');
 
-    get_channel_or_fail($db, (int)$row['channel_id'], $me['id'], $me['role'] === 'admin');
+    get_channel_or_fail($db, (int)$row['channel_id'], $me['id'], $me['role'] === 'admin' || $me['role'] === 'commander');
 
     if ($action === 'react') {
         $db->prepare('

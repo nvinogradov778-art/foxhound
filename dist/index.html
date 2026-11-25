@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOXHOUND</title>
+
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192.png">
+    <link rel="manifest" href="/manifest.json">
+
+    <meta name="description" content="Инженерно-тактическая страйкбольная команда FOXHOUND. Тактика, дисциплина, техническое превосходство.">
+    <meta name="theme-color" content="#ff6600">
+    <meta name="author" content="FOXHOUND">
+    <meta name="format-detection" content="telephone=no">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FOXHOUND">
+
+    <meta property="og:type"        content="website">
+    <meta property="og:site_name"   content="FOXHOUND">
+    <meta property="og:title"       content="FOXHOUND — Страйкбольная команда">
+    <meta property="og:description" content="Инженерно-тактическая страйкбольная команда.">
+    <meta property="og:url"         content="https://foxhound-team.ru/">
+    <meta property="og:image"       content="https://foxhound-team.ru/og-image.jpg">
+    <meta property="og:image:width"  content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt"   content="Логотип команды FOXHOUND">
+    <meta property="og:locale"      content="ru_RU">
+
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:title"       content="FOXHOUND — Страйкбольная команда">
+    <meta name="twitter:description" content="Инженерно-тактическая страйкбольная команда.">
+    <meta name="twitter:image"       content="https://foxhound-team.ru/og-image.jpg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Sans+Narrow:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+  <script type="module" crossorigin src="/assets/main.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/modal.js">
+  <link rel="stylesheet" crossorigin href="/assets/main.css">
+</head>
+<body>
+
+<header class="app-header">
+    <div class="app-header-inner">
+        <a href="#/home" class="app-logo" data-page="page-home">
+            <img src="/logo-foxhound.webp" alt="FOXHOUND" />
+            <span class="app-logo-text">FOXHOUND</span>
+        </a>
+
+        <nav class="app-nav">
+            <a href="#/home" class="nav-link" data-page="page-home"><span class="material-icons">home</span> Главная</a>
+            <a href="#/chat" class="nav-link" data-page="page-chat"><span class="material-icons">chat</span> Чат</a>
+
+            <div class="nav-group">
+                <button type="button" class="nav-link nav-trigger">
+                    <span class="material-icons">groups</span> Команда
+                    <span class="material-icons nav-arrow">expand_more</span>
+                </button>
+                <div class="nav-dropdown">
+                    <a href="#/operators" data-page="page-operators"><span class="material-icons">person</span> Оперативники</a>
+                    <a href="#/regulations" data-page="page-regulations"><span class="material-icons">gavel</span> Устав</a>
+                    <a href="#/docs" data-page="page-docs"><span class="material-icons">article</span> Регламенты</a>
+                    <a href="#/photo" data-page="page-photo"><span class="material-icons">photo_library</span> Фото</a>
+                    <a href="#/logs" data-page="page-logs"><span class="material-icons">history_edu</span> Журнал</a>
+                </div>
+            </div>
+
+            <div class="nav-group">
+                <button type="button" class="nav-link nav-trigger">
+                    <span class="material-icons">flag</span> Игры
+                    <span class="material-icons nav-arrow">expand_more</span>
+                </button>
+                <div class="nav-dropdown">
+                    <a href="#/scenarios" data-page="page-scenarios"><span class="material-icons">movie</span> Сценарии</a>
+                    <a href="#/maps" data-page="page-maps"><span class="material-icons">map</span> Карты</a>
+                </div>
+            </div>
+
+            <div class="nav-group">
+                <button type="button" class="nav-link nav-trigger">
+                    <span class="material-icons">menu_book</span> База
+                    <span class="material-icons nav-arrow">expand_more</span>
+                </button>
+                <div class="nav-dropdown">
+                    <a href="#/instructions" data-page="page-instructions"><span class="material-icons">description</span> Инструкции</a>
+                    <a href="#/atak" data-page="page-atak"><span class="material-icons">satellite_alt</span> ATAK</a>
+                    <a href="#/devices" data-page="page-devices"><span class="material-icons">build</span> Девайсы</a>
+                </div>
+            </div>
+
+            <div class="nav-group">
+                <button type="button" class="nav-link nav-trigger">
+                    <span class="material-icons">construction</span> Инструменты
+                    <span class="material-icons nav-arrow">expand_more</span>
+                </button>
+                <div class="nav-dropdown">
+                    <a href="#/calc" data-page="page-calc"><span class="material-icons">calculate</span> Калькулятор</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="app-header-right">
+            <button id="login-btn" type="button" class="btn btn-primary btn-sm" style="display: none;">
+                <span class="material-icons">login</span> Войти
+            </button>
+            <a href="#/profile" id="profile-btn" class="btn btn-icon btn-ghost"
+               data-page="page-profile" title="Профиль" style="display: none;">
+                <span class="material-icons">account_circle</span>
+            </a>
+        </div>
+
+        <button type="button" class="app-mobile-toggle" id="mobile-toggle" aria-label="Меню">
+            <span class="material-icons">menu</span>
+        </button>
+    </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu">
+    <a href="#/home" data-page="page-home" class="mobile-link"><span class="material-icons">home</span> Главная</a>
+    <a href="#/chat" data-page="page-chat" class="mobile-link"><span class="material-icons">chat</span> Чат</a>
+
+    <div class="mobile-group-title">Команда</div>
+    <a href="#/operators" data-page="page-operators" class="mobile-link"><span class="material-icons">person</span> Оперативники</a>
+    <a href="#/regulations" data-page="page-regulations" class="mobile-link"><span class="material-icons">gavel</span> Устав</a>
+    <a href="#/docs" data-page="page-docs" class="mobile-link"><span class="material-icons">article</span> Регламенты</a>
+    <a href="#/photo" data-page="page-photo" class="mobile-link"><span class="material-icons">photo_library</span> Фото</a>
+    <a href="#/logs" data-page="page-logs" class="mobile-link"><span class="material-icons">history_edu</span> Журнал</a>
+
+    <div class="mobile-group-title">Игры</div>
+    <a href="#/scenarios" data-page="page-scenarios" class="mobile-link"><span class="material-icons">movie</span> Сценарии</a>
+    <a href="#/maps" data-page="page-maps" class="mobile-link"><span class="material-icons">map</span> Карты</a>
+
+    <div class="mobile-group-title">База</div>
+    <a href="#/instructions" data-page="page-instructions" class="mobile-link"><span class="material-icons">description</span> Инструкции</a>
+    <a href="#/atak" data-page="page-atak" class="mobile-link"><span class="material-icons">satellite_alt</span> ATAK</a>
+    <a href="#/devices" data-page="page-devices" class="mobile-link"><span class="material-icons">build</span> Девайсы</a>
+
+    <div class="mobile-group-title">Инструменты</div>
+    <a href="#/calc" data-page="page-calc" class="mobile-link"><span class="material-icons">calculate</span> Калькулятор</a>
+
+    <div class="mobile-group-title">Профиль</div>
+    <a href="#/profile" data-page="page-profile" class="mobile-link"><span class="material-icons">account_circle</span> Профиль</a>
+</div>
+
+<main class="app-main">
+
+    <div id="page-home" class="page active">
+        <div class="container">
+            <section class="hero">
+                <img src="/hero.jpg" alt="" class="hero-img" onerror="this.style.display='none'">
+                <div class="hero-content">
+                    <h1 class="hero-title">FOXHOUND</h1>
+                    <p class="hero-subtitle">«На поле боя нет места надежде. Здесь есть только расчёт и воля к победе»</p>
+                    <div class="hero-actions">
+                        <button type="button" class="btn btn-primary btn-lg" id="btn-recruit">
+                            <span class="material-icons">how_to_reg</span> Подать заявку
+                        </button>
+                        <a href="https://vk.ru/club239972469" target="_blank" rel="noopener" class="btn btn-secondary btn-lg">
+                            <span class="material-icons">open_in_new</span> Мы ВКонтакте
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="dashboard-grid">
+                <article class="widget">
+                    <div class="widget-header">
+                        <span class="material-icons">event</span>
+                        <span class="widget-title">Ближайшее событие</span>
+                    </div>
+                    <div class="widget-body" id="widget-event-body">Загрузка…</div>
+                    <div class="widget-chat-footer" id="widget-event-footer"></div>
+                </article>
+
+                <article class="widget">
+                    <div class="widget-header">
+                        <span class="material-icons">history_edu</span>
+                        <span class="widget-title">Бортовой журнал</span>
+                    </div>
+                    <div class="widget-body" id="widget-log-body">Загрузка…</div>
+                    <div class="widget-chat-footer" id="widget-log-footer"></div>
+                </article>
+
+                <article class="widget">
+                    <div class="widget-header">
+                        <span class="material-icons">how_to_vote</span>
+                        <span class="widget-title">Открытые опросы</span>
+                    </div>
+                    <div class="widget-body" id="widget-polls-body">Загрузка…</div>
+                    <div class="widget-chat-footer" id="widget-polls-footer"></div>
+                </article>
+
+                <article class="widget">
+                    <div class="widget-header">
+                        <span class="material-icons">wb_sunny</span>
+                        <span class="widget-title">Погода на игру</span>
+                    </div>
+                    <div class="widget-body" id="widget-weather-body">Загрузка…</div>
+                </article>
+            </section>
+
+            <section class="radio-block">
+                <div class="radio-block-header">
+                    <span class="material-icons">radio</span>
+                    <h2 class="radio-block-title">Полевое радио</h2>
+                </div>
+                <div class="radio-console">
+                    <div class="radio-info">
+                        <div class="radio-freq" id="radio-freq">FREQ: ---.--- MHz</div>
+                        <div class="radio-purpose" id="radio-purpose">СЕТЬ ОТКЛЮЧЕНА</div>
+                        <div class="radio-track" id="radio-track">ШУМ ЭФИРА...</div>
+                        <div class="radio-desc" id="radio-desc">Для активации нажмите ВКЛ</div>
+                    </div>
+                    <div class="radio-progress">
+                        <div class="radio-progress-bar" id="radio-progress-bar">
+                            <div class="radio-progress-fill" id="radio-progress-fill"></div>
+                        </div>
+                        <div class="radio-times">
+                            <span id="radio-current">00:00</span>
+                            <span id="radio-duration">00:00</span>
+                        </div>
+                    </div>
+                    <div class="radio-controls">
+                        <div class="radio-dd" id="radio-station-dd">
+                            <button type="button" class="radio-dd-trigger" id="radio-dd-trigger">
+                                <span class="material-icons radio-dd-icon">tune</span>
+                                <span class="radio-dd-label" id="radio-dd-label">— нет станций —</span>
+                                <span class="material-icons radio-dd-arrow">expand_more</span>
+                            </button>
+                            <div class="radio-dd-menu" id="radio-dd-menu"></div>
+                        </div>
+                        <div class="radio-buttons">
+                            <button type="button" class="btn btn-secondary btn-icon" id="radio-prev" title="Предыдущий"><span class="material-icons">skip_previous</span></button>
+                            <button type="button" class="btn btn-primary btn-icon" id="radio-play" title="Играть / Пауза"><span class="material-icons">play_arrow</span></button>
+                            <button type="button" class="btn btn-secondary btn-icon" id="radio-next" title="Следующий"><span class="material-icons">skip_next</span></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="about-block">
+                <div class="about-title">
+                    <span class="material-icons">info</span>
+                    <span>О команде</span>
+                </div>
+                <div class="about-content">
+                    <p>Наша команда названа в честь культового отряда из вселенной Metal Gear, чей подход к операциям стал нашей главной философией. FOXHOUND — это элита, решающая задачи за счёт превосходства в тактике и технологиях.</p>
+                    <p>Мы проецируем эти принципы на реальный страйкбол. Нашими приоритетами являются строгая дисциплина, инженерный расчёт и техническое превосходство. Каждая игра для нас — это комплексная интеграция современных технологий в тактический игровой процесс.</p>
+                    <p>FOXHOUND — это братство. Ценим адекватность, надёжность, качественный отдых и выезды в кругу своих.</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div id="page-operators" class="page">
+        <div class="container">
+            <div class="page-header"><h1 class="page-title">Оперативный состав</h1></div>
+            <div id="operators-root"><div class="text-muted text-center">Загрузка…</div></div>
+        </div>
+    </div>
+
+    <div id="page-regulations" class="page">
+        <div class="container">
+            <div class="page-header"><h1 class="page-title">Устав подразделения</h1></div>
+            <div id="regulations-root"><div class="text-muted text-center">Загрузка…</div></div>
+        </div>
+    </div>
+
+    <div id="page-docs" class="page">
+        <div class="container">
+            <div class="page-header"><h1 class="page-title">Регламенты</h1></div>
+            <div id="docs-root"><div class="text-muted text-center">Загрузка…</div></div>
+        </div>
+    </div>
+
+    <div id="page-photo" class="page">
+        <div class="container">
+            <div class="page-header"><h1 class="page-title">Фотогалерея</h1></div>
+            <div id="gallery-root"><div class="text-muted text-center">Загрузка…</div></div>
+        </div>
+    </div>
+
+    <div id="page-scenarios" class="page">
+        <div class="container">
+            <div class="page-header"><h1 class="page-title">Сценарии</h1></div>
+            <div id="scenarios-root"><div class="text-muted text-center">Загрузка…</div></div>
+        </div>
+    </div>
+
+    <div id="page-maps" class="page">
+        <div class="container">
+            <div class="page-header"><h1 class="page-title">Карты полигонов</h1></div>
+            <div class="map-toolbar">
+                <label for="polygon-select">Полигон:</label>
+                <select id="polygon-select" class="select"></select>
+            </div>
+            <div id="map-container" class="map-container"></div>
+            <div id="map-loading" class="map-loading">Загрузка карты…</div>
+            <div id="map-layers" class="map-layers"></div>
+        </div>
+    </div>
+
+    <div id="page-instructions" class="page">
+        <div class="container">
+            <div class="page-header"><h1 class="page-title">Инструкции</h1></div>
+            <div id="instructions-root"><div class="text-muted text-center">Загрузка…</div></div>
+        </div>
+    </div>
+
+    <div id="page-atak" class="page">
+        <div class="container">
+            <div class="page-header"><h1 class="page-title">Руководство по ATAK</h1></div>
+            <div id="atak-root"><div class="text-muted text-center">Загрузка…</div></div>
+        </div>
+    </div>
+
+    <div id="page-devices" class="page">
+        <div class="container">
+            <div class="page-header"><h1 class="page-title">Девайсы</h1></div>
+            <div id="devices-root"><div class="text-muted text-center">Загрузка…</div></div>
+        </div>
+    </div>
+
+    <div id="page-calc" class="page">
+        <div class="container">
+            <div class="page-header"><h1 class="page-title">Калькулятор страйкбола</h1></div>
+            <div id="calculator-root">
+                <div class="calc-wrap">
+                    <div class="calc-params">
+                        <div class="calc-slider">
+                            <div class="calc-slider-head">
+                                <span class="calc-slider-label">Вес шара</span>
+                                <span class="calc-slider-value" id="calc-weight-value">0.25 г</span>
+                            </div>
+                            <input type="range" id="calc-weight" min="0.12" max="0.43" step="0.01" value="0.25">
+                            <div class="calc-slider-scale"><span>0.12 г</span><span>0.43 г</span></div>
+                        </div>
+                        <div class="calc-slider">
+                            <div class="calc-slider-head">
+                                <span class="calc-slider-label">Скорость вылета</span>
+                                <span class="calc-slider-value" id="calc-speed-value">120 м/с</span>
+                            </div>
+                            <input type="range" id="calc-speed" min="60" max="160" step="1" value="120">
+                            <div class="calc-slider-scale"><span>60 м/с</span><span>160 м/с</span></div>
+                        </div>
+                    </div>
+                    <div class="calc-results">
+                        <div class="calc-result">
+                            <div class="calc-result-label">Дульная энергия</div>
+                            <div class="calc-result-value accent" id="calc-energy">1.80 Дж</div>
+                        </div>
+                        <div class="calc-result">
+                            <div class="calc-result-label">Скорость на 0.20 г</div>
+                            <div class="calc-result-value" id="calc-speed-20">134 м/с</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="calc-status calc-status-ok" id="calc-status">
+                    <span class="material-icons">check_circle</span>
+                    <span>Допуск: разрешено, дистанция 10 м (категория «Основное»)</span>
+                </div>
+                <div class="calc-table-wrap">
+                    <div class="calc-table-title"><span class="material-icons">rule</span>Допуск</div>
+                    <table class="calc-table">
+                        <thead><tr><th>Категория</th><th>Ограничение</th><th>Дистанция</th><th>Статус</th></tr></thead>
+                        <tbody>
+                            <tr data-weapon="secondary"><td>Вторичка (пистолеты, автоматы в здании)</td><td>до 1.5 Дж</td><td>0 м</td><td data-status="secondary">—</td></tr>
+                            <tr data-weapon="primary"><td>Основное (автомат на открытой местности)</td><td>до 2.4 Дж</td><td>10 м</td><td data-status="primary">—</td></tr>
+                            <tr data-weapon="sniper"><td>Снайперка (болтовка, полуавтомат, только одиночный)</td><td>до 2.9 Дж</td><td>25 м</td><td data-status="sniper">—</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="page-logs" class="page">
+        <div class="container">
+            <div class="page-header"><h1 class="page-title">Бортовой журнал</h1></div>
+            <div id="logs-root"><div class="text-muted text-center">Загрузка…</div></div>
+        </div>
+    </div>
+
+    <div id="page-profile" class="page">
+        <div class="container">
+            <div id="profile-root"><div class="text-muted text-center">Загрузка…</div></div>
+        </div>
+    </div>
+
+    <div id="page-settings" class="page">
+        <div class="container">
+            <div class="page-header"><h1 class="page-title">Настройки</h1></div>
+            <div id="settings-root"><div class="text-muted text-center">Загрузка…</div></div>
+        </div>
+    </div>
+
+    <div id="page-polls" class="page">
+        <div class="container">
+            <div class="page-header"><h1 class="page-title">Голосования</h1></div>
+            <div id="polls-root"><div class="text-muted text-center">Загрузка…</div></div>
+        </div>
+    </div>
+
+    <div id="page-events" class="page">
+        <div class="container">
+            <div class="page-header"><h1 class="page-title">Календарь</h1></div>
+            <div id="events-root"><div class="text-muted text-center">Загрузка…</div></div>
+        </div>
+    </div>
+
+    <div id="page-chat" class="page">
+        <div id="chat-guest-view" class="chat-guest" style="display: none;">
+            <span class="material-icons">lock</span>
+            <h2>Требуется вход</h2>
+            <p class="text-secondary">Войдите, чтобы открыть чат.</p>
+        </div>
+        <div id="chat-layout" class="chat-layout">
+            <div class="chat-backdrop" id="chat-backdrop"></div>
+            <aside class="chat-sidebar" id="chat-sidebar">
+                <div class="chat-sidebar-head">
+                    <span>Каналы</span>
+                    <button type="button" class="chat-new-btn" id="chat-new-channel" style="display: none;" title="Создать канал"><span class="material-icons">add</span></button>
+                </div>
+                <div class="chat-channels" id="chat-channels"></div>
+            </aside>
+            <section class="chat-main">
+                <header class="chat-main-head">
+                    <button type="button" class="chat-mobile-toggle" id="chat-mobile-toggle" title="Каналы"><span class="material-icons">menu</span></button>
+                    <div class="chat-main-title" id="chat-channel-name">канал</div>
+                    <div class="chat-main-desc" id="chat-channel-desc"></div>
+                    <button type="button" class="chat-status-toggle" id="chat-status-toggle" title="Участники"><span class="material-icons">people</span></button>
+                </header>
+                <div class="chat-messages" id="chat-messages"></div>
+                <div class="chat-input-wrap">
+                    <div class="chat-reply-preview" id="chat-reply-preview" style="display: none;">
+                        <span class="material-icons">reply</span>
+                        <span class="chat-reply-text"></span>
+                        <button type="button" id="chat-reply-cancel" title="Отменить"><span class="material-icons">close</span></button>
+                    </div>
+                    <form class="chat-input-form" id="chat-input-form">
+                        <input type="file" id="chat-file-input" style="display: none;" accept="image/*,.pdf,.zip,.txt">
+                        <button type="button" class="btn btn-secondary btn-icon" id="chat-attach-btn" title="Прикрепить файл"><span class="material-icons">attach_file</span></button>
+                        <textarea id="chat-input" placeholder="Написать сообщение…" rows="1"></textarea>
+                        <button type="submit" class="btn btn-primary btn-icon" title="Отправить"><span class="material-icons">send</span></button>
+                    </form>
+                    <div id="chat-file-preview" style="display: none; padding: 5px 10px; font-size: 12px; color: var(--accent); justify-content: space-between;">
+                        <span id="chat-file-name"></span>
+                        <button type="button" id="chat-file-cancel" style="background:none; border:none; color:red; cursor:pointer;">✕</button>
+                    </div>
+                </div>
+            </section>
+            <aside class="chat-statuses" id="chat-statuses"></aside>
+        </div>
+    </div>
+</main>
+
+<div id="poll-create-modal" class="modal-backdrop">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Создать опрос</h3>
+            <button type="button" class="btn btn-ghost btn-icon" id="poll-create-close" title="Закрыть"><span class="material-icons">close</span></button>
+        </div>
+        <form id="poll-create-form">
+            <div class="form-group"><label>Название</label><input type="text" id="poll-create-title" required></div>
+            <div class="form-group">
+                <label>Тип</label>
+                <select id="poll-create-type">
+                    <option value="single">Одиночный выбор</option>
+                    <option value="multiple">Множественный выбор</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Варианты (по одному на строку)</label><textarea id="poll-create-options" rows="5" placeholder="Вариант 1&#10;Вариант 2&#10;Вариант 3" required></textarea></div>
+            <div class="form-group"><label>Дата окончания</label><div class="form-row-2"><input type="date" id="poll-create-expires-date" required><input type="time" id="poll-create-expires-time" required></div></div>
+            <button type="submit" class="btn btn-primary w-full">Создать</button>
+        </form>
+    </div>
+</div>
+
+<div id="event-modal" class="modal-backdrop">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title" id="event-modal-title">Создать событие</h3>
+            <button type="button" class="btn btn-ghost btn-icon" id="event-modal-close" title="Закрыть"><span class="material-icons">close</span></button>
+        </div>
+        <form id="event-form">
+            <input type="hidden" id="event-id" value="">
+            <div class="form-group"><label>Название</label><input type="text" id="event-title" required></div>
+            <div class="form-group"><label>Описание</label><textarea id="event-desc" rows="3"></textarea></div>
+            <div class="form-group"><label>Место</label><input type="text" id="event-location" placeholder="Название или координаты"></div>
+            <div class="form-group"><label>Дата и время</label><div class="form-row-2"><input type="date" id="event-date" required><input type="time" id="event-time" required></div></div>
+            <button type="submit" class="btn btn-primary w-full">Сохранить</button>
+        </form>
+    </div>
+</div>
+
+<div id="auth-modal" class="modal-backdrop">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title" id="auth-modal-title">Вход</h3>
+            <button type="button" class="btn btn-ghost btn-icon" id="auth-close" title="Закрыть"><span class="material-icons">close</span></button>
+        </div>
+        <form id="auth-form">
+            <div class="form-group"><label>Имя пользователя</label><input type="text" id="auth-username" autocomplete="username" required></div>
+            <div class="form-group"><label>Пароль</label><input type="password" id="auth-password" autocomplete="current-password" required></div>
+            <button type="submit" class="btn btn-primary w-full" id="auth-submit">Войти</button>
+        </form>
+        <div class="text-center mt-4"><a href="#" id="auth-switch" class="text-accent">Зарегистрироваться</a></div>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="recruit-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">ЗАЯВКА НА ВСТУПЛЕНИЕ</h3>
+            <button type="button" class="btn btn-ghost btn-icon" id="recruit-close"><span class="material-icons">close</span></button>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">Заполните форму. Командир свяжется с вами для прохождения собеседования.</p>
+        <form id="recruit-form">
+            <div class="form-group"><label>Позывной *</label><input type="text" id="rec-callsign" placeholder="Как к вам обращаться?" required></div>
+            <div class="form-group"><label>ФИО *</label><input type="text" id="rec-fullname" placeholder="Иванов Иван Иванович" required></div>
+            <div class="form-group"><label>Дата рождения *</label><input type="date" id="rec-birth" required></div>
+            <div class="form-group"><label>Телефон *</label><input type="tel" id="rec-phone" placeholder="+7 (999) 123-45-67" required></div>
+            <div class="form-group"><label>Ссылка на Telegram</label><input type="text" id="rec-telegram" placeholder="https://t.me/username"></div>
+            <div class="form-group"><label>Ссылка на VK</label><input type="text" id="rec-vk" placeholder="https://vk.com/username"></div>
+            <div class="form-group"><label>Почему хотите вступить? *</label><textarea id="rec-motivation" rows="3" placeholder="Что вам близко в нашей философии?" required></textarea></div>
+            <button type="submit" class="btn btn-primary w-full" id="rec-submit">Отправить заявку</button>
+        </form>
+    </div>
+</div>
+
+<div id="lightbox" class="lightbox">
+    <button type="button" class="lightbox-close" title="Закрыть">
+        <span class="material-icons">close</span>
+    </button>
+    <button type="button" class="lightbox-arrow lightbox-prev" id="lightbox-prev" title="Предыдущее">
+        <span class="material-icons">chevron_left</span>
+    </button>
+    <img class="lightbox-img" src="" alt="">
+    <button type="button" class="lightbox-arrow lightbox-next" id="lightbox-next" title="Следующее">
+        <span class="material-icons">chevron_right</span>
+    </button>
+    <div class="lightbox-caption"></div>
+</div>
+
+</body>
+</html>

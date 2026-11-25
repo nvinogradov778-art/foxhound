@@ -16,6 +16,7 @@ match ($action) {
 };
 
 function handle_register(PDO $db): void {
+    check_rate_limit($db, 'register', 3, 300);
     $data = read_json();
     $username = trim($data['username'] ?? '');
     $password = (string)($data['password'] ?? '');
@@ -41,9 +42,14 @@ function handle_register(PDO $db): void {
 }
 
 function handle_login(PDO $db): void {
+    check_rate_limit($db, 'login', 5, 60);
     $data = read_json();
     $username = trim($data['username'] ?? '');
     $password = (string)($data['password'] ?? '');
+
+    if ($username === '' || $password === '') {
+        fail(400, 'Имя пользователя и пароль обязательны');
+    }
 
     $stmt = $db->prepare('SELECT id, password_hash, is_banned, banned_reason FROM users WHERE username = ?');
     $stmt->execute([$username]);
@@ -65,13 +71,28 @@ function handle_login(PDO $db): void {
 }
 
 function handle_logout(): void {
+    $_SESSION = [];
+
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(
+            session_name(), '',
+            time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+    }
+
     session_destroy();
     ok();
 }
 
 function handle_check(PDO $db): void {
     if (empty($_SESSION['user_id'])) {
-        respond(['loggedin' => false, 'csrf_token' => null]);
+        respond([
+            'loggedin'   => false,
+            'csrf_token' => $_SESSION['csrf_token'] ?? null
+        ]);
     }
 
     $stmt = $db->prepare('SELECT id, username, avatar, about, role, registered_at, last_seen FROM users WHERE id = ?');
@@ -80,7 +101,10 @@ function handle_check(PDO $db): void {
 
     if (!$user) {
         session_destroy();
-        respond(['loggedin' => false, 'csrf_token' => null]);
+        respond([
+            'loggedin'   => false,
+            'csrf_token' => $_SESSION['csrf_token'] ?? null
+        ]);
     }
 
     $db->prepare('UPDATE users SET last_seen = ? WHERE id = ?')

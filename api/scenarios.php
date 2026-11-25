@@ -132,6 +132,11 @@ function handle_import(PDO $db, array $input): void {
         fail(400, 'Ожидался объект {"scenarios": [...]}');
     }
 
+    // ИСПРАВЛЕНО: Защита от очистки БД пустым массивом
+    if (empty($input['scenarios'])) {
+        fail(400, 'Массив сценариев для импорта не может быть пустым');
+    }
+
     $now = time();
     $db->beginTransaction();
 

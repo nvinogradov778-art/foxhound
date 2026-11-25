@@ -24,6 +24,7 @@ if (session_status() === PHP_SESSION_NONE) {
     ini_set('session.use_strict_mode', '1');
     ini_set('session.use_only_cookies', '1');
     ini_set('session.gc_maxlifetime', '86400');
+    ini_set('session.cookie_lifetime', '86400');
     ini_set('session.name', 'FHSESSID');
     session_start();
 

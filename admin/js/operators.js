@@ -41,47 +41,55 @@
     const row = document.createElement('div');
     row.className = 'list-item';
 
-    const content = document.createElement('div');
-    content.style.cssText = 'display:flex; gap:15px; align-items:center; flex-wrap:wrap;';
+    const left = document.createElement('div');
+    left.className = 'list-left';
 
     if (op.photo) {
       const img = document.createElement('img');
       img.src = '/' + op.photo;
       img.alt = op.name;
       img.className = 'preview-img';
-      img.onerror = function () { this.style.display = 'none'; };
-      content.appendChild(img);
+      img.onerror = function () { this.remove(); };
+      left.appendChild(img);
+    } else {
+      const placeholder = document.createElement('div');
+      placeholder.className = 'preview-placeholder material-icons';
+      placeholder.textContent = 'person';
+      left.appendChild(placeholder);
     }
 
     const info = document.createElement('div');
+    info.style.flex = '1';
+    info.style.minWidth = '0';
 
     const name = document.createElement('strong');
+    name.style.color = '#fff';
     name.textContent = op.name;
     info.appendChild(name);
 
     if (op.role) {
       const role = document.createElement('div');
-      role.style.cssText = 'font-size:14px; color:#ff6600;';
+      role.style.cssText = 'font-size:14px; color:var(--accent);';
       role.textContent = op.role;
       info.appendChild(role);
     }
 
     if (op.specialization) {
       const spec = document.createElement('div');
-      spec.style.cssText = 'font-size:14px; color:#666;';
+      spec.style.cssText = 'font-size:14px; color:var(--text-muted);';
       spec.textContent = op.specialization;
       info.appendChild(spec);
     }
 
     if (op.description) {
       const desc = document.createElement('div');
-      desc.style.cssText = 'font-size:13px; color:#666;';
+      desc.style.cssText = 'font-size:13px; color:var(--text-muted);';
       desc.textContent = op.description;
       info.appendChild(desc);
     }
 
-    content.appendChild(info);
-    row.appendChild(content);
+    left.appendChild(info);
+    row.appendChild(left);
 
     const actions = document.createElement('div');
     actions.className = 'actions';

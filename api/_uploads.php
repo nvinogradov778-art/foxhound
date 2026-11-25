@@ -22,7 +22,11 @@ function upload_file(
     if ($finfo) {
         finfo_close($finfo);
     }
-    if (!is_string($mime) || !in_array($mime, $allowedMimes, true)) {
+    
+    // Разрешаем octet-stream, если расширение в белом списке (для старых браузеров)
+    $isOctet = ($mime === 'application/octet-stream');
+    
+    if (!is_string($mime) || (!in_array($mime, $allowedMimes, true) && !$isOctet)) {
         fail(400, 'MIME не совпадает');
     }
 
@@ -112,10 +116,6 @@ function upload_geojson(array $file, string $destDir, string $prefix = 'layer'):
 
 // ---------- Работа с папками photos/ ----------
 
-/**
- * Создаёт подпапку в photos/ и возвращает относительный путь.
- * $slug = null или '' → корень photos/, иначе photos/{slug}/
- */
 function ensure_photos_subdir(?string $slug): string {
     $targetDir = ($slug !== null && $slug !== '') ? 'photos/' . $slug : 'photos';
     $absDir = __DIR__ . '/../' . $targetDir;
@@ -129,10 +129,6 @@ function ensure_photos_subdir(?string $slug): string {
     return $targetDir;
 }
 
-/**
- * Резолвит альбом по ID и возвращает путь к его папке.
- * $albumId = null → 'photos' (без альбома).
- */
 function resolve_photos_dir(PDO $db, ?int $albumId): string {
     if ($albumId === null) {
         return ensure_photos_subdir(null);

@@ -16,10 +16,8 @@ if (!is_dir($cacheDir)) @mkdir($cacheDir, 0755, true);
 $cacheKey  = md5($lat . '_' . $lng . '_' . $date);
 $cacheFile = $cacheDir . '/' . $cacheKey . '.json';
 
-// Свежий кэш — сразу отдаём
 if (is_file($cacheFile) && (time() - filemtime($cacheFile) < 6 * 3600)) {
-    readfile($cacheFile);
-    exit;
+    ok(['weather' => json_decode(file_get_contents($cacheFile), true)]);
 }
 
 $url = 'https://api.open-meteo.com/v1/forecast'
@@ -39,22 +37,19 @@ curl_setopt_array($ch, [
 ]);
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$curlErr  = curl_error($ch);
 curl_close($ch);
 
 if ($response === false || $httpCode !== 200) {
-    // Отдаём старый кэш, если он есть
     if (is_file($cacheFile)) {
-        readfile($cacheFile);
-        exit;
+        ok(['weather' => json_decode(file_get_contents($cacheFile), true)]);
     }
-
     fail(502, 'Не удалось получить прогноз');
 }
 
-if (!is_array(json_decode($response, true))) {
+$data = json_decode($response, true);
+if (!is_array($data)) {
     fail(502, 'Некорректный ответ API');
 }
 
 file_put_contents($cacheFile, $response);
-echo $response;
+ok(['weather' => $data]);
